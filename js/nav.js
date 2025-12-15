@@ -1,31 +1,44 @@
-(async () => {
+(() => {
   const inHtmlFolder = location.pathname.includes("/html/");
 
-  // nav.html betöltése
-  const navPath = inHtmlFolder ? "../js/nav.html" : "js/nav.html";
-  const res = await fetch(navPath);
-  const navHtml = await res.text();
+  // linkek: cím + célfájl
+  // index (pékség) a gyökérben van, a többi a /html/ mappában
+  const links = [
+    { label: "ZH 1 - Pékség", root: "index.html", html: "../index.html" },
+    { label: "ZH 1 - Autó", file: "Auto.html" },
+    { label: "ZH 1 - Gyógyszertár", file: "Gyogyszertar.html" },
+    { label: "ZH 1 - Sörök variáció", file: "Sorok_variacio.html" },
+    { label: "ZH 1 - Sörök", file: "Sorok.html" },
+    { label: "ZH 1 - Videójátékok", file: "Videojatekok.html" },
+    { label: "ZH 2", file: "zh2.html" },
+  ];
 
-  document.body.insertAdjacentHTML("afterbegin", navHtml);
+  const nav = document.createElement("nav");
+  nav.className = "nav";
 
-  // útvonal térkép
-  const map = {
-    Pek: inHtmlFolder ? "Pek.html" : "html/Pek.html",
-    Auto: inHtmlFolder ? "Auto.html" : "html/Auto.html",
-    Gyogyszertar: inHtmlFolder ? "Gyogyszertar.html" : "html/Gyogyszertar.html",
-    Sorok_variacio: inHtmlFolder ? "Sorok_variacio.html" : "html/Sorok_variacio.html",
-    Sorok: inHtmlFolder ? "Sorok.html" : "html/Sorok.html",
-    Videojatekok: inHtmlFolder ? "Videojatekok.html" : "html/Videojatekok.html",
-    zh2: inHtmlFolder ? "zh2.html" : "html/zh2.html",
-  };
+  links.forEach(l => {
+    const a = document.createElement("a");
+    a.textContent = l.label;
 
-  document.querySelectorAll(".nav a").forEach(a => {
-    const key = a.dataset.page;
-    a.href = map[key];
-
-    // aktív oldal kiemelése
-    if (location.pathname.endsWith(map[key])) {
-      a.classList.add("active");
+    // Href számítás: ha /html/ mappában vagyok, akkor sima fájlnév,
+    // ha gyökérben vagyok, akkor html/<fájl>
+    if (l.root && l.html) {
+      a.href = inHtmlFolder ? l.html : l.root;
+    } else {
+      a.href = inHtmlFolder ? l.file : `html/${l.file}`;
     }
+
+    // Active jelölés
+    const current = location.pathname.split("/").pop();
+    const target = (inHtmlFolder ? a.href.split("/").pop() : a.href.split("/").pop());
+
+    if (current === target) a.classList.add("active");
+    if (!inHtmlFolder && current === "index.html" && l.label.includes("Pékség")) a.classList.add("active");
+    if (inHtmlFolder && current !== "index.html" && l.label.includes("Pékség") && current === "index.html") a.classList.add("active");
+
+    nav.appendChild(a);
   });
+
+  // beszúrjuk a body elejére
+  document.body.prepend(nav);
 })();
