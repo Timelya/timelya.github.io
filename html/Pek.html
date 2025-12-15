@@ -1,25 +1,21 @@
 <!DOCTYPE html>
 <html lang="hu">
-<head>
-  <meta charset="UTF-8">
-  <title>SZOP gy. - 25/26 I.: Zárthelyidolgozat</title>
-<script src="../js/nav.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SZOP gy. - 25/26 I.: Zárthelyidolgozat</title>
+    <script defer src="../js/nav.js"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="../favicon.ico">
+  </head>
 
+  <body>
+    <div class="page">
+      <h1>Pékség</h1>
 
-  <link rel="icon" href="/favicon.ico">
-<link rel="stylesheet" href="../css/style.css">
-
-</head>
-
-<body>
-
-<div class="page">
-<h1>Pékség</h1>
-
-<!-- 5 KÓDBLOKK -->
-<div class="codebox">
-  <div class="code-title">Producer.cs</div>
-  <pre class="code"><code>
+      <!-- 5 KÓDBLOKK -->
+      <div class="codebox">
+        <div class="code-title">Producer.cs</div>
+        <pre class="code"><code>
 public void Work()
 {
     // Kiegészitendő
@@ -41,11 +37,11 @@ public void Work()
     IsWorking = false;
 }
   </code></pre>
-</div>
+      </div>
 
-<div class="codebox">
-  <div class="code-title">Consumer.cs</div>
-  <pre class="code"><code>
+      <div class="codebox">
+        <div class="code-title">Consumer.cs</div>
+        <pre class="code"><code>
 public void Work()
 {
     // Kiegészitendő
@@ -64,11 +60,11 @@ public void Work()
     IsWorking = false;
 }
   </code></pre>
-</div>
+      </div>
 
-<div class="codebox">
-  <div class="code-title">Supervisor.cs – TryProduce</div>
-  <pre class="code"><code>
+      <div class="codebox">
+        <div class="code-title">Supervisor.cs – TryProduce</div>
+        <pre class="code"><code>
 public static bool TryProduce(Producer producer, Sutemeny sutemeny)
 {
     // Kiegészitendő
@@ -82,11 +78,11 @@ public static bool TryProduce(Producer producer, Sutemeny sutemeny)
     }
 }
   </code></pre>
-</div>
+      </div>
 
-<div class="codebox">
-  <div class="code-title">Supervisor.cs – TryConsume</div>
-  <pre class="code"><code>
+      <div class="codebox">
+        <div class="code-title">Supervisor.cs – TryConsume</div>
+        <pre class="code"><code>
 public static bool TryConsume(Consumer consumer, out Sutemeny? sutemeny)
 {
     // Kiegészitendő
@@ -104,11 +100,11 @@ public static bool TryConsume(Consumer consumer, out Sutemeny? sutemeny)
     }
 }
   </code></pre>
-</div>
+      </div>
 
-<div class="codebox">
-  <div class="code-title">Supervisor.cs – TryConsume</div>
-  <pre class="code"><code>
+      <div class="codebox">
+        <div class="code-title">Supervisor.cs – TryConsume</div>
+        <pre class="code"><code>
 public static bool TryConsume(Consumer consumer, out Sutemeny? sutemeny)
 {
     // Kiegészitendő
@@ -126,11 +122,11 @@ public static bool TryConsume(Consumer consumer, out Sutemeny? sutemeny)
     }
 }
   </code></pre>
-</div>
+      </div>
 
-<div class="codebox">
-  <div class="code-title">Supervisor.cs – Working state</div>
-  <pre class="code"><code>
+      <div class="codebox">
+        <div class="code-title">Supervisor.cs – Working state</div>
+        <pre class="code"><code>
 public static void CheckProducerWorkingState()
 {
     // Kiegészitendő
@@ -143,11 +139,11 @@ public static void CheckConsumerWorkingState()
     areConsumersRunning = consumers.Any(c => c.IsWorking);
 }
   </code></pre>
-</div>
+      </div>
 
-<div class="codebox">
-  <div class="code-title">Supervisor.cs – WriteOutOneStack</div>
-  <pre class="code"><code>
+      <div class="codebox">
+        <div class="code-title">Supervisor.cs – WriteOutOneStack</div>
+        <pre class="code"><code>
 public static void WriteOutOneStack()
 {
     // Kiegészitendő
@@ -159,11 +155,11 @@ public static void WriteOutOneStack()
     }
 }
   </code></pre>
-</div>
+      </div>
 
-<div class="codebox">
-  <div class="code-title">Supervisor.cs – Create methods</div>
-  <pre class="code"><code>
+      <div class="codebox">
+        <div class="code-title">Supervisor.cs – Create methods</div>
+        <pre class="code"><code>
 public static void CreateConsumers(int amount, SutemenyFajta sutemenyFajta, Toltelek toltelek)
 {
     // Kiegészitendő
@@ -178,11 +174,11 @@ public static void CreateProducers(int amount, int amountToProduce, SutemenyFajt
         producers.Add(new Producer(amountToProduce, sutemenyFajta, toltelek));
 }
   </code></pre>
-</div>
+      </div>
 
-<div class="codebox">
-  <div class="code-title">Supervisor.cs – StartProcess</div>
-  <pre class="code"><code>
+      <div class="codebox">
+        <div class="code-title">Supervisor.cs – StartProcess</div>
+        <pre class="code"><code>
 public static void StartProcess()
 {
     // Kiegészitendő
@@ -207,11 +203,11 @@ public static void StartProcess()
     }
 }
   </code></pre>
-</div>
+      </div>
 
-<div class="codebox">
-  <div class="code-title">Program.cs</div>
-  <pre class="code"><code>
+      <div class="codebox">
+        <div class="code-title">Program.cs</div>
+        <pre class="code"><code>
 static void Main(string[] args)
 {
     // Termelők és fogyasztók létrehozása
@@ -224,34 +220,33 @@ static void Main(string[] args)
     Console.ReadLine();
 }
   </code></pre>
-</div>
+      </div>
+    </div>
+    <script>
+      document.querySelectorAll("pre.code code").forEach((codeEl) => {
+        let html = codeEl.textContent
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
 
-</div>
-<script>
-  document.querySelectorAll("pre.code code").forEach(codeEl => {
-    let html = codeEl.textContent
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+        html = html.replace(/(\/\/.*)/g, '<span class="cmt">$1</span>');
+        html = html.replace(/(".*?")/g, '<span class="str">$1</span>');
+        html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+        html = html.replace(
+          /\b(static|void|class|public|private|internal|return|new)\b/g,
+          '<span class="kw">$1</span>'
+        );
+        html = html.replace(
+          /\b(Console|Supervisor|SutemenyFajta|Toltelek)\b/g,
+          '<span class="cls">$1</span>'
+        );
+        html = html.replace(
+          /\b(Main|ReadLine|CreateProducers|CreateConsumers|StartProcess)\b/g,
+          '<span class="mtd">$1</span>'
+        );
 
-    html = html.replace(/(\/\/.*)/g, '<span class="cmt">$1</span>');
-    html = html.replace(/(".*?")/g, '<span class="str">$1</span>');
-    html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
-    html = html.replace(
-      /\b(static|void|class|public|private|internal|return|new)\b/g,
-      '<span class="kw">$1</span>'
-    );
-    html = html.replace(
-      /\b(Console|Supervisor|SutemenyFajta|Toltelek)\b/g,
-      '<span class="cls">$1</span>'
-    );
-    html = html.replace(
-      /\b(Main|ReadLine|CreateProducers|CreateConsumers|StartProcess)\b/g,
-      '<span class="mtd">$1</span>'
-    );
-
-    codeEl.innerHTML = html;
-  });
-</script>
-</body>
+        codeEl.innerHTML = html;
+      });
+    </script>
+  </body>
 </html>
