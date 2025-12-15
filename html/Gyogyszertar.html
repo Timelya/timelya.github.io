@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>SZOP gy. - 25/26 I.: Zárthelyidolgozat</title>
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<nav class="nav">
+  <a href="../timea.github.io/index.html">ZH 1 - Pékség</a>
+  <a href="html/Auto.html">ZH 1 - Autó</a>
+  <a href="html/Gyogyszertar.html">ZH 1 - Gyógyszertár</a>
+  <a href="html/Sorok_variacio.html">ZH 1 - Sörök variáció</a>
+  <a href="html/Sorok.html">ZH 1 - Sörök</a>
+  <a href="html/videojatekok.html">ZH 1 - Videójátékok</a>
+  <a href="html/zh2.html">ZH 2</a>
+</nav>
+
+
+<div class="page">
+<h1>asd</h1>
+
+</div>
+
+<script>
+  document.querySelectorAll("pre.code code").forEach(codeEl => {
+    let html = codeEl.textContent
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+    html = html.replace(/(\/\/.*)/g, '<span class="cmt">$1</span>');
+    html = html.replace(/(".*?")/g, '<span class="str">$1</span>');
+    html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+    html = html.replace(
+      /\b(static|void|class|public|private|internal|return|new)\b/g,
+      '<span class="kw">$1</span>'
+    );
+    html = html.replace(
+      /\b(Console|Supervisor|SutemenyFajta|Toltelek)\b/g,
+      '<span class="cls">$1</span>'
+    );
+    html = html.replace(
+      /\b(Main|ReadLine|CreateProducers|CreateConsumers|StartProcess)\b/g,
+      '<span class="mtd">$1</span>'
+    );
+
+    codeEl.innerHTML = html;
+  });
+</script>
+</body>
+</html>
