@@ -5,24 +5,225 @@
     <title>SZOP gy. - 25/26 I.: Zárthelyidolgozat</title>
     <script defer src="../js/nav.js"></script>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="../favicon.ico">
+    <link rel="icon" href="/favicon.ico">
   </head>
 
 <body>
 
-<nav class="nav">
-  <a href="../timea.github.io/index.html">ZH 1 - Pékség</a>
-  <a href="html/Auto.html">ZH 1 - Autó</a>
-  <a href="html/Gyogyszertar.html">ZH 1 - Gyógyszertár</a>
-  <a href="html/Sorok_variacio.html">ZH 1 - Sörök variáció</a>
-  <a href="html/Sorok.html">ZH 1 - Sörök</a>
-  <a href="html/videojatekok.html">ZH 1 - Videójátékok</a>
-  <a href="html/zh2.html">ZH 2</a>
-</nav>
-
-
 <div class="page">
-<h1>asd</h1>
+<h1>Gyógyszertár – megoldás</h1>
+<div class="codebox">
+  <div class="code-title">GyogyszerTipus.cs</div>
+  <pre class="code"><code>
+public enum GyogyszerTipus
+{
+    Fajdalomcsillapito,
+    Vernyomascsokkento,
+    AllergiaGyogyszer
+}
+  </code></pre>
+</div>
+<div class="codebox">
+  <div class="code-title">Gyogyszer.cs</div>
+  <pre class="code"><code>
+public class Gyogyszer
+{
+    private static int ID = 1;
+
+    public int Azonosito { get; }
+    public GyogyszerTipus Tipus { get; }
+    public int Minoseg { get; } // 1–5
+
+    public Gyogyszer(GyogyszerTipus tipus, int minoseg)
+    {
+        Azonosito = ID++;
+        Tipus = tipus;
+        Minoseg = minoseg;
+    }
+
+    public override string ToString()
+        => $"{Azonosito} ({Tipus}, minőség={Minoseg})";
+}
+  </code></pre>
+</div>
+<div class="codebox">
+  <div class="code-title">Termelo.cs – Work()</div>
+  <pre class="code"><code>
+public void Work()
+{
+    // Kiegészitendő
+    IsWorking = true;
+
+    while (TermeltDb < TermelendoDb)
+    {
+        int minoseg = Supervisor.Rnd.Next(1, 6); // 1–5
+        Gyogyszer gy = new Gyogyszer(GyogyszerTipus, minoseg);
+
+        if (Supervisor.TryProduce(this, gy))
+        {
+            TermeltDb++;
+            Console.WriteLine($"{this} termelte: {gy}");
+        }
+
+        Thread.Sleep(1500); // 1,5 mp
+    }
+
+    IsWorking = false;
+    Console.WriteLine($"{this} leállt (termelt: {TermeltDb})");
+}
+  </code></pre>
+</div>
+<div class="codebox">
+  <div class="code-title">Fogyaszto.cs – Work()</div>
+  <pre class="code"><code>
+public void Work()
+{
+    // Kiegészitendő
+    IsWorking = true;
+
+    while (true)
+    {
+        if (!Supervisor.CanBuildPackageFor(GyogyszerTipus))
+            break;
+
+        int packed = 0;
+
+        while (packed < CsomagolasiMennyiseg)
+        {
+            if (!Supervisor.TryConsume(this, out Gyogyszer? gy))
+                break;
+
+            if (gy.Minoseg == 1)
+            {
+                Console.WriteLine($"ROSSZ MINŐSÉG – kidobva: {gy}");
+                continue;
+            }
+
+            packed++;
+            OsszesCsomagoltDb++;
+        }
+
+        if (packed < CsomagolasiMennyiseg)
+            break;
+
+        OsszesCsomag++;
+        Console.WriteLine($"{this} elkészített 1 csomagot ({GyogyszerTipus})");
+    }
+
+    IsWorking = false;
+    Console.WriteLine($"{this} leállt – csomagok száma: {OsszesCsomag}");
+}
+  </code></pre>
+</div>
+<div class="codebox">
+  <div class="code-title">Felugyelo.cs</div>
+  <pre class="code"><code>
+public static class Supervisor
+{
+    public static Random Rnd = new Random();
+
+    private static readonly object locker = new object();
+    private static readonly List<Gyogyszer> buffer = new List<Gyogyszer>();
+
+    public static int MaxBuffer = 100;
+
+    public static List<Termelo> termelok = new();
+    public static List<Fogyaszto> fogyasztok = new();
+
+    public static bool areProducersRunning = true;
+
+    public static bool TryProduce(Termelo t, Gyogyszer gy)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            if (buffer.Count >= MaxBuffer) return false;
+            buffer.Add(gy);
+            return true;
+        }
+    }
+
+    public static bool TryConsume(Fogyaszto f, out Gyogyszer gy)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            gy = buffer.FirstOrDefault(x => x.Tipus == f.GyogyszerTipus);
+            if (gy == null) return false;
+
+            buffer.Remove(gy);
+            return true;
+        }
+    }
+
+    public static bool CanBuildPackageFor(GyogyszerTipus tipus)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            int count = buffer.Count(x => x.Tipus == tipus);
+            if (count >= 20) return true;
+
+            areProducersRunning = termelok.Any(t => t.IsWorking);
+            if (!areProducersRunning && count < 20) return false;
+
+            return true;
+        }
+    }
+
+    public static void StartProcess()
+    {
+        // Kiegészitendő
+        termelok.Clear();
+        fogyasztok.Clear();
+
+        // 3 termelő
+        for (int i = 0; i < 3; i++)
+        {
+            var tipus = (GyogyszerTipus)i;
+            int toProduce = Rnd.Next(80, 101);
+            termelok.Add(new Termelo(toProduce, tipus));
+        }
+
+        // 6 fogyasztó
+        for (int i = 0; i < 6; i++)
+        {
+            var tipus = (GyogyszerTipus)(i % 3);
+            fogyasztok.Add(new Fogyaszto(20, tipus));
+        }
+
+        List<Thread> threads = new();
+
+        foreach (var t in termelok)
+        {
+            var th = new Thread(t.Work);
+            threads.Add(th);
+            th.Start();
+        }
+
+        foreach (var f in fogyasztok)
+        {
+            var th = new Thread(f.Work);
+            threads.Add(th);
+            th.Start();
+        }
+
+        foreach (var th in threads)
+            th.Join();
+    }
+}
+  </code></pre>
+</div>
+<div class="codebox">
+  <div class="code-title">Program.cs</div>
+  <pre class="code"><code>
+static void Main(string[] args)
+{
+    Supervisor.StartProcess();
+    Console.ReadLine();
+}
+  </code></pre>
+</div>
 
 </div>
 

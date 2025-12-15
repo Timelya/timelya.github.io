@@ -5,24 +5,277 @@
     <title>SZOP gy. - 25/26 I.: Zárthelyidolgozat</title>
     <script defer src="../js/nav.js"></script>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="../favicon.ico">
+    <link rel="icon" href="/favicon.ico">
   </head>
 
 <body>
 
-<nav class="nav">
-  <a href="../timea.github.io/index.html">ZH 1 - Pékség</a>
-  <a href="html/Auto.html">ZH 1 - Autó</a>
-  <a href="html/Gyogyszertar.html">ZH 1 - Gyógyszertár</a>
-  <a href="html/Sorok_variacio.html">ZH 1 - Sörök variáció</a>
-  <a href="html/Sorok.html">ZH 1 - Sörök</a>
-  <a href="html/videojatekok.html">ZH 1 - Videójátékok</a>
-  <a href="html/zh2.html">ZH 2</a>
-</nav>
-
-
 <div class="page">
-<h1>erte</h1>
+<h1>Sörök (variáció) – megoldás</h1>
+
+<div class="codebox">
+  <div class="code-title">SorTipus.cs</div>
+  <pre class="code"><code>
+public enum SorTipus
+{
+    APA,
+    IPA
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Sor.cs</div>
+  <pre class="code"><code>
+public class Sor
+{
+    private static int ID = 1;
+
+    public int Azonosito { get; }
+    public SorTipus Tipus { get; }
+    public double AlkoholSzazalek { get; } // 1.0 - 5.0 (2 tizedes)
+
+    public Sor(SorTipus tipus, double alkoholSzazalek)
+    {
+        Azonosito = ID++;
+        Tipus = tipus;
+        AlkoholSzazalek = alkoholSzazalek;
+    }
+
+    public override string ToString()
+        => $"{Azonosito} ({Tipus}, {AlkoholSzazalek:0.00}%)";
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Termelo.cs – Work()</div>
+  <pre class="code"><code>
+public void Work()
+{
+    // Kiegészitendő
+    IsWorking = true;
+
+    while (termeltMennyiseg < termelendoMennyiseg)
+    {
+        double alkohol = Supervisor.NextAlcohol(); // 1.0..5.0, 2 tizedes
+        Sor sor = new Sor(termeltSorTipus, alkohol);
+
+        if (Supervisor.TryProduce(this, sor))
+        {
+            termeltMennyiseg++;
+            Console.WriteLine($"{this} termelte: {sor}");
+        }
+
+        Thread.Sleep(varakozasiIdo); // 1500 ms
+    }
+
+    IsWorking = false;
+    Console.WriteLine($"{this} leállt (termelt: {termeltMennyiseg})");
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Fogyaszto.cs – Work() (10-es fólia + típusváltás)</div>
+  <pre class="code"><code>
+public void Work()
+{
+    // Kiegészitendő
+    IsWorking = true;
+
+    while (true)
+    {
+        // Ha a jelenlegi típusból nem lehet fóliát összeállítani,
+        // próbáljunk váltani. Ha a másikból sem lehet, álljunk le.
+        if (!Supervisor.CanBuildFoilFor(aktualisSorTipus))
+        {
+            SorTipus masik = (aktualisSorTipus == SorTipus.APA) ? SorTipus.IPA : SorTipus.APA;
+
+            if (Supervisor.CanBuildFoilFor(masik))
+            {
+                aktualisSorTipus = masik;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        int foilCount = 0;
+
+        while (foilCount < 10)
+        {
+            if (!Supervisor.TryConsume(this, out Sor? sor))
+            {
+                // nem tudunk kivenni a bufferből
+                break;
+            }
+
+            // alacsony alkohol: Supervisor kidobta, sor == null
+            if (sor == null) continue;
+
+            aktualisFoliazottSorMennyiseg++;
+            osszesFoliazottSor++;
+            foilCount++;
+        }
+
+        if (foilCount < 10) break;
+
+        osszesFoliaCsomag++;
+        Console.WriteLine($"{this} kész fólia ({aktualisSorTipus}): 10 db");
+
+        // fólia után típust vált
+        aktualisSorTipus = (aktualisSorTipus == SorTipus.APA) ? SorTipus.IPA : SorTipus.APA;
+    }
+
+    Console.WriteLine($"{this} leáll – fólia csomagok száma: {osszesFoliaCsomag}");
+    IsWorking = false;
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Felugyelo.cs – buffer max 30 + szálindítás (2 termelő, 4 fogyasztó)</div>
+  <pre class="code"><code>
+public static class Supervisor
+{
+    private static readonly object locker = new object();
+    private static readonly List<Sor> buffer = new List<Sor>();
+    private static readonly Random Rnd = new Random();
+
+    public static int maxBuffer = 30;
+
+    public static List<Termelo> termelok = new List<Termelo>();
+    public static List<Fogyaszto> fogyasztok = new List<Fogyaszto>();
+
+    public static bool areProducersRunning = true;
+
+    public static double NextAlcohol()
+    {
+        // Kiegészitendő (1.0..5.0, 2 tizedes)
+        lock (locker)
+        {
+            double raw = 1.0 + Rnd.NextDouble() * 4.0; // 1..5
+            return Math.Round(raw, 2);
+        }
+    }
+
+    public static int NextToProduce()
+    {
+        // Kiegészitendő (50/60/70/80)
+        lock (locker)
+        {
+            int[] options = new[] { 50, 60, 70, 80 };
+            return options[Rnd.Next(0, options.Length)];
+        }
+    }
+
+    public static bool TryProduce(Termelo termelo, Sor sor)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            if (buffer.Count >= maxBuffer) return false;
+            buffer.Add(sor);
+            return true;
+        }
+    }
+
+    public static bool TryConsume(Fogyaszto fogyaszto, out Sor? sor)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            sor = buffer.FirstOrDefault(s => s.Tipus == fogyaszto.aktualisSorTipus);
+            if (sor == null) return false;
+
+            // alacsony alkohol (<1.5): kidob + jelzés
+            if (sor.AlkoholSzazalek < 1.5)
+            {
+                buffer.Remove(sor);
+                Console.WriteLine($"KIDOBVA (alacsony alkohol): {sor}");
+                sor = null;
+                return true;
+            }
+
+            buffer.Remove(sor);
+            return true;
+        }
+    }
+
+    public static void CheckProducerWorkingState()
+    {
+        // Kiegészitendő
+        areProducersRunning = termelok.Any(t => t.IsWorking);
+    }
+
+    public static bool CanBuildFoilFor(SorTipus tipus)
+    {
+        // Kiegészitendő (10 db-os fólia)
+        lock (locker)
+        {
+            int count = buffer.Count(s => s.Tipus == tipus);
+            if (count >= 10) return true;
+
+            CheckProducerWorkingState();
+
+            // ha már nincs termelő és nincs elég, nem fog összejönni
+            if (!areProducersRunning && count < 10) return false;
+
+            return false; // még futhat termelés, de MOST nincs elég
+        }
+    }
+
+    public static void StartProcess()
+    {
+        // Kiegészitendő
+        termelok.Clear();
+        fogyasztok.Clear();
+
+        // 2 termelő, különböző típusok, 1500 ms
+        termelok.Add(new Termelo(NextToProduce(), 1500, SorTipus.APA));
+        termelok.Add(new Termelo(NextToProduce(), 1500, SorTipus.IPA));
+
+        // 4 fogyasztó, induló típus felváltva
+        fogyasztok.Add(new Fogyaszto(SorTipus.APA));
+        fogyasztok.Add(new Fogyaszto(SorTipus.IPA));
+        fogyasztok.Add(new Fogyaszto(SorTipus.APA));
+        fogyasztok.Add(new Fogyaszto(SorTipus.IPA));
+
+        List<Thread> threads = new List<Thread>();
+
+        foreach (var t in termelok)
+        {
+            Thread th = new Thread(t.Work);
+            threads.Add(th);
+            th.Start();
+        }
+
+        foreach (var f in fogyasztok)
+        {
+            Thread th = new Thread(f.Work);
+            threads.Add(th);
+            th.Start();
+        }
+
+        foreach (var th in threads)
+            th.Join();
+    }
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Program.cs</div>
+  <pre class="code"><code>
+static void Main(string[] args)
+{
+    Supervisor.StartProcess();
+    Console.ReadLine();
+}
+  </code></pre>
+</div>
 
 </div>
 

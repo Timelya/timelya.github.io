@@ -5,24 +5,273 @@
     <title>SZOP gy. - 25/26 I.: Zárthelyidolgozat</title>
     <script defer src="../js/nav.js"></script>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="../favicon.ico">
+    <link rel="icon" href="/favicon.ico">
   </head>
 
 <body>
 
-<nav class="nav">
-  <a href="../timea.github.io/index.html">ZH 1 - Pékség</a>
-  <a href="html/Auto.html">ZH 1 - Autó</a>
-  <a href="html/Gyogyszertar.html">ZH 1 - Gyógyszertár</a>
-  <a href="html/Sorok_variacio.html">ZH 1 - Sörök variáció</a>
-  <a href="html/Sorok.html">ZH 1 - Sörök</a>
-  <a href="html/videojatekok.html">ZH 1 - Videójátékok</a>
-  <a href="html/zh2.html">ZH 2</a>
-</nav>
-
-
 <div class="page">
-<h1>asdr</h1>
+<h1>Videójátékok – megoldás</h1>
+
+<div class="codebox">
+  <div class="code-title">KonzolTipus.cs</div>
+  <pre class="code"><code>
+public enum KonzolTipus
+{
+    PlayStation,
+    XBOX
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Jatek.cs</div>
+  <pre class="code"><code>
+public class Jatek
+{
+    private static int ID = 1;
+
+    public int Azonosito { get; }
+    public KonzolTipus KonzolTipus { get; }
+    public int PEGI { get; } // 0,3,7,12,16,18
+
+    public Jatek(KonzolTipus tipus, int pegi)
+    {
+        Azonosito = ID++;
+        KonzolTipus = tipus;
+        PEGI = pegi;
+    }
+
+    public override string ToString()
+        => $"{Azonosito} ({KonzolTipus}, PEGI {PEGI})";
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Termelo.cs – Work()</div>
+  <pre class="code"><code>
+public void Work()
+{
+    // Kiegészitendő
+    IsWorking = true;
+
+    while (TermeltDb < TermelendoDb)
+    {
+        int[] pegik = { 0, 3, 7, 12, 16, 18 };
+        int pegi = pegik[Supervisor.Rnd.Next(0, pegik.Length)];
+
+        Jatek j = new Jatek(KonzolTipus, pegi);
+
+        if (Supervisor.TryProduce(this, j))
+        {
+            TermeltDb++;
+            Console.WriteLine($"{this} termelte: {j}");
+        }
+
+        Thread.Sleep(1000); // 1 mp
+    }
+
+    IsWorking = false;
+    Console.WriteLine($"{this} leállt (termelt: {TermeltDb})");
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Fogyaszto.cs – Work() (10-es doboz + váltás)</div>
+  <pre class="code"><code>
+public void Work()
+{
+    // Kiegészitendő
+    IsWorking = true;
+
+    while (true)
+    {
+        if (!Supervisor.CanBuildBoxFor(KonzolTipus))
+        {
+            KonzolTipus masik =
+                (KonzolTipus == KonzolTipus.PlayStation)
+                ? KonzolTipus.XBOX
+                : KonzolTipus.PlayStation;
+
+            if (Supervisor.CanBuildBoxFor(masik))
+            {
+                KonzolTipus = masik;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        int packed = 0;
+
+        while (packed < CsomagolasiMennyiseg)
+        {
+            if (!Supervisor.TryConsume(this, out Jatek? j))
+                break;
+
+            if (j.PEGI == 0)
+            {
+                Supervisor.SetAside(j);
+                Console.WriteLine($"FÉLRETÉVE (ismeretlen PEGI): {j}");
+                continue;
+            }
+
+            packed++;
+            OsszesenCsomagoltDb++;
+            Console.WriteLine($"{this} becsomagolta: {j}");
+        }
+
+        if (packed < CsomagolasiMennyiseg)
+            break;
+
+        OsszesDoboz++;
+        Console.WriteLine($"{this} kész doboz: 10 db ({KonzolTipus})");
+
+        KonzolTipus =
+            (KonzolTipus == KonzolTipus.PlayStation)
+            ? KonzolTipus.XBOX
+            : KonzolTipus.PlayStation;
+    }
+
+    Console.WriteLine($"{this} leáll – dobozok száma: {OsszesDoboz}");
+    IsWorking = false;
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Felugyelo.cs – buffer max 45 + szálindítás</div>
+  <pre class="code"><code>
+public static class Supervisor
+{
+    public static Random Rnd = new Random();
+
+    private static readonly object locker = new object();
+    private static readonly List<Jatek> buffer = new List<Jatek>();
+    private static readonly List<Jatek> felretett = new List<Jatek>();
+
+    public static int MaxBuffer = 45;
+
+    public static List<Termelo> termelok = new List<Termelo>();
+    public static List<Fogyaszto> fogyasztok = new List<Fogyaszto>();
+
+    public static bool areProducersRunning = true;
+
+    public static bool TryProduce(Termelo t, Jatek j)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            if (buffer.Count >= MaxBuffer) return false;
+            buffer.Add(j);
+            return true;
+        }
+    }
+
+    public static bool TryConsume(Fogyaszto f, out Jatek? j)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            j = buffer.FirstOrDefault(x => x.KonzolTipus == f.KonzolTipus);
+            if (j == null) return false;
+
+            buffer.Remove(j);
+            return true;
+        }
+    }
+
+    public static void SetAside(Jatek j)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            felretett.Add(j);
+        }
+    }
+
+    public static void CheckProducerWorkingState()
+    {
+        // Kiegészitendő
+        areProducersRunning = termelok.Any(t => t.IsWorking);
+    }
+
+    public static bool CanBuildBoxFor(KonzolTipus tipus)
+    {
+        // Kiegészitendő (10 db-os doboz)
+        lock (locker)
+        {
+            int count = buffer.Count(x => x.KonzolTipus == tipus);
+            if (count >= 10) return true;
+
+            CheckProducerWorkingState();
+
+            if (!areProducersRunning && count < 10)
+                return false;
+
+            return true;
+        }
+    }
+
+    public static void StartProcess()
+    {
+        // Kiegészitendő
+        termelok.Clear();
+        fogyasztok.Clear();
+
+        // 4 termelő (15–30 db)
+        for (int i = 0; i < 4; i++)
+        {
+            KonzolTipus tipus = (i % 2 == 0)
+                ? KonzolTipus.PlayStation
+                : KonzolTipus.XBOX;
+
+            int toProduce = Rnd.Next(15, 31);
+            termelok.Add(new Termelo(toProduce, 1000, tipus));
+        }
+
+        // 4 fogyasztó (10-es doboz)
+        fogyasztok.Add(new Fogyaszto(10, KonzolTipus.PlayStation));
+        fogyasztok.Add(new Fogyaszto(10, KonzolTipus.XBOX));
+        fogyasztok.Add(new Fogyaszto(10, KonzolTipus.PlayStation));
+        fogyasztok.Add(new Fogyaszto(10, KonzolTipus.XBOX));
+
+        List<Thread> threads = new List<Thread>();
+
+        foreach (var t in termelok)
+        {
+            Thread th = new Thread(t.Work);
+            threads.Add(th);
+            th.Start();
+        }
+
+        foreach (var f in fogyasztok)
+        {
+            Thread th = new Thread(f.Work);
+            threads.Add(th);
+            th.Start();
+        }
+
+        foreach (var th in threads)
+            th.Join();
+    }
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Program.cs</div>
+  <pre class="code"><code>
+static void Main(string[] args)
+{
+    Supervisor.StartProcess();
+    Console.ReadLine();
+}
+  </code></pre>
+</div>
 
 </div>
 

@@ -4,42 +4,296 @@
     <meta charset="UTF-8" />
     <title>SZOP gy. - 25/26 I.: Zárthelyidolgozat</title>
     <script defer src="../js/nav.js"></script>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="icon" href="/favicon.ico" />
   </head>
 
-<body>
+  <body>
+    <div class="page">
+      <h1>Autó – megoldás</h1>
 
-<div class="page">
-<h1>TEMP</h1>
+      <div class="codebox">
+        <div class="code-title">KaszniTipus.cs</div>
+        <pre class="code"><code>
+public enum KaszniTipus
+{
+    Audi,
+    Volkswagen,
+    Skoda
+}
+  </code></pre>
+      </div>
 
-</div>
+      <div class="codebox">
+        <div class="code-title">Alkatresz.cs</div>
+        <pre class="code"><code>
+public class Alkatresz
+{
+    private static int ID = 1;
 
-<script>
-  document.querySelectorAll("pre.code code").forEach(codeEl => {
-    let html = codeEl.textContent
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+    public int Azonosito { get; }
+    public KaszniTipus KaszniTipus { get; }
+    public int Besorolas { get; } // 1-3
 
-    html = html.replace(/(\/\/.*)/g, '<span class="cmt">$1</span>');
-    html = html.replace(/(".*?")/g, '<span class="str">$1</span>');
-    html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
-    html = html.replace(
-      /\b(static|void|class|public|private|internal|return|new)\b/g,
-      '<span class="kw">$1</span>'
-    );
-    html = html.replace(
-      /\b(Console|Supervisor|SutemenyFajta|Toltelek)\b/g,
-      '<span class="cls">$1</span>'
-    );
-    html = html.replace(
-      /\b(Main|ReadLine|CreateProducers|CreateConsumers|StartProcess)\b/g,
-      '<span class="mtd">$1</span>'
-    );
+    public Alkatresz(KaszniTipus kaszniTipus, int besorolas)
+    {
+        Azonosito = ID++;
+        KaszniTipus = kaszniTipus;
+        Besorolas = besorolas;
+    }
 
-    codeEl.innerHTML = html;
-  });
-</script>
-</body>
+    public override string ToString()
+        => $"{Azonosito} ({KaszniTipus}, besorolas={Besorolas})";
+}
+  </code></pre>
+      </div>
+
+      <div class="codebox">
+        <div class="code-title">Termelo.cs – Work()</div>
+        <pre class="code"><code>
+public void Work()
+{
+    // Kiegészitendő
+    IsWorking = true;
+
+    while (TermeltDb &lt; TermelendoDb)
+    {
+        int besorolas = Supervisor.Rnd.Next(1, 4); // 1..3
+        Alkatresz a = new Alkatresz(KaszniTipus, besorolas);
+
+        if (Supervisor.TryProduce(this, a))
+        {
+            TermeltDb++;
+            Console.WriteLine($"{this} termelte: {a}");
+        }
+
+        Thread.Sleep(2000); // 2 mp
+    }
+
+    IsWorking = false;
+    Console.WriteLine($"{this} leallt (termelt: {TermeltDb})");
+}
+  </code></pre>
+      </div>
+
+      <div class="codebox">
+        <div class="code-title">Fogyaszto.cs – Work()</div>
+        <pre class="code"><code>
+public void Work()
+{
+    // Kiegészitendő
+    IsWorking = true;
+
+    while (true)
+    {
+        // ha már nem lehet konténert összeállítani, álljunk le
+        if (!Supervisor.CanBuildContainerFor(KaszniTipus))
+            break;
+
+        int packedInThisContainer = 0;
+
+        while (packedInThisContainer &lt; CsomagolasiMennyiseg)
+        {
+            if (!Supervisor.TryConsume(this, out Alkatresz? a))
+            {
+                // nem tudunk tovább csomagolni
+                break;
+            }
+
+            // drága (1) és NEM Audi: félretesz + jelzés
+            if (a.Besorolas == 1 &amp;&amp; a.KaszniTipus != KaszniTipus.Audi)
+            {
+                Supervisor.SetAside(a);
+                Console.WriteLine($"FELRETETT (draga, nem Audi): {a}");
+                continue; // nem megy a konténerbe
+            }
+
+            packedInThisContainer++;
+            OsszesCsomagoltDb++;
+            Console.WriteLine($"{this} becsomagolta: {a}");
+        }
+
+        if (packedInThisContainer &lt; CsomagolasiMennyiseg)
+            break;
+
+        OsszesKontener++;
+        Console.WriteLine($"{this} kesz kontener: {CsomagolasiMennyiseg} db ({KaszniTipus})");
+    }
+
+    IsWorking = false;
+    Console.WriteLine($"{this} leallt (kontenerek: {OsszesKontener})");
+}
+  </code></pre>
+      </div>
+
+      <div class="codebox">
+        <div class="code-title">
+          Supervisor.cs – közös erőforrás + TryProduce/TryConsume + indítás
+        </div>
+        <pre class="code"><code>
+public static class Supervisor
+{
+    public static readonly Random Rnd = new Random();
+
+    private static readonly object locker = new object();
+    private static readonly List&lt;Alkatresz&gt; buffer = new List&lt;Alkatresz&gt;();
+    private static readonly List&lt;Alkatresz&gt; felretett = new List&lt;Alkatresz&gt;();
+
+    public static int MaxBuffer = 50;
+
+    public static List&lt;Termelo&gt; termelok = new List&lt;Termelo&gt;();
+    public static List&lt;Fogyaszto&gt; fogyasztok = new List&lt;Fogyaszto&gt;();
+
+    public static bool areProducersRunning = true;
+
+    public static bool TryProduce(Termelo termelo, Alkatresz a)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            if (buffer.Count &gt;= MaxBuffer) return false;
+            buffer.Add(a);
+            return true;
+        }
+    }
+
+    public static bool TryConsume(Fogyaszto fogyaszto, out Alkatresz? a)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            a = buffer.FirstOrDefault(x =&gt; x.KaszniTipus == fogyaszto.KaszniTipus);
+            if (a == null) return false;
+
+            buffer.Remove(a);
+            return true;
+        }
+    }
+
+    public static void SetAside(Alkatresz a)
+    {
+        // Kiegészitendő
+        lock (locker)
+        {
+            felretett.Add(a);
+        }
+    }
+
+    public static void CheckProducerWorkingState()
+    {
+        // Kiegészitendő
+        areProducersRunning = termelok.Any(t =&gt; t.IsWorking);
+    }
+
+    public static bool CanBuildContainerFor(KaszniTipus tipus)
+    {
+        // Kiegészitendő (3 db-os konténer)
+        lock (locker)
+        {
+            // ha nincs már termelő és nincs elég darab a bufferben → nem tud konténert összerakni
+            int count = buffer.Count(x =&gt; x.KaszniTipus == tipus);
+            if (count &gt;= 3) return true;
+
+            CheckProducerWorkingState();
+            if (!areProducersRunning &amp;&amp; count &lt; 3) return false;
+
+            return true; // még van esély, mert termelők futnak
+        }
+    }
+
+    public static void CreateProducers()
+    {
+        // Kiegészitendő (6 termelő)
+        termelok.Clear();
+
+        for (int i = 0; i &lt; 6; i++)
+        {
+            KaszniTipus tipus = (KaszniTipus)(i % 3);
+            int toProduce = Rnd.Next(20, 31); // 20-30
+            termelok.Add(new Termelo(toProduce, 2000, tipus));
+        }
+    }
+
+    public static void CreateConsumers()
+    {
+        // Kiegészitendő (3 fogyasztó)
+        fogyasztok.Clear();
+
+        fogyasztok.Add(new Fogyaszto(3, KaszniTipus.Audi));
+        fogyasztok.Add(new Fogyaszto(3, KaszniTipus.Volkswagen));
+        fogyasztok.Add(new Fogyaszto(3, KaszniTipus.Skoda));
+    }
+
+    public static void StartProcess()
+    {
+        // Kiegészitendő
+        MaxBuffer = 50;
+
+        CreateProducers();
+        CreateConsumers();
+
+        List&lt;Thread&gt; threads = new List&lt;Thread&gt;();
+
+        foreach (var t in termelok)
+        {
+            Thread th = new Thread(t.Work);
+            threads.Add(th);
+            th.Start();
+        }
+
+        foreach (var f in fogyasztok)
+        {
+            Thread th = new Thread(f.Work);
+            threads.Add(th);
+            th.Start();
+        }
+
+        foreach (var th in threads)
+            th.Join();
+    }
+}
+  </code></pre>
+      </div>
+
+      <div class="codebox">
+        <div class="code-title">Program.cs</div>
+        <pre class="code"><code>
+static void Main(string[] args)
+{
+    // Termelők és fogyasztók létrehozása / indítás
+    Supervisor.StartProcess();
+
+    Console.ReadLine();
+}
+  </code></pre>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll("pre.code code").forEach((codeEl) => {
+        let html = codeEl.textContent
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+
+        html = html.replace(/(\/\/.*)/g, '<span class="cmt">$1</span>');
+        html = html.replace(/(".*?")/g, '<span class="str">$1</span>');
+        html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+        html = html.replace(
+          /\b(static|void|class|public|private|internal|return|new)\b/g,
+          '<span class="kw">$1</span>'
+        );
+        html = html.replace(
+          /\b(Console|Supervisor|SutemenyFajta|Toltelek)\b/g,
+          '<span class="cls">$1</span>'
+        );
+        html = html.replace(
+          /\b(Main|ReadLine|CreateProducers|CreateConsumers|StartProcess)\b/g,
+          '<span class="mtd">$1</span>'
+        );
+
+        codeEl.innerHTML = html;
+      });
+    </script>
+  </body>
 </html>
