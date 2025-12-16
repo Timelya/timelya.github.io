@@ -5,13 +5,558 @@
     <title>SZOP gy. - 25/26 I.: Zárthelyidolgozat</title>
     <script defer src="../js/nav.js"></script>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="favicon.ico">
   </head>
 
 <body>
 
 <div class="page">
-<h1>TEMP</h1>
+<h1>ZH 2 – Szerver/Kliens (TCP) – kód</h1>
+
+<div class="codebox">
+  <div class="code-title">App.config (Server)</div>
+  <pre class="code"><code>
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;configuration&gt;
+  &lt;appSettings&gt;
+    &lt;add key="IP" value="127.0.0.1" /&gt;
+    &lt;add key="PORT" value="4242" /&gt;
+    &lt;add key="PROBES_XML" value="probes.xml" /&gt;
+    &lt;add key="CONTROLLERS_XML" value="controllers.xml" /&gt;
+  &lt;/appSettings&gt;
+&lt;/configuration&gt;
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Probe.cs (Server)</div>
+  <pre class="code"><code>
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+
+namespace Server
+{
+    internal class Probe
+    {
+        public static List&lt;Probe&gt; Probes { get; } = new List&lt;Probe&gt;();
+
+        public string Id { get; private set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
+        public int Energy { get; private set; } // 0..100
+        public string Sid { get; private set; }
+
+        public bool IsFast =&gt; Id.EndsWith("-F", StringComparison.OrdinalIgnoreCase);
+
+        public Probe(string id, int x, int y, int energy, string sid)
+        {
+            Id = id;
+            X = x;
+            Y = y;
+            Energy = Clamp(energy, 0, 100);
+            Sid = sid;
+        }
+
+        public static Probe CreateNew(string sid)
+        {
+            string id = GenerateUniqueId();
+            return new Probe(id, 0, 0, 100, sid);
+        }
+
+        public void DecreaseEnergy(int amount)
+        {
+            int cost = IsFast ? amount * 2 : amount;
+            Energy = Clamp(Energy - cost, 0, 100);
+        }
+
+        public void Refill(int amount)
+        {
+            Energy = Clamp(Energy + amount, 0, 100);
+        }
+
+        public void Move(int dx, int dy)
+        {
+            X += dx;
+            Y += dy;
+        }
+
+        public override string ToString() =&gt; $"{Id} (X={X}, Y={Y}, E={Energy})";
+
+        public static string GenerateUniqueId()
+        {
+            var rnd = new Random();
+            while (true)
+            {
+                int num = rnd.Next(0, 100000);
+                string five = num.ToString("D5");
+                string speed = rnd.Next(0, 2) == 0 ? "F" : "S";
+                string candidate = $"P-{five}-{speed}";
+
+                if (!Probes.Any(p =&gt; p.Id == candidate))
+                    return candidate;
+            }
+        }
+
+        public static Probe? FindById(string id) =&gt; Probes.FirstOrDefault(p =&gt; p.Id == id);
+
+        public static void LoadProbes(string fileName)
+        {
+            Probes.Clear();
+            if (!File.Exists(fileName)) return;
+
+            var doc = XDocument.Load(fileName);
+            foreach (var e in doc.Root!.Elements("probe"))
+            {
+                string id = (string)e.Attribute("id")!;
+                int x = (int)e.Attribute("X")!;
+                int y = (int)e.Attribute("Y")!;
+                int energy = (int)e.Attribute("energy")!;
+                string sid = (string)e.Attribute("sid")!;
+
+                Probes.Add(new Probe(id, x, y, energy, sid));
+            }
+        }
+
+        public static void SaveProbes(string fileName)
+        {
+            var root = new XElement("probes",
+                Probes.Select(p =&gt; new XElement("probe",
+                    new XAttribute("id", p.Id),
+                    new XAttribute("X", p.X),
+                    new XAttribute("Y", p.Y),
+                    new XAttribute("energy", p.Energy),
+                    new XAttribute("sid", p.Sid)
+                ))
+            );
+
+            new XDocument(new XDeclaration("1.0", "utf-8", "yes"), root).Save(fileName);
+        }
+
+        private static int Clamp(int v, int min, int max) =&gt; v &lt; min ? min : (v &gt; max ? max : v);
+    }
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Controller.cs (Server)</div>
+  <pre class="code"><code>
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+
+namespace Server
+{
+    internal class Controller
+    {
+        public static List&lt;Controller&gt; Controllers { get; } = new List&lt;Controller&gt;();
+
+        public string Id { get; private set; }
+        public string Passcode { get; private set; }
+        public string PId { get; private set; } // Probe Id
+
+        public Controller(string id, string passcode, string pid)
+        {
+            Id = id;
+            Passcode = passcode;
+            PId = pid;
+        }
+
+        public override string ToString() =&gt; $"{Id} (pid={PId})";
+
+        public static Controller? TryEnable(string id, string passcode)
+        {
+            return Controllers.FirstOrDefault(c =&gt;
+                c.Id.Equals(id, StringComparison.OrdinalIgnoreCase) &amp;&amp;
+                c.Passcode == passcode);
+        }
+
+        public static bool TryCreate(out Controller created, out Probe createdProbe)
+        {
+            string probeId = Probe.GenerateUniqueId();
+            string number = probeId.Split('-')[1];
+            string controllerId = $"C-{number}";
+
+            if (Controllers.Any(c =&gt; c.Id == controllerId))
+            {
+                created = null!;
+                createdProbe = null!;
+                return false;
+            }
+
+            string pass = "pass" + number;
+
+            created = new Controller(controllerId, pass, probeId);
+            createdProbe = new Probe(probeId, 0, 0, 100, controllerId);
+
+            Controllers.Add(created);
+            Probe.Probes.Add(createdProbe);
+
+            return true;
+        }
+
+        public static void LoadControllers(string fileName)
+        {
+            Controllers.Clear();
+            if (!File.Exists(fileName)) return;
+
+            var doc = XDocument.Load(fileName);
+            foreach (var e in doc.Root!.Elements("controller"))
+            {
+                string id = (string)e.Attribute("id")!;
+                string passcode = (string)e.Attribute("passcode")!;
+                string pid = (string)e.Attribute("pid")!;
+                Controllers.Add(new Controller(id, passcode, pid));
+            }
+        }
+
+        public static void SaveControllers(string fileName)
+        {
+            var root = new XElement("controllers",
+                Controllers.Select(c =&gt; new XElement("controller",
+                    new XAttribute("id", c.Id),
+                    new XAttribute("passcode", c.Passcode),
+                    new XAttribute("pid", c.PId)
+                ))
+            );
+
+            new XDocument(new XDeclaration("1.0", "utf-8", "yes"), root).Save(fileName);
+        }
+    }
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Control.cs (Server) – ThreadPool + parancsok + ütközés</div>
+  <pre class="code"><code>
+using System;
+using System.Collections.Concurrent;
+using System.IO;
+using System.Linq;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+namespace Server
+{
+    internal static class Control
+    {
+        private class ClientState
+        {
+            public TcpClient Client { get; }
+            public NetworkStream Stream { get; }
+            public StreamReader Reader { get; }
+            public StreamWriter Writer { get; }
+
+            public Controller? ActiveController { get; set; }
+            public Probe? ActiveProbe { get; set; }
+
+            public ClientState(TcpClient c)
+            {
+                Client = c;
+                Stream = c.GetStream();
+                Reader = new StreamReader(Stream, Encoding.UTF8);
+                Writer = new StreamWriter(Stream, Encoding.UTF8) { AutoFlush = true };
+            }
+        }
+
+        private static readonly object clientsLock = new object();
+        private static readonly List&lt;ClientState&gt; clients = new List&lt;ClientState&gt;();
+        private static readonly Random rnd = new Random();
+
+        public static void AddClient(TcpClient client)
+        {
+            var st = new ClientState(client);
+            lock (clientsLock) clients.Add(st);
+
+            ThreadPool.QueueUserWorkItem(_ =&gt; HandleClient(st));
+        }
+
+        public static void CloseClient(ClientState st)
+        {
+            lock (clientsLock) clients.Remove(st);
+
+            try { st.Writer.Dispose(); } catch { }
+            try { st.Reader.Dispose(); } catch { }
+            try { st.Stream.Dispose(); } catch { }
+            try { st.Client.Close(); } catch { }
+        }
+
+        public static void CloseAllClients()
+        {
+            List&lt;ClientState&gt; snapshot;
+            lock (clientsLock) snapshot = clients.ToList();
+            foreach (var st in snapshot) CloseClient(st);
+        }
+
+        private static void HandleClient(ClientState st)
+        {
+            try
+            {
+                st.Writer.WriteLine("OK CONNECTED");
+
+                while (true)
+                {
+                    string? line = st.Reader.ReadLine();
+                    if (line == null) break;
+
+                    string resp = ExecuteCommand(st, line.Trim());
+                    st.Writer.WriteLine(resp);
+
+                    if (!st.Client.Connected) break;
+                }
+            }
+            catch { }
+            finally
+            {
+                CloseClient(st);
+            }
+        }
+
+        private static bool HasEnergyOrReject(ClientState st, int cost, out string reject)
+        {
+            reject = "ERR NO ACTIVE PROBE";
+            if (st.ActiveProbe == null) return false;
+
+            if (cost &gt; 0 &amp;&amp; st.ActiveProbe.Energy &lt;= 0)
+            {
+                reject = "ERR PROBE OUT OF ENERGY";
+                return false;
+            }
+            return true;
+        }
+
+        private static string ExecuteCommand(ClientState st, string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return "ERR EMPTY";
+
+            var parts = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var cmd = parts[0].ToUpperInvariant();
+
+            switch (cmd)
+            {
+                case "EXIT":
+                    try { st.Client.Close(); } catch { }
+                    return "OK BYE";
+
+                case "ENABLE":
+                    if (parts.Length != 3) return "ERR ENABLE &lt;id&gt; &lt;passcode&gt;";
+
+                    var c = Controller.TryEnable(parts[1], parts[2]);
+                    if (c == null) return "ERR INVALID";
+
+                    var p = Probe.FindById(c.PId);
+                    if (p == null) return "ERR PROBE NOT FOUND";
+
+                    st.ActiveController = c;
+                    st.ActiveProbe = p;
+                    return $"OK ENABLED {c.Id} {p.Id}";
+
+                case "DISABLE":
+                    st.ActiveController = null;
+                    st.ActiveProbe = null;
+                    return "OK DISABLED";
+
+                case "CREATE":
+                    if (!Controller.TryCreate(out var createdC, out var createdP))
+                        return "ERR CREATE FAILED";
+
+                    Controller.SaveControllers("controllers.xml");
+                    Probe.SaveProbes("probes.xml");
+
+                    st.ActiveController = createdC;
+                    st.ActiveProbe = createdP;
+
+                    return $"OK CREATED {createdC.Id} {createdC.Passcode} {createdP.Id}";
+
+                case "PROBES":
+                    if (!HasEnergyOrReject(st, 1, out var rejP)) return rejP;
+                    st.ActiveProbe!.DecreaseEnergy(1);
+
+                    var bag = new ConcurrentBag&lt;string&gt;();
+                    var arr = Probe.Probes.ToArray();
+
+                    Parallel.ForEach(arr, pr =&gt;
+                    {
+                        bag.Add($"{pr.Id} {pr.X} {pr.Y}");
+                    });
+
+                    return "OK PROBES\n" + string.Join("\n", bag.OrderBy(x =&gt; x));
+
+                case "STATUS":
+                    if (!HasEnergyOrReject(st, 2, out var rejS)) return rejS;
+                    st.ActiveProbe!.DecreaseEnergy(2);
+
+                    Probe? target = st.ActiveProbe;
+                    if (parts.Length == 2)
+                        target = Probe.FindById(parts[1]);
+
+                    if (target == null) return "ERR PROBE NOT FOUND";
+                    return $"OK STATUS {target.Id} X={target.X} Y={target.Y} E={target.Energy}";
+
+                case "REFILL":
+                    if (st.ActiveProbe == null) return "ERR NO ACTIVE PROBE";
+                    int add = rnd.Next(20, 71);
+                    st.ActiveProbe.Refill(add);
+                    return $"OK REFILLED +{add} E={st.ActiveProbe.Energy}";
+
+                case "UP":    return Move(st, 0, +1);
+                case "DOWN":  return Move(st, 0, -1);
+                case "LEFT":  return Move(st, -1, 0);
+                case "RIGHT": return Move(st, +1, 0);
+
+                default:
+                    if (!HasEnergyOrReject(st, 1, out var rejU)) return rejU;
+                    st.ActiveProbe!.DecreaseEnergy(1);
+                    return "ERR UNKNOWN";
+            }
+        }
+
+        private static string Move(ClientState st, int dx, int dy)
+        {
+            if (!HasEnergyOrReject(st, 1, out var rejM)) return rejM;
+
+            st.ActiveProbe!.DecreaseEnergy(1);
+
+            int newX = st.ActiveProbe.X + dx;
+            int newY = st.ActiveProbe.Y + dy;
+
+            var other = Probe.Probes.FirstOrDefault(p =&gt;
+                p.Id != st.ActiveProbe.Id &amp;&amp; p.X == newX &amp;&amp; p.Y == newY);
+
+            if (other != null)
+            {
+                st.ActiveProbe.DecreaseEnergy(10);
+                other.DecreaseEnergy(10);
+
+                try { st.Writer.WriteLine("ERR COLLISION"); } catch { }
+                try { st.Client.Close(); } catch { }
+
+                return $"ERR COLLISION {st.ActiveProbe.Id} {other.Id}";
+            }
+
+            st.ActiveProbe.Move(dx, dy);
+            return $"OK MOVED {st.ActiveProbe.Id} X={st.ActiveProbe.X} Y={st.ActiveProbe.Y} E={st.ActiveProbe.Energy}";
+        }
+    }
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Program.cs (Server) – Listener + XML betöltés</div>
+  <pre class="code"><code>
+using System;
+using System.Configuration;
+using System.Net;
+using System.Net.Sockets;
+
+namespace Server
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string ip = ConfigurationManager.AppSettings["IP"] ?? "127.0.0.1";
+            int port = int.Parse(ConfigurationManager.AppSettings["PORT"] ?? "4242");
+
+            string probesXml = ConfigurationManager.AppSettings["PROBES_XML"] ?? "probes.xml";
+            string controllersXml = ConfigurationManager.AppSettings["CONTROLLERS_XML"] ?? "controllers.xml";
+
+            Probe.LoadProbes(probesXml);
+            Controller.LoadControllers(controllersXml);
+
+            var listener = new TcpListener(IPAddress.Parse(ip), port);
+            listener.Start();
+
+            Console.WriteLine($"Listening on {ip}:{port}");
+
+            try
+            {
+                while (true)
+                {
+                    var client = listener.AcceptTcpClient();
+                    Control.AddClient(client);
+                }
+            }
+            catch
+            {
+                Control.CloseAllClients();
+            }
+            finally
+            {
+                listener.Stop();
+            }
+        }
+    }
+}
+  </code></pre>
+</div>
+
+<div class="codebox">
+  <div class="code-title">Client Program.cs – stabil kliens (Console)</div>
+  <pre class="code"><code>
+using System;
+using System.IO;
+using System.Net.Sockets;
+using System.Text;
+
+namespace Client
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            try
+            {
+                using var client = new TcpClient();
+                client.Connect("127.0.0.1", 4242);
+
+                using var stream = client.GetStream();
+                using var reader = new StreamReader(stream, Encoding.UTF8);
+                using var writer = new StreamWriter(stream, Encoding.UTF8) { AutoFlush = true };
+
+                Console.WriteLine(reader.ReadLine());
+
+                while (true)
+                {
+                    Console.Write("&gt; ");
+                    string? line = Console.ReadLine();
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+
+                    writer.WriteLine(line);
+
+                    string? resp = reader.ReadLine();
+                    if (resp == null)
+                    {
+                        Console.WriteLine("Kapcsolat megszakadt a szerverrel.");
+                        break;
+                    }
+
+                    Console.WriteLine(resp);
+
+                    if (line.Trim().Equals("EXIT", StringComparison.OrdinalIgnoreCase))
+                        break;
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Kapcsolat megszakadt a szerverrel.");
+            }
+        }
+    }
+}
+  </code></pre>
+</div>
 
 </div>
 
