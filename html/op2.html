@@ -10,14 +10,89 @@
 </head>
 <body>
 
+    <nav class="toc">
+  <h2>Tartalomjegyzék</h2>
+   <ul>
+    <li><a href="#mi-az-virtualizacio">1. Mi az virtualizáció?</a></li>
+    <li><a href="#mikor-alkalmazhato-virtualizacio">2. Milyen esetekben alkalmazható a virtualizáció?</a></li>
+    <li><a href="#virtualizacio-os">3. Milyen operációs rendszereken jöhet szóba virtualizáció?</a></li>
+    <li><a href="#virtualizacio-tipusai">4. Milyen típusú virtualizáció létezik és mi jellemzi ezeket?</a></li>
+    <li><a href="#virtualizacios-szoftverek">5. Milyen virtualizációs szoftvereket ismersz?</a></li>
+    <li><a href="#vm-letrehozas">6. Ismertesd egy virtuális gép létrehozásának folyamatát!</a></li>
+    <li><a href="#virtualis-hattertar">7. Ismertesd a virtuális háttértárak kezelésének lehetőségeit!</a></li>
+    <li><a href="#virtualbox-halozat">8. Ismertesd a hálózat kezelésének lehetőségeit a Virtualboxban!</a></li>
+    <li><a href="#guest-additions">9. Mi a guest additions?</a></li>
+    <li><a href="#megosztott-mappak">10. Hogyan használhatók megosztott mappák?</a></li>
+    <li><a href="#klonozas-pillanatkep">11. Mi a klónozás és a pillanatkép szerepe?</a></li>
+    <li><a href="#vm-koltotestes">12. Hogyan költöztethető egy virtuális gép egy másik fizikai gépre?</a></li>
+    <li><a href="#blade-szerver">13. Mi a blade szerver?</a></li>
+    <li><a href="#esxi-vs-virtualbox">14. Hasonlítsd össze a VMWare ESXi-t a Virtualbox-szal!</a></li>
+
+    <li><a href="#munkaallomas-szerver">1. Alkalmasnak tart munkaállomást szerver feladatok ellátására? Milyen többletszolgáltatásokat nyújt egy szerver hardver?</a></li>
+    <li><a href="#redundancia">2. Mit jelent a redundancia hardverelemek esetében?</a></li>
+    <li><a href="#ubuntu-telepites-modok">3. Milyen telepítési módokat ismersz Ubuntu Linux esetén?</a></li>
+    <li><a href="#linux-telepites-lepesek">4. Ismertesd egy Linux telepítésének főbb lépéseit!</a></li>
+    <li><a href="#particionalas-lepesek">5. Ismertesd egy Linux telepítése során a partíciók kialakításának lépéseit!</a></li>
+    <li><a href="#initrd">6. Mi az initrd?</a></li>
+    <li><a href="#csomagkezelo">7. Mi a csomagkezelő?</a></li>
+    <li><a href="#boot-manager">8. Mi a boot manager?</a></li>
+    <li><a href="#gpt">9. Mi a GPT és mik a jellemzői?</a></li>
+
+    <li><a href="#szoftver-telepites-modok">1. Milyen módszereket használtak (és használhatók ma is) szoftverek telepítésére?</a></li>
+    <li><a href="#csomagkezelo-mukodes">2. Mi a csomagkezelő és hogyan működik?</a></li>
+    <li><a href="#dpkg">3. Milyen használati esetei vannak a dpkg-nek?</a></li>
+    <li><a href="#fuggosegek">4. Mik a függőségek és hogyan kezelhetők?</a></li>
+    <li><a href="#apt">5. Mi az APT és hogyan működik?</a></li>
+    <li><a href="#repozitoriumok">6. Mik a repozitóriumok és hogyan kezelhetők a rendszerben?</a></li>
+    <li><a href="#apt-hasznalat">7. Milyen használati esetei vannak az apt-nek?</a></li>
+
+    <li><a href="#unix-fajlok">1. Mely fájlok játszanak szerepet a Unix felhasználó- és csoportkezelésében?</a></li>
+    <li><a href="#uid-gid">2. Mi azonosítja a felhasználót egy Unix rendszerben?</a></li>
+    <li><a href="#adduser-jelszo">3. Miért nem adható meg a jelszó paraméterként az adduser parancs számára?</a></li>
+    <li><a href="#adduser-alapertelmezett">4. Hogyan állíthatók be az adduser parancs alapértelmezett paraméterei?</a></li>
+    <li><a href="#csoportkezeles">5. Milyen parancsok használhatók a csoport- és csoport tagság kezelésére?</a></li>
+    <li><a href="#bashrc">6. Mi a bashrc és mi a szerepe?</a></li>
+
+    <li><a href="#ssh">1. Mi az ssh?</a></li>
+    <li><a href="#telnet-vs-ssh">2. Mi a különbség a telnet és az ssh közt?</a></li>
+    <li><a href="#ssh-hasznalat">3. Hogyan használható az ssh unix környezetben?</a></li>
+    <li><a href="#ssh-konfig">4. Hogyan konfigurálható az ssh Unix környezetben?</a></li>
+    <li><a href="#putty">5. Ismertesd a Putty használatát és fő beállításait!</a></li>
+    <li><a href="#putty-koltoztetes">6. Hogyan költöztethető a Putty egy másik számítógépre?</a></li>
+    <li><a href="#nyilvanos-kulcs">7. Mi a nyilvános kulcsú azonosítás?</a></li>
+    <li><a href="#kulcsos-kapcsolat">8. Hogyan használható a nyilvános kulcsú azonosítás a titkosított kapcsolat során?</a></li>
+    <li><a href="#digitalis-alairas">9. Hogyan használható a nyilvános kulcsú azonosítás a digitális aláírás során?</a></li>
+    <li><a href="#kulcsos-bejelentkezes">10. Hogyan használható a kulcspár a bejelentkezési folyamatban?</a></li>
+    <li><a href="#hardveres-kulcs">11. Milyen hardvereszközöket használhatók a kulcspár előállítása és kezelése során?</a></li>
+
+    <li><a href="#docker-os">1. Milyen operációs rendszereken használható a Docker?</a></li>
+    <li><a href="#docker-architektura">2. Milyen hardveren futtathatók Docker konténerek?</a></li>
+    <li><a href="#kontener-vs-vm">3. Mi a különbség a konténerek és a virtuális gépek között?</a></li>
+    <li><a href="#docker-arch-elemek">4. Mik a Docker architektúrájának főbb elemei?</a></li>
+    <li><a href="#namespaces">5. Mi a szerepe a Linux kernel névtereinek?</a></li>
+    <li><a href="#cgroups">6. Hogyan segítik a kontroll csoportok a Docker működését?</a></li>
+    <li><a href="#unionfs">7. Mi a Union fájlrendszer?</a></li>
+    <li><a href="#docker-engine">8. Milyen fő összetevőkből áll a Docker motor?</a></li>
+    <li><a href="#docker-telepites">9. Hogyan lehet telepíteni a Dockert Linux rendszeren?</a></li>
+    <li><a href="#docker-windows-mac">10. Hogyan lehet ezt megtenni Windows és MacOS rendszereken?</a></li>
+    <li><a href="#wsl2">11. Mi a WSL2 és miért van rá szükség?</a></li>
+    <li><a href="#dockerhub">12. Mi a DockerHub?</a></li>
+
+    <li><a href="#docker-halozat">Hálózatkezelés a konténerekben</a></li>
+    <li><a href="#docker-kotetek">Kötetek kezelése</a></li>
+    <li><a href="#grav-feladat">Gyakorlati feladat – Grav konténer</a></li>
+  </ul>
+</nav>
+
+
 <h1>Virtualizáció: Ellenőrző Kérdések</h1>
 
-<h2>1. Mi az virtualizáció?</h2>
+<h2 id="mi-az-virtualizacio">1. Mi az virtualizáció?</h2>
 <p>
 A virtualizáció az a technológia, amely lehetővé teszi, hogy egyetlen fizikai hardveren (host) több, egymástól teljesen független virtuális gépet (VM / guest) futtassunk egyidejűleg. Mindegyik virtuális gép saját operációs rendszerrel és a fizikai erőforrásokból allokált saját erőforrásokkal (CPU, RAM, tárhely) rendelkezik.
 </p>
 
-<h2>2. Milyen esetekben alkalmazható a virtualizáció?</h2>
+<h2 id="mikor-alkalmazhato-virtualizacio">2. Milyen esetekben alkalmazható a virtualizáció?</h2>
 <ul>
     <li>Rugalmas Erőforrás-kezelés: Változó terhelés esetén (pl. Neptun) az erőforrások dinamikus hozzárendelése és elvétele.</li>
     <li>Hardver Konszolidáció: Több kis teljesítményű szerver (pl. timeserver, webszerver) funkciójának futtatása egyetlen nagy fizikai gépen.</li>
@@ -26,12 +101,12 @@ A virtualizáció az a technológia, amely lehetővé teszi, hogy egyetlen fizik
     <li>Legacy Rendszerek: Régi, inkompatibilis operációs rendszerek (pl. DOS) futtatása modern hardveren.</li>
 </ul>
 
-<h2>3. Milyen operációs rendszereken jöhet szóba virtualizáció?</h2>
+<h2 id="virtualizacio-os">3. Milyen operációs rendszereken jöhet szóba virtualizáció?</h2>
 <p>
 Gyakorlatilag bármely modern vagy régebbi operációs rendszer futtatható virtuális gépen, beleértve a Windows, Linux (pl. Ubuntu), MacOS rendszereket és akár a régi DOS-t is.
 </p>
 
-<h2>4. Milyen típusú virtualizáció létezik és mi jellemzi ezeket?</h2>
+<h2 id="virtualizacio-tipusai">4. Milyen típusú virtualizáció létezik és mi jellemzi ezeket?</h2>
 <p>Alapvetően kétféle virtualizáció létezik:</p>
 
 <table border="1">
@@ -56,13 +131,13 @@ Gyakorlatilag bármely modern vagy régebbi operációs rendszer futtatható vir
     </tbody>
 </table>
 
-<h2>5. Milyen virtualizációs szoftvereket ismersz?</h2>
+<h2 id="virtualizacios-szoftverek">5. Milyen virtualizációs szoftvereket ismersz?</h2>
 <ul>
     <li>Bare-Metal: vmWare ESXi, Microsoft Hyper-V, Xen, ProxMox.</li>
     <li>Kliens Oldali: Virtualbox, vmWare Player, Microsoft Virtual PC, Parallels Desktop.</li>
 </ul>
 
-<h2>6. Ismertesd egy virtuális gép létrehozásának folyamatát!</h2>
+<h2 id="vm-letrehozas">6. Ismertesd egy virtuális gép létrehozásának folyamatát!</h2>
 <ol>
     <li>Név és Típus Megadása: A VM elnevezése és a telepítendő OS típusának/verziójának kiválasztása.</li>
     <li>Memória (RAM) Allokálása: A Host gép memóriájának megosztása.</li>
@@ -75,7 +150,7 @@ Gyakorlatilag bármely modern vagy régebbi operációs rendszer futtatható vir
     <li>Létrehozás: A VM létrejön, de még nem indítható (ISO hiányában).</li>
 </ol>
 
-<h2>7. Ismertesd a virtuális háttértárak kezelésének lehetőségeit!</h2>
+<h2 id="virtualis-hattertar">7. Ismertesd a virtuális háttértárak kezelésének lehetőségeit!</h2>
 <ul>
     <li>Virtuális Merevlemezek: Új létrehozása (mint fájl a Host gépen) vagy már létező diszk hozzáadása.</li>
     <li>Virtuális CD/DVD: Általában egy .iso fájlt illesztünk be.</li>
@@ -83,7 +158,7 @@ Gyakorlatilag bármely modern vagy régebbi operációs rendszer futtatható vir
     <li>Vezérlőtípusok: IDE, SATA, SCSI, SAS, Floppy, NVMe támogatása.</li>
 </ul>
 
-<h2>8. Ismertesd a hálózat kezelésének lehetőségeit a Virtualboxban!</h2>
+<h2 id="virtualbox-halozat">8. Ismertesd a hálózat kezelésének lehetőségeit a Virtualboxban!</h2>
 
 <table border="1">
     <thead>
@@ -112,33 +187,33 @@ Gyakorlatilag bármely modern vagy régebbi operációs rendszer futtatható vir
     </tbody>
 </table>
 
-<h2>9. Mi a guest additions?</h2>
+<h2 id="guest-additions">9. Mi a guest additions?</h2>
 <p>
 A Guest Additions (Vendég Kiegészítők) egy speciális szoftvercsomag (driver CD), amelyet a virtuális gépre kell telepíteni. Szerepe: Virtuális eszközmeghajtókat telepít a vendég OS-hez, lehetővé téve a teljes kihasználást (pl. osztott vágólap, megosztott mappák használata).
 </p>
 
-<h2>10. Hogyan használhatók megosztott mappák?</h2>
+<h2 id="megosztott-mappak">10. Hogyan használhatók megosztott mappák?</h2>
 <p>
 A megosztott mappa a Host és a Guest gép közös könyvtára a fájlcserére. A Host gép mappáját a Virtualbox beállításaiban kell kijelölni. A Guest rendszerben (pl. Windows alatt) ez a mappa a VBOXSVR hálózati számítógép megosztásaként érhető el.
 </p>
 
-<h2>11. Mi a klónozás és a pillanatkép szerepe?</h2>
+<h2 id="klonozas-pillanatkep">11. Mi a klónozás és a pillanatkép szerepe?</h2>
 <ul>
     <li>Klónozás: Egy meglevő virtuális gépről egy újabb, azonnal használható példány létrehozása.</li>
     <li>Pillanatkép (Snapshot): A virtuális gép diszkállapotának mentése egy adott ponton. Hiba esetén lehetővé teszi a gyors visszaállást az előző, működő állapotra.</li>
 </ul>
 
-<h2>12. Hogyan költöztethető egy virtuális gép egy másik fizikai gépre?</h2>
+<h2 id="vm-koltotestes">12. Hogyan költöztethető egy virtuális gép egy másik fizikai gépre?</h2>
 <p>
 A legmegbízhatóbb mód: a Host gépről a Fájl -> Gép exportálása menüponttal mentjük a VM-et (pl. OVF formátumban), majd a célgépen a Fájl -> Gép importálása menüponttal állítjuk helyre.
 </p>
 
-<h2>13. Mi a blade szerver?</h2>
+<h2 id="blade-szerver">13. Mi a blade szerver?</h2>
 <p>
 A Blade szerver egy olyan szerver architektúra, ahol egy nagy szekrényben (sasszéban) több különálló szerver (blade) található, amelyek megosztják az áramellátást, a hálózati kapcsolatokat és a hűtést. Előnyei: Kis helyfoglalás, nagy skálázhatóság.
 </p>
 
-<h2>14. Hasonlítsd össze a VMWare ESXi-t a Virtualbox-szal!</h2>
+<h2 id="esxi-vs-virtualbox">14. Hasonlítsd össze a VMWare ESXi-t a Virtualbox-szal!</h2>
 
 <table border="1">
     <thead>
@@ -174,7 +249,7 @@ A Blade szerver egy olyan szerver architektúra, ahol egy nagy szekrényben (sas
 
 <h1>Ellenőrző Kérdések és Válaszok (12. Fejezet)</h1>
 
-<h2>1. Alkalmasnak tart munkaállomást szerver feladatok ellátására? Milyen többletszolgáltatásokat nyújt egy szerver hardver?</h2>
+<h2 id="munkaallomas-szerver">1. Alkalmasnak tart munkaállomást szerver feladatok ellátására? Milyen többletszolgáltatásokat nyújt egy szerver hardver?</h2>
 
 <p><strong>Alkalmasság:</strong> Egy munkaállomás nem alkalmas kritikus szerver feladatok ellátására. Csak akkor jöhet szóba, ha a szolgáltatás kiesése elviselhető, és a helyreállítás néhány napot igénybe vehet.</p>
 
@@ -186,7 +261,7 @@ A Blade szerver egy olyan szerver architektúra, ahol egy nagy szekrényben (sas
     <li>Távfelügyelet (Pl. HP ILO): Független felügyeleti rendszer, amellyel a szerver távolról be-/kikapcsolható, felügyelhető, és a BIOS is konfigurálható anélkül, hogy fizikailag a gépnél kellene lenni.</li>
 </ul>
 
-<h2>2. Mit jelent a redundancia hardverelemek esetében?</h2>
+<h2 id="redundancia">2. Mit jelent a redundancia hardverelemek esetében?</h2>
 
 <p>
 A redundancia azt jelenti, hogy a rendszerben lévő kritikus hardverkomponensek (pl. tápegység, merevlemezek) több, párhuzamosan működő példányban vannak jelen.
@@ -194,7 +269,7 @@ A redundancia azt jelenti, hogy a rendszerben lévő kritikus hardverkomponensek
 
 <p><strong>Célja:</strong> Ha az egyik komponens meghibásodik, a másik azonnal átveszi a feladatát, ezzel megakadályozva az üzemzavart és biztosítva a folyamatos működést. (Pl. Dupla tápegység, RAID tömbök).</p>
 
-<h2>3. Milyen telepítési módokat ismersz Ubuntu Linux esetén?</h2>
+<h2 id="ubuntu-telepites-modok">3. Milyen telepítési módokat ismersz Ubuntu Linux esetén?</h2>
 
 <p>A jegyzet négy fő telepítési módot említ:</p>
 <ol>
@@ -204,7 +279,7 @@ A redundancia azt jelenti, hogy a rendszerben lévő kritikus hardverkomponensek
     <li>Telepítő Nélküli Telepítés: Egy live rendszert indítva, abból végzik az éles rendszer telepítését.</li>
 </ol>
 
-<h2>4. Ismertesd egy Linux telepítésének főbb lépéseit!</h2>
+<h2 id="linux-telepites-lepesek">4. Ismertesd egy Linux telepítésének főbb lépéseit!</h2>
 
 <ol>
     <li>Nyelv és Területi Beállítás: A telepítő nyelvének, majd az OS nyelvének, területi beállításainak és billentyűzetkiosztásának kiválasztása.</li>
@@ -219,7 +294,7 @@ A redundancia azt jelenti, hogy a rendszerben lévő kritikus hardverkomponensek
     <li>Befejezés és Újraindítás.</li>
 </ol>
 
-<h2>5. Ismertesd egy Linux telepítése során a partíciók kialakításának lépéseit!</h2>
+<h2 id="particionalas-lepesek">5. Ismertesd egy Linux telepítése során a partíciók kialakításának lépéseit!</h2>
 
 <p>A Kézi partícionálás választása után (msdos vagy GPT tábla létrehozása):</p>
 
@@ -246,7 +321,7 @@ A redundancia azt jelenti, hogy a rendszerben lévő kritikus hardverkomponensek
     </li>
 </ol>
 
-<h2>6. Mi az initrd?</h2>
+<h2 id="initrd">6. Mi az initrd?</h2>
 
 <p>
 Az initrd (INITial Ram Disk) egy lemez-image, amelyet a boot folyamat során a boot manager (Grub) betölt a kernel számára.
@@ -257,7 +332,7 @@ Az initrd (INITial Ram Disk) egy lemez-image, amelyet a boot folyamat során a b
     <li>Működés: Az initrd-re csak a boot folyamat során van szükség, utána a kernel eldobja.</li>
 </ul>
 
-<h2>7. Mi a csomagkezelő?</h2>
+<h2 id="csomagkezelo">7. Mi a csomagkezelő?</h2>
 
 <p>
 A csomagkezelő a Linux rendszerekben használt eszközök összessége, amely lehetővé teszi a szükséges szoftverek letöltését, telepítését, eltávolítását és frissítését (patch-elését) egy-egy önálló egységként (csomagként).
@@ -268,7 +343,7 @@ A csomagkezelő a Linux rendszerekben használt eszközök összessége, amely l
     <li>Fontosság: Lehetővé teszi az automatikus biztonsági frissítések kezelését (pl. Ubuntu).</li>
 </ul>
 
-<h2>8. Mi a boot manager?</h2>
+<h2 id="boot-manager">8. Mi a boot manager?</h2>
 
 <p>
 A boot manager (pl. Grub vagy Lilo) az a szoftver, amely a rendszer bekapcsolása után a rendszer betöltését végzi.
@@ -278,7 +353,7 @@ A boot manager (pl. Grub vagy Lilo) az a szoftver, amely a rendszer bekapcsolás
     <li>Feladata: Lehetővé teszi a felhasználó számára, hogy kiválassza, melyik operációs rendszert vagy melyik kernel verziót kívánja elindítani, különösen ha a gépen több OS van telepítve (dual-boot).</li>
 </ul>
 
-<h2>9. Mi a GPT és mik a jellemzői?</h2>
+<h2 id="gpt">9. Mi a GPT és mik a jellemzői?</h2>
 
 <p>
 A GPT a GUID Partition Table (Globally Unique Identifier Partition Table) rövidítése. Ez a modern utódja az 1983-as msdos partíciós táblának.
@@ -294,7 +369,7 @@ A GPT a GUID Partition Table (Globally Unique Identifier Partition Table) rövid
 
 <h1>Csomagkezelés: Ellenőrző Kérdések és Válaszok</h1>
 
-<h2>1. Milyen módszereket használtak (és használhatók ma is) szoftverek telepítésére?</h2>
+<h2 id="szoftver-telepites-modok">1. Milyen módszereket használtak (és használhatók ma is) szoftverek telepítésére?</h2>
 
 <table border="1">
     <thead>
@@ -328,7 +403,7 @@ A GPT a GUID Partition Table (Globally Unique Identifier Partition Table) rövid
     </tbody>
 </table>
 
-<h2>2. Mi a csomagkezelő és hogyan működik?</h2>
+<h2 id="csomagkezelo-mukodes">2. Mi a csomagkezelő és hogyan működik?</h2>
 
 <p>
 A csomagkezelő egy olyan rendszer, amelyet a szoftverek telepítési, eltávolítási, frissítési és függőségkezelési problémáinak megoldására fejlesztettek ki.
@@ -338,7 +413,7 @@ A csomagkezelő egy olyan rendszer, amelyet a szoftverek telepítési, eltávol�
     <li>Működése: A programokat lefordított binárisokat tartalmazó telepítő csomagokba (pl. .deb vagy .rpm fájlok) zárják. A csomagkezelő eszközök (mint a dpkg vagy APT) ezeket a csomagokat használják a rendszergazdai beavatkozások minimalizálásával.</li>
 </ul>
 
-<h2>3. Milyen használati esetei vannak a dpkg-nek?</h2>
+<h2 id="dpkg">3. Milyen használati esetei vannak a dpkg-nek?</h2>
 
 <p>
 A dpkg a Debian-alapú rendszerek alacsony szintű csomagkezelő eszköze, amely az egyes telepítő fájlok kezelésére szolgál.
@@ -367,7 +442,7 @@ A dpkg a Debian-alapú rendszerek alacsony szintű csomagkezelő eszköze, amely
     <li>Korlátja: Nem kezeli automatikusan a csomag függőségeit (ha egy program egy másikra szorul, azt manuálisan kell telepíteni).</li>
 </ul>
 
-<h2>4. Mik a függőségek és hogyan kezelhetők?</h2>
+<h2 id="fuggosegek">4. Mik a függőségek és hogyan kezelhetők?</h2>
 
 <ul>
     <li>Függőségek: Olyan programkönyvtárak vagy más szoftvercsomagok, amelyek elengedhetetlenek egy adott program működéséhez. Ha egy program függ egy másiktól (pl. a Midnight Commander az mc-data-tól), a függőség hiányában a telepítés sikertelen lesz.</li>
@@ -379,7 +454,7 @@ A dpkg a Debian-alapú rendszerek alacsony szintű csomagkezelő eszköze, amely
     <li>APT: Az apt-get install parancs kiadásakor az APT automatikusan felépíti a függőségi fát, letölti és telepíti az összes szükséges extra csomagot a megfelelő sorrendben.</li>
 </ul>
 
-<h2>5. Mi az APT és hogyan működik?</h2>
+<h2 id="apt">5. Mi az APT és hogyan működik?</h2>
 
 <p>
 Az APT (Advanced Package Tool) a Debian-alapú rendszerek fejlettebb, magas szintű csomagkezelő rendszere. Az APT a dpkg fölötti réteg, amely jelentősen automatizálja a folyamatot.
@@ -390,7 +465,7 @@ Az APT (Advanced Package Tool) a Debian-alapú rendszerek fejlettebb, magas szin
     <li>Fő parancs: apt-get</li>
 </ul>
 
-<h2>6. Mik a repozitóriumok és hogyan kezelhetők a rendszerben?</h2>
+<h2 id="repozitoriumok">6. Mik a repozitóriumok és hogyan kezelhetők a rendszerben?</h2>
 
 <ul>
     <li>Repozitóriumok (Tárházak): Hálózati tárolók, amelyeket a Linux disztribúciók tartanak fenn, és ahol a szoftverek, frissítések és hibajavítások elérhetőek.</li>
@@ -402,7 +477,7 @@ Az APT (Advanced Package Tool) a Debian-alapú rendszerek fejlettebb, magas szin
     <li>apt-get update: Ez a parancs frissíti a helyi nyilvántartást (/var/lib/apt/lists) a repozitóriumok aktuális állapotával. Ezt minden telepítés/frissítés előtt érdemes lefuttatni.</li>
 </ul>
 
-<h2>7. Milyen használati esetei vannak az apt-nek?</h2>
+<h2 id="apt-hasznalat">7. Milyen használati esetei vannak az apt-nek?</h2>
 
 <table border="1">
     <thead>
@@ -445,7 +520,7 @@ Az APT (Advanced Package Tool) a Debian-alapú rendszerek fejlettebb, magas szin
 
 <h1>Ellenőrző Kérdések és Válaszok (14. Fejezet)</h1>
 
-<h2>1. Mely fájlok játszanak szerepet a Unix felhasználó- és csoportkezelésében? Mi ezek felépítése és funkciója?</h2>
+<h2 id="unix-fajlok">1. Mely fájlok játszanak szerepet a Unix felhasználó- és csoportkezelésében? Mi ezek felépítése és funkciója?</h2>
 
 <table border="1">
     <thead>
@@ -474,7 +549,7 @@ Az APT (Advanced Package Tool) a Debian-alapú rendszerek fejlettebb, magas szin
     </tbody>
 </table>
 
-<h2>2. Mi azonosítja a felhasználót egy Unix rendszerben?</h2>
+<h2 id="uid-gid">2. Mi azonosítja a felhasználót egy Unix rendszerben?</h2>
 
 <p>
 A felhasználót elsősorban a UID (User ID) azonosítja. Ezen kívül minden felhasználóhoz tartozik egy GID (Group ID), amely az elsődleges csoportját azonosítja.
@@ -485,7 +560,7 @@ A felhasználót elsősorban a UID (User ID) azonosítja. Ezen kívül minden fe
     <li>Rendszerfelhasználók UID/GID tartománya: Általában 0-999 (folyamatokhoz kötődnek, pl. lp, daemon).</li>
 </ul>
 
-<h2>3. Miért nem adható meg a jelszó paraméterként az adduser parancs számára?</h2>
+<h2 id="adduser-jelszo">3. Miért nem adható meg a jelszó paraméterként az adduser parancs számára?</h2>
 
 <p>
 Mert a parancssorban kiadott parancsok más bejelentkezett felhasználók számára láthatóvá válhatnak (pl. a w parancs, vagy a folyamatlisták segítségével).
@@ -496,7 +571,7 @@ Mert a parancssorban kiadott parancsok más bejelentkezett felhasználók szám�
     <li>Megoldás: Az adduser interaktívan kéri be a jelszót, amely így nem válik láthatóvá mások számára.</li>
 </ul>
 
-<h2>4. Hogyan állíthatók be az adduser parancs alapértelmezett paraméterei?</h2>
+<h2 id="adduser-alapertelmezett">4. Hogyan állíthatók be az adduser parancs alapértelmezett paraméterei?</h2>
 
 <p>
 Az adduser parancs számos paraméterének alapértelmezett értéke az /etc/adduser.conf konfigurációs fájlban van meghatározva.
@@ -506,7 +581,7 @@ Az adduser parancs számos paraméterének alapértelmezett értéke az /etc/add
     <li>Példák: DSHELL (/bin/bash – alapértelmezett shell), DHOME (/home – alapértelmezett home könyvtár helye), USERGROUPS (létrehozzon-e egyedi csoportot a felhasználó nevével megegyezően), FIRST_UID (a felhasználói azonosító tartomány kezdete).</li>
 </ul>
 
-<h2>5. Milyen parancsok használhatók a csoport- és csoport tagság kezelésére?</h2>
+<h2 id="csoportkezeles">5. Milyen parancsok használhatók a csoport- és csoport tagság kezelésére?</h2>
 
 <table border="1">
     <thead>
@@ -569,7 +644,7 @@ Az adduser parancs számos paraméterének alapértelmezett értéke az /etc/add
     </tbody>
 </table>
 
-<h2>6. Mi a bashrc és mi a szerepe?</h2>
+<h2 id="bashrc">6. Mi a bashrc és mi a szerepe?</h2>
 
 <p>
 A .bashrc egy, a felhasználó home könyvtárában (~/.bashrc) található konfigurációs fájl.
@@ -583,12 +658,12 @@ A .bashrc egy, a felhasználó home könyvtárában (~/.bashrc) található konf
 
 <h1>Ellenőrző Kérdések és Válaszok (15. Fejezet - SSH)</h1>
 
-<h2>1. Mi az ssh?</h2>
+<h2 id="ssh">1. Mi az ssh?</h2>
 <p>
 Az SSH (Secure Shell) egy protokoll és egy program neve, amely lehetővé teszi, hogy egy távoli gépre biztonságosan bejelentkezzünk és azon dolgozzunk. Az SSH kapcsolat titkosított, így az átvitt adatok lehallgatása esetén sem válnak értelmezhetővé.
 </p>
 
-<h2>2. Mi a különbség a telnet és az ssh közt?</h2>
+<h2 id="telnet-vs-ssh">2. Mi a különbség a telnet és az ssh közt?</h2>
 
 <table border="1">
     <thead>
@@ -612,14 +687,14 @@ Az SSH (Secure Shell) egy protokoll és egy program neve, amely lehetővé teszi
     </tbody>
 </table>
 
-<h2>3. Hogyan használható az ssh unix környezetben?</h2>
+<h2 id="ssh-hasznalat">3. Hogyan használható az ssh unix környezetben?</h2>
 <p>Az SSH parancs parancssorban használható, a leggyakoribb szintaxisok:</p>
 <ul>
     <li>Egyszerű bejelentkezés (azonos felhasználónévvel): ssh &lt;célgép_neve_vagy_IP&gt; (pl. ssh gemini.ektf.hu)</li>
     <li>Bejelentkezés más felhasználónévvel: ssh &lt;felhasználónév&gt;@&lt;célgép_neve_vagy_IP&gt; (pl. ssh koczka.ferenc@gemini.ektf.hu)</li>
 </ul>
 
-<h2>4. Hogyan konfigurálható az ssh Unix környezetben?</h2>
+<h2 id="ssh-konfig">4. Hogyan konfigurálható az ssh Unix környezetben?</h2>
 <p>
 Az SSH kliens viselkedése a felhasználó home könyvtárában lévő ~/.ssh/config konfigurációs fájlban állítható be.
 </p>
@@ -633,7 +708,7 @@ Az SSH kliens viselkedése a felhasználó home könyvtárában lévő ~/.ssh/co
     <li>ServerAliveInterval 60: Megakadályozza az inaktív kapcsolatok lebontását a hálózati forgalom generálásával 60 másodpercenként.</li>
 </ul>
 
-<h2>5. Ismertesd a Putty használatát és fő beállításait!</h2>
+<h2 id="putty">5. Ismertesd a Putty használatát és fő beállításait!</h2>
 <p>
 A Putty egy ingyenes, telepítés nélkül használható Windows program SSH-kapcsolatokhoz.
 </p>
@@ -646,7 +721,7 @@ A Putty egy ingyenes, telepítés nélkül használható Windows program SSH-kap
     <li>Auto-Login Username: Előre beállítható a bejelentkezési név a Connection -> Data menüpontban.</li>
 </ul>
 
-<h2>6. Hogyan költöztethető a Putty egy másik számítógépre?</h2>
+<h2 id="putty-koltoztetes">6. Hogyan költöztethető a Putty egy másik számítógépre?</h2>
 <p>
 A Putty beállításai a Windows Registry-ben tárolódnak. Áthelyezéshez:
 </p>
@@ -658,7 +733,7 @@ A Putty beállításai a Windows Registry-ben tárolódnak. Áthelyezéshez:
     <li>A .reg fájlt a célgépre másolva, azon duplán kattintva (és a helyreállítást kérve) a mentett beállítások átkerülnek.</li>
 </ol>
 
-<h2>7. Mi a nyilvános kulcsú azonosítás?</h2>
+<h2 id="nyilvanos-kulcs">7. Mi a nyilvános kulcsú azonosítás?</h2>
 <p>
 A nyilvános kulcsú azonosítás a titkosított kommunikáció egy formája, amely egy kulcspár (nyilvános kulcs és titkos kulcs) használatán alapul, és kiváltja a jelszóval történő bejelentkezést.
 </p>
@@ -668,17 +743,17 @@ A nyilvános kulcsú azonosítás a titkosított kommunikáció egy formája, am
     <li>Titkos Kulcs (Private Key): Szigorúan titkos, csak a tulajdonos birtokolja. Csak ezzel lehet visszafejteni a nyilvános kulccsal titkosított adatot.</li>
 </ul>
 
-<h2>8. Hogyan használható a nyilvános kulcsú azonosítás a titkosított kapcsolat kiépítése és fenntartása során?</h2>
+<h2 id="kulcsos-kapcsolat">8. Hogyan használható a nyilvános kulcsú azonosítás a titkosított kapcsolat kiépítése és fenntartása során?</h2>
 <p>
 A titkosított kapcsolat (pl. SSH) kezdetén a nyilvános kulcsú titkosítást használják a jóval gyorsabb szimmetrikus kódoláshoz szükséges kulcs cseréjére. A kommunikáció ezután már a gyorsabb szimmetrikus kulccsal folytatódik.
 </p>
 
-<h2>9. Hogyan használható a nyilvános kulcsú azonosítás a digitális aláírás során?</h2>
+<h2 id="digitalis-alairas">9. Hogyan használható a nyilvános kulcsú azonosítás a digitális aláírás során?</h2>
 <p>
 A digitális aláírás alapelve, hogy a tulajdonos a titkos kulcsával kódol el egy üzenetet (aláírja). A címzett ezután a küldő nyilvános kulcsával tudja dekódolni. Ez bizonyítja, hogy az üzenet valóban a titkos kulcs birtokában lévő feladótól származik (hitelesség).
 </p>
 
-<h2>10. Hogyan használható a kulcspár a bejelentkezési folyamatban a jelszó helyettesítésére Putty és ssh parancs esetén?</h2>
+<h2 id="kulcsos-bejelentkezes">10. Hogyan használható a kulcspár a bejelentkezési folyamatban a jelszó helyettesítésére Putty és ssh parancs esetén?</h2>
 
 <ol>
     <li>Kulcspár generálása: Unix/Linuxon az ssh-keygen -t rsa -b 2048 paranccsal, Windowson a PuttyGen programmal történik.</li>
@@ -686,7 +761,7 @@ A digitális aláírás alapelve, hogy a tulajdonos a titkos kulcsával kódol e
     <li>Bejelentkezés: Ha a helyi gép ismeri a titkos kulcsot (pl. be van állítva a Putty-ban, vagy az SSH-parancs használja), a bejelentkezés jelszó megadása nélkül, a kulccsal történő azonosítással valósul meg.</li>
 </ol>
 
-<h2>11. Milyen hardvereszközöket használhatók a kulcspár előállítása és kezelése során?</h2>
+<h2 id="hardveres-kulcs">11. Milyen hardvereszközöket használhatók a kulcspár előállítása és kezelése során?</h2>
 
 <ul>
     <li>Aláíró tokenek: Néhány ezer forintos USB-s eszközök, amelyek képesek a kulcspár generálására és tárolására. Garantálják, hogy a titkos kulcs nem olvasható ki belőlük (pl. Putty-CAC szoftverrel használható Windowson).</li>
@@ -695,7 +770,7 @@ A digitális aláírás alapelve, hogy a tulajdonos a titkos kulcsával kódol e
 
 <h1>Diszk Rendszerek: Ellenőrző Kérdések és Válaszok (16. Fejezet)</h1>
 
-<h2>1. Mi a partíció és mi a szerepe?</h2>
+<h2 id="docker-os">1. Mi a partíció és mi a szerepe?</h2>
 <p>
 A partíció a háttértár egy összefüggő, különálló területe, amely úgy viselkedik, mintha egy önálló fizikai lemez lenne.
 </p>
@@ -703,7 +778,7 @@ A partíció a háttértár egy összefüggő, különálló területe, amely ú
     <li>Szerepe: Lehetővé teszi, hogy egyetlen fizikai diszken több logikailag elkülönített területet hozzunk létre, amelyek mindegyike eltérő fájlrendszert tartalmazhat (pl. a rendszerfájlok és a felhasználói adatok szétválasztása).</li>
 </ul>
 
-<h2>2. Milyen partícionálási sémákat ismersz, és mi jellemzi ezeket?</h2>
+<h2 id="docker-architektura">2. Milyen partícionálási sémákat ismersz, és mi jellemzi ezeket?</h2>
 
 <table border="1">
     <thead>
