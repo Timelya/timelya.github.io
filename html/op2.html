@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Virtualizáció: Ellenőrző Kérdések</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/op2.css">
+</head>
+<body>
+
+<h1>Virtualizáció: Ellenőrző Kérdések</h1>
+
+<h2>1. Mi az virtualizáció?</h2>
+<p>
+A virtualizáció az a technológia, amely lehetővé teszi, hogy egyetlen fizikai hardveren (host) több, egymástól teljesen független virtuális gépet (VM / guest) futtassunk egyidejűleg. Mindegyik virtuális gép saját operációs rendszerrel és a fizikai erőforrásokból allokált saját erőforrásokkal (CPU, RAM, tárhely) rendelkezik.
+</p>
+
+<h2>2. Milyen esetekben alkalmazható a virtualizáció?</h2>
+<ul>
+    <li>Rugalmas Erőforrás-kezelés: Változó terhelés esetén (pl. Neptun) az erőforrások dinamikus hozzárendelése és elvétele.</li>
+    <li>Hardver Konszolidáció: Több kis teljesítményű szerver (pl. timeserver, webszerver) funkciójának futtatása egyetlen nagy fizikai gépen.</li>
+    <li>Feladatok Szétválasztása: Különböző funkciók (levelezés, adatbázis) elkülönítése külön VM-ekre a jobb áttekinthetőség és stabilitás érdekében.</li>
+    <li>Tesztelés és Fejlesztés: Ideiglenes teszt- vagy demógépek gyors létrehozása és törlése.</li>
+    <li>Legacy Rendszerek: Régi, inkompatibilis operációs rendszerek (pl. DOS) futtatása modern hardveren.</li>
+</ul>
+
+<h2>3. Milyen operációs rendszereken jöhet szóba virtualizáció?</h2>
+<p>
+Gyakorlatilag bármely modern vagy régebbi operációs rendszer futtatható virtuális gépen, beleértve a Windows, Linux (pl. Ubuntu), MacOS rendszereket és akár a régi DOS-t is.
+</p>
+
+<h2>4. Milyen típusú virtualizáció létezik és mi jellemzi ezeket?</h2>
+<p>Alapvetően kétféle virtualizáció létezik:</p>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Típus</th>
+            <th>Jellemzők</th>
+            <th>Szoftverek (Példa)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Bare-Metal (Típus 1)</td>
+            <td>A virtualizációt végző szoftver (hypervisor) közvetlenül a fizikai hardveren fut. Szerverek esetében elterjedt.</td>
+            <td>vmWare ESXi, Microsoft Hyper-V, Xen, ProxMox.</td>
+        </tr>
+        <tr>
+            <td>Kliens Oldali (Típus 2)</td>
+            <td>A virtualizációs szoftver egy meglévő gazda operációs rendszeren (Host OS) belül fut, mint egy alkalmazás. Asztali gépeken használatos.</td>
+            <td>Virtualbox, vmWare Player, Virtual PC, Parallels Desktop.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>5. Milyen virtualizációs szoftvereket ismersz?</h2>
+<ul>
+    <li>Bare-Metal: vmWare ESXi, Microsoft Hyper-V, Xen, ProxMox.</li>
+    <li>Kliens Oldali: Virtualbox, vmWare Player, Microsoft Virtual PC, Parallels Desktop.</li>
+</ul>
+
+<h2>6. Ismertesd egy virtuális gép létrehozásának folyamatát!</h2>
+<ol>
+    <li>Név és Típus Megadása: A VM elnevezése és a telepítendő OS típusának/verziójának kiválasztása.</li>
+    <li>Memória (RAM) Allokálása: A Host gép memóriájának megosztása.</li>
+    <li>Merevlemez Beállítása: Új virtuális merevlemez létrehozása.
+        <ul>
+            <li>Dinamikusan növekvő: Kezdetben kevesebb helyet foglal, de lassabb lehet.</li>
+            <li>Fix méretű: Azonnal lefoglalja a teljes helyet, de gyorsabb a működése.</li>
+        </ul>
+    </li>
+    <li>Létrehozás: A VM létrejön, de még nem indítható (ISO hiányában).</li>
+</ol>
+
+<h2>7. Ismertesd a virtuális háttértárak kezelésének lehetőségeit!</h2>
+<ul>
+    <li>Virtuális Merevlemezek: Új létrehozása (mint fájl a Host gépen) vagy már létező diszk hozzáadása.</li>
+    <li>Virtuális CD/DVD: Általában egy .iso fájlt illesztünk be.</li>
+    <li>Médiakezelő: Lehetővé teszi a virtuális diszkek és image-ek központi kezelését, másolását, törlését, illetve a VM-ről való leválasztását.</li>
+    <li>Vezérlőtípusok: IDE, SATA, SCSI, SAS, Floppy, NVMe támogatása.</li>
+</ul>
+
+<h2>8. Ismertesd a hálózat kezelésének lehetőségeit a Virtualboxban!</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Mód</th>
+            <th>Cél és Működés</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>NAT (Network Address Translation)</td>
+            <td>A VM kifelé (Internet felé) tud kommunikálni a Host gép IP-címét használva, de a külvilág nem éri el a VM-et.</td>
+        </tr>
+        <tr>
+            <td>Bridge-elt Kártya</td>
+            <td>A VM közvetlenül kapcsolódik a fizikai hálózathoz, és úgy viselkedik, mint egy különálló fizikai gép (más hálózati gépek is elérhetik).</td>
+        </tr>
+        <tr>
+            <td>Belső Csatoló (Internal Network)</td>
+            <td>A VM-ek csak egymás között kommunikálhatnak, a Host gépet és az Internetet nem érik el.</td>
+        </tr>
+        <tr>
+            <td>Host Only Kártya</td>
+            <td>A VM-ek elérik a Host operációs rendszert is, de az Internet felől elszigeteltek maradnak.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>9. Mi a guest additions?</h2>
+<p>
+A Guest Additions (Vendég Kiegészítők) egy speciális szoftvercsomag (driver CD), amelyet a virtuális gépre kell telepíteni. Szerepe: Virtuális eszközmeghajtókat telepít a vendég OS-hez, lehetővé téve a teljes kihasználást (pl. osztott vágólap, megosztott mappák használata).
+</p>
+
+<h2>10. Hogyan használhatók megosztott mappák?</h2>
+<p>
+A megosztott mappa a Host és a Guest gép közös könyvtára a fájlcserére. A Host gép mappáját a Virtualbox beállításaiban kell kijelölni. A Guest rendszerben (pl. Windows alatt) ez a mappa a VBOXSVR hálózati számítógép megosztásaként érhető el.
+</p>
+
+<h2>11. Mi a klónozás és a pillanatkép szerepe?</h2>
+<ul>
+    <li>Klónozás: Egy meglevő virtuális gépről egy újabb, azonnal használható példány létrehozása.</li>
+    <li>Pillanatkép (Snapshot): A virtuális gép diszkállapotának mentése egy adott ponton. Hiba esetén lehetővé teszi a gyors visszaállást az előző, működő állapotra.</li>
+</ul>
+
+<h2>12. Hogyan költöztethető egy virtuális gép egy másik fizikai gépre?</h2>
+<p>
+A legmegbízhatóbb mód: a Host gépről a Fájl -> Gép exportálása menüponttal mentjük a VM-et (pl. OVF formátumban), majd a célgépen a Fájl -> Gép importálása menüponttal állítjuk helyre.
+</p>
+
+<h2>13. Mi a blade szerver?</h2>
+<p>
+A Blade szerver egy olyan szerver architektúra, ahol egy nagy szekrényben (sasszéban) több különálló szerver (blade) található, amelyek megosztják az áramellátást, a hálózati kapcsolatokat és a hűtést. Előnyei: Kis helyfoglalás, nagy skálázhatóság.
+</p>
+
+<h2>14. Hasonlítsd össze a VMWare ESXi-t a Virtualbox-szal!</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Tulajdonság</th>
+            <th>VMWare ESXi</th>
+            <th>Virtualbox</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Virtualizáció Típusa</td>
+            <td>Bare-Metal (Típus 1) – Közvetlenül a hardveren fut.</td>
+            <td>Kliens Oldali (Típus 2) – Egy Host OS-en belül fut.</td>
+        </tr>
+        <tr>
+            <td>Célkörnyezet</td>
+            <td>Szerverek, adatközpontok, termelési környezet.</td>
+            <td>Fejlesztés, tesztelés, asztali munkaállomások.</td>
+        </tr>
+        <tr>
+            <td>Kezelés</td>
+            <td>Webes adminisztrációs felület.</td>
+            <td>Grafikus felhasználói felület (Desktop applikáció).</td>
+        </tr>
+        <tr>
+            <td>Skálázhatóság</td>
+            <td>Magas (támogatja a vCenter, vMotion rendszereket).</td>
+            <td>Korlátozott, egyedi gépekhez van tervezve.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Ellenőrző Kérdések és Válaszok (12. Fejezet)</h1>
+
+<h2>1. Alkalmasnak tart munkaállomást szerver feladatok ellátására? Milyen többletszolgáltatásokat nyújt egy szerver hardver?</h2>
+
+<p><strong>Alkalmasság:</strong> Egy munkaállomás nem alkalmas kritikus szerver feladatok ellátására. Csak akkor jöhet szóba, ha a szolgáltatás kiesése elviselhető, és a helyreállítás néhány napot igénybe vehet.</p>
+
+<p><strong>Többletszolgáltatások (Szerver Hardver):</strong></p>
+<ul>
+    <li>Minőségi Hardver: Gyárilag összeszerelt, tesztelt, inkompatibilitásoktól mentes alkatrészek.</li>
+    <li>Dupla Tápegység: Redundancia; biztosítja a folyamatos működést egy tápegység meghibásodása esetén is (üzem közben cserélhető).</li>
+    <li>RAID Vezérlő: Redundáns diszkműködést tesz lehetővé, ami védi az adatokat a merevlemez-hibák ellen.</li>
+    <li>Távfelügyelet (Pl. HP ILO): Független felügyeleti rendszer, amellyel a szerver távolról be-/kikapcsolható, felügyelhető, és a BIOS is konfigurálható anélkül, hogy fizikailag a gépnél kellene lenni.</li>
+</ul>
+
+<h2>2. Mit jelent a redundancia hardverelemek esetében?</h2>
+
+<p>
+A redundancia azt jelenti, hogy a rendszerben lévő kritikus hardverkomponensek (pl. tápegység, merevlemezek) több, párhuzamosan működő példányban vannak jelen.
+</p>
+
+<p><strong>Célja:</strong> Ha az egyik komponens meghibásodik, a másik azonnal átveszi a feladatát, ezzel megakadályozva az üzemzavart és biztosítva a folyamatos működést. (Pl. Dupla tápegység, RAID tömbök).</p>
+
+<h2>3. Milyen telepítési módokat ismersz Ubuntu Linux esetén?</h2>
+
+<p>A jegyzet négy fő telepítési módot említ:</p>
+<ol>
+    <li>Egyszerű Telepítés: Kevés kérdést tesz fel a telepítő (alapértelmezett beállítások, pl. DHCP-től vár hálózati címet). Csak normál felhasználó hozható létre (sudo-val).</li>
+    <li>Szakértő Mód: Lényegesen több kérdést tesz fel; lehetővé teszi a root felhasználó jelszavának azonnali beállítását. (Elérés: telepítő menü, F6 → Szakértő mód, Space, Esc).</li>
+    <li>Automatizált Telepítés: A válaszok egy előre elkészített fájlba vannak leírva.</li>
+    <li>Telepítő Nélküli Telepítés: Egy live rendszert indítva, abból végzik az éles rendszer telepítését.</li>
+</ol>
+
+<h2>4. Ismertesd egy Linux telepítésének főbb lépéseit!</h2>
+
+<ol>
+    <li>Nyelv és Területi Beállítás: A telepítő nyelvének, majd az OS nyelvének, területi beállításainak és billentyűzetkiosztásának kiválasztása.</li>
+    <li>Hálózati Beállítás: DHCP használata vagy manuális IP-cím, Netmask, Átjáró és Névszerver megadása (szervereknél ez az elterjedt).</li>
+    <li>Gépnév és Tartomány: A szerver egyedi nevének és a domain (tartomány) nevének megadása.</li>
+    <li>Felhasználókezelés: Egy általános felhasználó létrehozása (a rootként való bejelentkezés biztonsági okokból nem javasolt!).</li>
+    <li>Rendszeróra: Az NTP (Network Time Protocol) bekapcsolása a pontos időszinkronizálás érdekében.</li>
+    <li>Partícionálás: A lemez felosztása (/, swap, /home, stb.) és a fájlrendszer (pl. Ext4) kiválasztása.</li>
+    <li>Rendszer Másolása: A kernel, az initrd és az alapvető szoftverek telepítése.</li>
+    <li>Csomagkezelő Forrás: Hálózati tárolók (repository) beállítása.</li>
+    <li>Boot Manager: A Grub telepítése a merevlemezre.</li>
+    <li>Befejezés és Újraindítás.</li>
+</ol>
+
+<h2>5. Ismertesd egy Linux telepítése során a partíciók kialakításának lépéseit!</h2>
+
+<p>A Kézi partícionálás választása után (msdos vagy GPT tábla létrehozása):</p>
+
+<ol>
+    <li>Gyökérpartíció (/):
+        <ul>
+            <li>Méret: 4–32 GByte (szerver esetén a /var és /home partíciók méretétől függően).</li>
+            <li>Használat: Ext4 fájlrendszer.</li>
+            <li>Csatolási pont: / (gyökérkönyvtár).</li>
+            <li>Indító zászló (msdos esetén): Bekapcsolása (bootable).</li>
+        </ul>
+    </li>
+    <li>Swap Partíció:
+        <ul>
+            <li>Méret: Ökölszabály szerint a fizikai memória kétszerese (bár ez vitatható).</li>
+            <li>Használat: Cserehely (virtuális memória).</li>
+        </ul>
+    </li>
+    <li>Adatpartíció (/home / /var):
+        <ul>
+            <li>A diszken maradó hely felosztása.</li>
+            <li>Csatolási pont: pl. /home (felhasználói adatok) vagy /var (logok, webszerver tartalom).</li>
+        </ul>
+    </li>
+</ol>
+
+<h2>6. Mi az initrd?</h2>
+
+<p>
+Az initrd (INITial Ram Disk) egy lemez-image, amelyet a boot folyamat során a boot manager (Grub) betölt a kernel számára.
+</p>
+
+<ul>
+    <li>Szerepe: Tartalmazza a legalapvetőbb drivereket (különösen a merevlemez-vezérlőkét), amelyek szükségesek ahhoz, hogy a kernel hozzá tudjon férni a rendszerpartícióhoz, és be tudja tölteni a többi drivert és modult. Ezáltal a kernel mérete kicsi maradhat.</li>
+    <li>Működés: Az initrd-re csak a boot folyamat során van szükség, utána a kernel eldobja.</li>
+</ul>
+
+<h2>7. Mi a csomagkezelő?</h2>
+
+<p>
+A csomagkezelő a Linux rendszerekben használt eszközök összessége, amely lehetővé teszi a szükséges szoftverek letöltését, telepítését, eltávolítását és frissítését (patch-elését) egy-egy önálló egységként (csomagként).
+</p>
+
+<ul>
+    <li>Forrása: Nem a telepítő CD, hanem az interneten elérhető hálózati tárolók (repository-k).</li>
+    <li>Fontosság: Lehetővé teszi az automatikus biztonsági frissítések kezelését (pl. Ubuntu).</li>
+</ul>
+
+<h2>8. Mi a boot manager?</h2>
+
+<p>
+A boot manager (pl. Grub vagy Lilo) az a szoftver, amely a rendszer bekapcsolása után a rendszer betöltését végzi.
+</p>
+
+<ul>
+    <li>Feladata: Lehetővé teszi a felhasználó számára, hogy kiválassza, melyik operációs rendszert vagy melyik kernel verziót kívánja elindítani, különösen ha a gépen több OS van telepítve (dual-boot).</li>
+</ul>
+
+<h2>9. Mi a GPT és mik a jellemzői?</h2>
+
+<p>
+A GPT a GUID Partition Table (Globally Unique Identifier Partition Table) rövidítése. Ez a modern utódja az 1983-as msdos partíciós táblának.
+</p>
+
+<p><strong>Jellemzői:</strong></p>
+<ul>
+    <li>Képes 2 TByte-nál nagyobb diszkek kezelésére (az msdos 2 TByte-nál "megbotlik").</li>
+    <li>Minden partíció egy egyedi, 36 karakteres azonosítót (GUID) kap.</li>
+    <li>Speciális partíció: GPT használata esetén szükséges egy kb. 512 MByte méretű, ún. Fenntartott BIOS boot típusú partíció létrehozása.</li>
+    <li>A boot flag (indító zászló) bekapcsolása már nem szükséges.</li>
+</ul>
+
+<h1>Csomagkezelés: Ellenőrző Kérdések és Válaszok</h1>
+
+<h2>1. Milyen módszereket használtak (és használhatók ma is) szoftverek telepítésére?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Rendszer</th>
+            <th>Módszer</th>
+            <th>Problémák/Jellemzők</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Windows</td>
+            <td>Telepítő programok (Installer)</td>
+            <td>Gyakran probléma az eltávolítás: a közösen használt .dll fájlok sorsa (hagyományos DLL Hell).</td>
+        </tr>
+        <tr>
+            <td>MacOS/IOS</td>
+            <td>Sandbox modell</td>
+            <td>Minden program a saját könyvtárába kerül. Törléskor a teljes könyvtárat eltávolítják. Csak az Apple Store-ból engedélyezett a telepítés (zárt rendszer).</td>
+        </tr>
+        <tr>
+            <td>Linux (Régi)</td>
+            <td>Forráskód fordítása</td>
+            <td>Nehézkes, függőségek kezelése, uninstaller hiánya, biztonsági hibák lassú javítása.</td>
+        </tr>
+        <tr>
+            <td>Linux (Modern)</td>
+            <td>Csomagkezelő rendszerek (.deb / .rpm)</td>
+            <td>Előre lefordított binárisok telepítése, automatikus függőségkezelés, egyszerű eltávolítás.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>2. Mi a csomagkezelő és hogyan működik?</h2>
+
+<p>
+A csomagkezelő egy olyan rendszer, amelyet a szoftverek telepítési, eltávolítási, frissítési és függőségkezelési problémáinak megoldására fejlesztettek ki.
+</p>
+
+<ul>
+    <li>Működése: A programokat lefordított binárisokat tartalmazó telepítő csomagokba (pl. .deb vagy .rpm fájlok) zárják. A csomagkezelő eszközök (mint a dpkg vagy APT) ezeket a csomagokat használják a rendszergazdai beavatkozások minimalizálásával.</li>
+</ul>
+
+<h2>3. Milyen használati esetei vannak a dpkg-nek?</h2>
+
+<p>
+A dpkg a Debian-alapú rendszerek alacsony szintű csomagkezelő eszköze, amely az egyes telepítő fájlok kezelésére szolgál.
+</p>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Parancs</th>
+            <th>Funkció</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>dpkg -i &lt;csomag.deb&gt;</td>
+            <td>Install (telepítés) egy helyi .deb fájlból.</td>
+        </tr>
+        <tr>
+            <td>dpkg -r &lt;csomag&gt;</td>
+            <td>Remove (eltávolítás) egy már telepített csomagról (a függőségeket és konfigurációt meghagyja).</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul>
+    <li>Korlátja: Nem kezeli automatikusan a csomag függőségeit (ha egy program egy másikra szorul, azt manuálisan kell telepíteni).</li>
+</ul>
+
+<h2>4. Mik a függőségek és hogyan kezelhetők?</h2>
+
+<ul>
+    <li>Függőségek: Olyan programkönyvtárak vagy más szoftvercsomagok, amelyek elengedhetetlenek egy adott program működéséhez. Ha egy program függ egy másiktól (pl. a Midnight Commander az mc-data-tól), a függőség hiányában a telepítés sikertelen lesz.</li>
+</ul>
+
+<p>Kezelés:</p>
+<ul>
+    <li>dpkg: A függőségeket manuálisan kell letölteni és telepíteni a fő program telepítése előtt.</li>
+    <li>APT: Az apt-get install parancs kiadásakor az APT automatikusan felépíti a függőségi fát, letölti és telepíti az összes szükséges extra csomagot a megfelelő sorrendben.</li>
+</ul>
+
+<h2>5. Mi az APT és hogyan működik?</h2>
+
+<p>
+Az APT (Advanced Package Tool) a Debian-alapú rendszerek fejlettebb, magas szintű csomagkezelő rendszere. Az APT a dpkg fölötti réteg, amely jelentősen automatizálja a folyamatot.
+</p>
+
+<ul>
+    <li>Működése: Nem várja el a felhasználótól, hogy tudja, hol van a telepítő fájl. Helyette a repozitóriumokban (tárházakban) keres. Az APT maga végzi el a letöltést, kezeli a függőségeket és telepíti a legújabb verziót.</li>
+    <li>Fő parancs: apt-get</li>
+</ul>
+
+<h2>6. Mik a repozitóriumok és hogyan kezelhetők a rendszerben?</h2>
+
+<ul>
+    <li>Repozitóriumok (Tárházak): Hálózati tárolók, amelyeket a Linux disztribúciók tartanak fenn, és ahol a szoftverek, frissítések és hibajavítások elérhetőek.</li>
+</ul>
+
+<p>Kezelése:</p>
+<ul>
+    <li>A repozitóriumok helyét az /etc/apt/sources.list fájl írja le (URL, verzió, tároló típusok: main, universe, multiverse, stb.).</li>
+    <li>apt-get update: Ez a parancs frissíti a helyi nyilvántartást (/var/lib/apt/lists) a repozitóriumok aktuális állapotával. Ezt minden telepítés/frissítés előtt érdemes lefuttatni.</li>
+</ul>
+
+<h2>7. Milyen használati esetei vannak az apt-nek?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Parancs</th>
+            <th>Funkció</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>apt-get update</td>
+            <td>Frissíti a helyi csomaglistát a repozitóriumok valós állapotára.</td>
+        </tr>
+        <tr>
+            <td>apt-get install &lt;csomag&gt;</td>
+            <td>Automatikusan letölti és telepíti a csomagot, beleértve az összes függőségét is.</td>
+        </tr>
+        <tr>
+            <td>apt-get upgrade</td>
+            <td>Frissíti az összes olyan csomagot, amelyből újabb változat áll rendelkezésre (nem frissíti a rendszermag csomagjait).</td>
+        </tr>
+        <tr>
+            <td>apt-get dist-upgrade</td>
+            <td>Teljes frissítést végez, beleértve a kernel (rendszermag) csomagok frissítését is (ami rendszer újraindítást igényel).</td>
+        </tr>
+        <tr>
+            <td>apt-get autoremove</td>
+            <td>Eltávolítja az összes olyan csomagot, amelyre már nincs szükség a rendszerben (pl. régi kerneleket, vagy már nem használt függőségeket).</td>
+        </tr>
+        <tr>
+            <td>apt-get autoremove --purge &lt;csomag&gt;</td>
+            <td>Eltávolítja a programot, a függőségeit és a konfigurációs fájljait is (teljes "írmagjának" eltávolítása).</td>
+        </tr>
+        <tr>
+            <td>apt-get clean</td>
+            <td>Törli a letöltött .deb telepítő fájlokat a gyorsítótárból (/var/cache/apt/archives).</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Ellenőrző Kérdések és Válaszok (14. Fejezet)</h1>
+
+<h2>1. Mely fájlok játszanak szerepet a Unix felhasználó- és csoportkezelésében? Mi ezek felépítése és funkciója?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Fájl</th>
+            <th>Funkció</th>
+            <th>Felépítés (Általános)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>/etc/passwd</td>
+            <td>Tárolja az összes felhasználói fiók alapvető információit, kivéve a jelszót (ez egy árnyékfájlban van).</td>
+            <td>Felhasználónév:Jelszó (helykitöltő):UID:GID:GECOS (Teljes név):Home Könyvtár:Shell</td>
+        </tr>
+        <tr>
+            <td>/etc/shadow</td>
+            <td>Tárolja a felhasználók titkosított jelszavait (árnyék jelszavak) és a jelszó érvényességével kapcsolatos információkat. Csak a root olvashatja.</td>
+            <td>Felhasználónév:Titkosított Jelszó:Utolsó változtatás dátuma:Jelszó Érvényessége, stb.</td>
+        </tr>
+        <tr>
+            <td>/etc/group</td>
+            <td>Tárolja az összes csoportot és a csoportok tagjait.</td>
+            <td>Csoportnév:Jelszó (általában x):GID:Tagok listája (vesszővel elválasztva)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>2. Mi azonosítja a felhasználót egy Unix rendszerben?</h2>
+
+<p>
+A felhasználót elsősorban a UID (User ID) azonosítja. Ezen kívül minden felhasználóhoz tartozik egy GID (Group ID), amely az elsődleges csoportját azonosítja.
+</p>
+
+<ul>
+    <li>Valódi felhasználók UID/GID tartománya: Általában 1000-től kezdődik (lásd /etc/adduser.conf).</li>
+    <li>Rendszerfelhasználók UID/GID tartománya: Általában 0-999 (folyamatokhoz kötődnek, pl. lp, daemon).</li>
+</ul>
+
+<h2>3. Miért nem adható meg a jelszó paraméterként az adduser parancs számára?</h2>
+
+<p>
+Mert a parancssorban kiadott parancsok más bejelentkezett felhasználók számára láthatóvá válhatnak (pl. a w parancs, vagy a folyamatlisták segítségével).
+</p>
+
+<ul>
+    <li>Kockázat: Ha a jelszót paraméterként adnánk meg (adduser --password &lt;jelszó&gt;), az kikerülne a parancssor történetébe és a futó folyamatok listájába is, ami komoly biztonsági kockázatot jelentene.</li>
+    <li>Megoldás: Az adduser interaktívan kéri be a jelszót, amely így nem válik láthatóvá mások számára.</li>
+</ul>
+
+<h2>4. Hogyan állíthatók be az adduser parancs alapértelmezett paraméterei?</h2>
+
+<p>
+Az adduser parancs számos paraméterének alapértelmezett értéke az /etc/adduser.conf konfigurációs fájlban van meghatározva.
+</p>
+
+<ul>
+    <li>Példák: DSHELL (/bin/bash – alapértelmezett shell), DHOME (/home – alapértelmezett home könyvtár helye), USERGROUPS (létrehozzon-e egyedi csoportot a felhasználó nevével megegyezően), FIRST_UID (a felhasználói azonosító tartomány kezdete).</li>
+</ul>
+
+<h2>5. Milyen parancsok használhatók a csoport- és csoport tagság kezelésére?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Kategória</th>
+            <th>Parancs</th>
+            <th>Funkció</th>
+            <th>Példa</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Felhasználó felvétel</td>
+            <td>adduser (magas szintű) vagy useradd (alacsony szintű)</td>
+            <td>Új felhasználó létrehozása, home könyvtárral és jelszóval.</td>
+            <td>adduser lajos</td>
+        </tr>
+        <tr>
+            <td>Felhasználó törlés</td>
+            <td>userdel</td>
+            <td>Törli a felhasználói fiókot. A -r paraméterrel törli a home könyvtárat is.</td>
+            <td>userdel -r nagy.agnes</td>
+        </tr>
+        <tr>
+            <td>Felhasználó módosítás</td>
+            <td>usermod</td>
+            <td>Felhasználói adatok (pl. lejárat, shell, home könyvtár) módosítása.</td>
+            <td>usermod feri --expiredate '2025/12/31'</td>
+        </tr>
+        <tr>
+            <td>Csoport felvétel</td>
+            <td>groupadd</td>
+            <td>Új csoport létrehozása.</td>
+            <td>groupadd horgaszok</td>
+        </tr>
+        <tr>
+            <td>Csoport módosítás</td>
+            <td>groupmod</td>
+            <td>Csoport átnevezése vagy GID módosítása.</td>
+            <td>groupmod horgaszok -n pecasok</td>
+        </tr>
+        <tr>
+            <td>Csoport tagság</td>
+            <td>adduser &lt;user&gt; &lt;group&gt;</td>
+            <td>Felhasználót ad hozzá egy már létező csoporthoz.</td>
+            <td>adduser feri pecasok</td>
+        </tr>
+        <tr>
+            <td>Csoport törlés</td>
+            <td>groupdel</td>
+            <td>Törli a csoportot. Nem törölhető, ha az egy felhasználó elsődleges csoportja!</td>
+            <td>groupdel pecasok</td>
+        </tr>
+        <tr>
+            <td>Információ</td>
+            <td>id &lt;user&gt;</td>
+            <td>Megjeleníti a felhasználó UID-jét, GID-jét és összes csoporttagságát.</td>
+            <td>id feri</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>6. Mi a bashrc és mi a szerepe?</h2>
+
+<p>
+A .bashrc egy, a felhasználó home könyvtárában (~/.bashrc) található konfigurációs fájl.
+</p>
+
+<ul>
+    <li>Szerepe: Közvetlenül a bejelentkezés után, egy új shell indításakor fut le, és elvégzi a felhasználói parancssori környezet beállításait.</li>
+    <li>Tartalma: Tartalmazza a leggyakoribb parancsok rövidítéseit (aliasok, pl. alias ll='ls -alF'), valamint a parancssori prompt kinézetét beállító környezeti változó (pl. PS1) definiálását.</li>
+    <li>Hasonló fájl: A felhasználói .bashrc előtt a rendszergazda által szerkeszthető /etc/bash.bashrc fut le.</li>
+</ul>
+
+<h1>Ellenőrző Kérdések és Válaszok (15. Fejezet - SSH)</h1>
+
+<h2>1. Mi az ssh?</h2>
+<p>
+Az SSH (Secure Shell) egy protokoll és egy program neve, amely lehetővé teszi, hogy egy távoli gépre biztonságosan bejelentkezzünk és azon dolgozzunk. Az SSH kapcsolat titkosított, így az átvitt adatok lehallgatása esetén sem válnak értelmezhetővé.
+</p>
+
+<h2>2. Mi a különbség a telnet és az ssh közt?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Jellemző</th>
+            <th>Telnet</th>
+            <th>SSH</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Biztonság</td>
+            <td>Nem biztonságos. Az átvitt adatok (beleértve a jelszót) titkosítás nélkül, nyílt szövegként mennek a hálózaton.</td>
+            <td>Biztonságos. Minden kommunikáció titkosított, megakadályozva a lehallgatást.</td>
+        </tr>
+        <tr>
+            <td>Cél</td>
+            <td>Régi, elavult távoli hozzáférés.</td>
+            <td>Modern, biztonságos távoli hozzáférés.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>3. Hogyan használható az ssh unix környezetben?</h2>
+<p>Az SSH parancs parancssorban használható, a leggyakoribb szintaxisok:</p>
+<ul>
+    <li>Egyszerű bejelentkezés (azonos felhasználónévvel): ssh &lt;célgép_neve_vagy_IP&gt; (pl. ssh gemini.ektf.hu)</li>
+    <li>Bejelentkezés más felhasználónévvel: ssh &lt;felhasználónév&gt;@&lt;célgép_neve_vagy_IP&gt; (pl. ssh koczka.ferenc@gemini.ektf.hu)</li>
+</ul>
+
+<h2>4. Hogyan konfigurálható az ssh Unix környezetben?</h2>
+<p>
+Az SSH kliens viselkedése a felhasználó home könyvtárában lévő ~/.ssh/config konfigurációs fájlban állítható be.
+</p>
+
+<p>Főbb beállítások:</p>
+<ul>
+    <li>Host &lt;név&gt;: Lehetővé teszi rövid nevek (aliasok) definiálását a hosszabb címekhez.</li>
+    <li>HostName: Megadja a célgép tényleges internetes nevét, ha az alias eltér.</li>
+    <li>User: Előre beállítja a felhasználónevet a kapcsolódáshoz.</li>
+    <li>Port: Megváltoztatja az alapértelmezett 22-es portot.</li>
+    <li>ServerAliveInterval 60: Megakadályozza az inaktív kapcsolatok lebontását a hálózati forgalom generálásával 60 másodpercenként.</li>
+</ul>
+
+<h2>5. Ismertesd a Putty használatát és fő beállításait!</h2>
+<p>
+A Putty egy ingyenes, telepítés nélkül használható Windows program SSH-kapcsolatokhoz.
+</p>
+
+<p>Fő Beállítások (Default Settings):</p>
+<ul>
+    <li>Visual Bell: A hangjelzések helyett a képernyő felvillanása jelzi a figyelmeztetést (Visual Bell).</li>
+    <li>Teljes képernyős mód: Az Alt + Enter kombináció bekapcsolása (Full screen on Alt-Enter).</li>
+    <li>Kapcsolat védelme (Keepalives): A Connection menüben beállítható az inaktivitási intervallum (pl. 30-60 másodperc), hogy megakadályozza a kapcsolat lebomlását.</li>
+    <li>Auto-Login Username: Előre beállítható a bejelentkezési név a Connection -> Data menüpontban.</li>
+</ul>
+
+<h2>6. Hogyan költöztethető a Putty egy másik számítógépre?</h2>
+<p>
+A Putty beállításai a Windows Registry-ben tárolódnak. Áthelyezéshez:
+</p>
+
+<ol>
+    <li>Indítsuk el a Registry Editor-t.</li>
+    <li>Keressük meg a SimonTatham nevű kulcsot.</li>
+    <li>A Putty kulcson jobb egérgombbal kiválasztjuk az Exportálás menüpontot (létrejön egy .reg fájl).</li>
+    <li>A .reg fájlt a célgépre másolva, azon duplán kattintva (és a helyreállítást kérve) a mentett beállítások átkerülnek.</li>
+</ol>
+
+<h2>7. Mi a nyilvános kulcsú azonosítás?</h2>
+<p>
+A nyilvános kulcsú azonosítás a titkosított kommunikáció egy formája, amely egy kulcspár (nyilvános kulcs és titkos kulcs) használatán alapul, és kiváltja a jelszóval történő bejelentkezést.
+</p>
+
+<ul>
+    <li>Nyilvános Kulcs (Public Key): Nyilvánosan elérhető, bárki használhatja az adatok titkosítására vagy az aláírás ellenőrzésére.</li>
+    <li>Titkos Kulcs (Private Key): Szigorúan titkos, csak a tulajdonos birtokolja. Csak ezzel lehet visszafejteni a nyilvános kulccsal titkosított adatot.</li>
+</ul>
+
+<h2>8. Hogyan használható a nyilvános kulcsú azonosítás a titkosított kapcsolat kiépítése és fenntartása során?</h2>
+<p>
+A titkosított kapcsolat (pl. SSH) kezdetén a nyilvános kulcsú titkosítást használják a jóval gyorsabb szimmetrikus kódoláshoz szükséges kulcs cseréjére. A kommunikáció ezután már a gyorsabb szimmetrikus kulccsal folytatódik.
+</p>
+
+<h2>9. Hogyan használható a nyilvános kulcsú azonosítás a digitális aláírás során?</h2>
+<p>
+A digitális aláírás alapelve, hogy a tulajdonos a titkos kulcsával kódol el egy üzenetet (aláírja). A címzett ezután a küldő nyilvános kulcsával tudja dekódolni. Ez bizonyítja, hogy az üzenet valóban a titkos kulcs birtokában lévő feladótól származik (hitelesség).
+</p>
+
+<h2>10. Hogyan használható a kulcspár a bejelentkezési folyamatban a jelszó helyettesítésére Putty és ssh parancs esetén?</h2>
+
+<ol>
+    <li>Kulcspár generálása: Unix/Linuxon az ssh-keygen -t rsa -b 2048 paranccsal, Windowson a PuttyGen programmal történik.</li>
+    <li>Kulcs engedélyezése: A generált nyilvános kulcsot fel kell másolni a távoli szerveren a felhasználó home könyvtárában lévő ~/.ssh/authorized_keys fájlba (pl. az ssh-copy-id paranccsal).</li>
+    <li>Bejelentkezés: Ha a helyi gép ismeri a titkos kulcsot (pl. be van állítva a Putty-ban, vagy az SSH-parancs használja), a bejelentkezés jelszó megadása nélkül, a kulccsal történő azonosítással valósul meg.</li>
+</ol>
+
+<h2>11. Milyen hardvereszközöket használhatók a kulcspár előállítása és kezelése során?</h2>
+
+<ul>
+    <li>Aláíró tokenek: Néhány ezer forintos USB-s eszközök, amelyek képesek a kulcspár generálására és tárolására. Garantálják, hogy a titkos kulcs nem olvasható ki belőlük (pl. Putty-CAC szoftverrel használható Windowson).</li>
+    <li>HSM modulok (Hardware Security Module): Külső eszközök vagy kártyák, amelyeket nagy tömegű kulcsgeneráláshoz, kezeléshez és gyors titkosításhoz használnak (általában magas áruk van, minősítéssel rendelkeznek).</li>
+</ul>
+
+<h1>Diszk Rendszerek: Ellenőrző Kérdések és Válaszok (16. Fejezet)</h1>
+
+<h2>1. Mi a partíció és mi a szerepe?</h2>
+<p>
+A partíció a háttértár egy összefüggő, különálló területe, amely úgy viselkedik, mintha egy önálló fizikai lemez lenne.
+</p>
+<ul>
+    <li>Szerepe: Lehetővé teszi, hogy egyetlen fizikai diszken több logikailag elkülönített területet hozzunk létre, amelyek mindegyike eltérő fájlrendszert tartalmazhat (pl. a rendszerfájlok és a felhasználói adatok szétválasztása).</li>
+</ul>
+
+<h2>2. Milyen partícionálási sémákat ismersz, és mi jellemzi ezeket?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Séma</th>
+            <th>Jellemzők</th>
+            <th>Korlátok</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>MS-DOS (MBR)</td>
+            <td>Hagyományos, régi séma. Egyszerű.</td>
+            <td>Maximum 2 TByte méretű partíciókat képes kezelni. Korlátozott számú elsődleges partíció.</td>
+        </tr>
+        <tr>
+            <td>GPT (GUID Partition Table)</td>
+            <td>Modern séma. Minden partíció egy egyedi, 36 karakteres azonosítót kap (UUID/GUID).</td>
+            <td>Támogatja a 2 TByte-nál nagyobb diszkeket és partíciókat.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>3. Mutasd be a cfdisk használatát!</h2>
+<p>
+A cfdisk egy parancssori eszköz (GUI-val), amelyet a diszkek partícionálására használnak Linux rendszerekben (msdos és GPT partíciós táblák megjelenítésére és szerkesztésére).
+</p>
+<ul>
+    <li>Használat: cfdisk /dev/sdX</li>
+    <li>Műveletek: Megjeleníti a diszk jelenlegi partíciós tábláját, lehetővé teszi új partíciók létrehozását (elsődleges/logikai), típusuk megadását (pl. Linux RAID automatikus felismerés), és végül a tábla kiírását a diszkre (write parancs).</li>
+</ul>
+
+<h2>4. Mik a fájlrendszerek? Sorolj fel néhányat és jellemezd őket!</h2>
+<p>
+A fájlrendszer a tárolt adatok szervezéséért felelős struktúra és szabályrendszer. Lehetővé teszi, hogy a partíciókon tároljunk fájlokat és könyvtárakat.
+</p>
+
+<p>Linux:</p>
+<ul>
+    <li>Ext4: A mai Linux rendszerek alapértelmezett, „természetes” fájlrendszere.</li>
+    <li>mkfs.btrfs, mkfs.xfs, mkfs.minix, stb.</li>
+</ul>
+
+<p>Windows Kompatibilis:</p>
+<ul>
+    <li>mkfs.ntfs, mkfs.fat, mkfs.vfat (FAT/FAT32).</li>
+</ul>
+
+<h2>5. Hogyan alakíthatók ki fájlrendszerek Unix rendszereken?</h2>
+<p>
+A fájlrendszer kialakítása (formázás) az elkészült partíciókon történik az mkfs.&lt;fájlrendszer&gt; parancsok segítségével.
+</p>
+<ul>
+    <li>Parancs: mkfs.ext4 /dev/sdb1</li>
+    <li>Folyamat: A parancs kiadása létrehozza a szükséges struktúrákat (szuperblokk, inode táblák) a partíción, ami utána használhatóvá válik.</li>
+</ul>
+
+<h2>6. Hogyan végezhető el a fájlrendszerek csatolása és leválasztása?</h2>
+<ul>
+    <li>Csatolás (Mountolás): A mount paranccsal lehet egy partíciót vagy eszközt (pl. pendrive) egy létező könyvtárhoz (mount point) csatolni, így az elérhetővé válik a fájlrendszerben.</li>
+    <li>Példa: mount /dev/sdb1 /mnt</li>
+    <li>Leválasztás (Umountolás): Az umount paranccsal lehet megszüntetni a csatolást.</li>
+    <li>Példa: umount /mnt</li>
+</ul>
+
+<h2>7. Hogyan vehető használatba egy iso image?</h2>
+<p>
+Egy ISO image-t (amely egy fájlrendszert tartalmaz) a mount paranccsal lehet csatolni egy könyvtárhoz.
+</p>
+<ul>
+    <li>Szükséges paraméter: A -o loop paramétert kell használni, amely a loop device-t használja a mountolás végrehajtásához.</li>
+    <li>Példa: mount -o loop counterstrike.iso /media/cdrom</li>
+</ul>
+
+<h2>8. Mi a /etc/fstab file szerepe?</h2>
+<p>
+A /etc/fstab fájl leírja, hogy melyik eszköz melyik mount pontra és milyen paraméterekkel legyen automatikusan csatolva a rendszer indulásakor.
+</p>
+<ul>
+    <li>Azonosítás: Az eszközök megadására a /dev/sdXY eszközfájl neve helyett célszerű az UUID-t (Universal Unique Identifier) használni, mivel ez biztosítja az egyedi azonosítást a diszkek átkábelezése vagy hozzáadása esetén is.</li>
+</ul>
+
+<h2>9. Milyen használati esetei vannak a dd parancsnak?</h2>
+<p>
+A dd (Disk Dump) egy alacsony szintű parancs, amely bájtokat másol egyik forrásból (if=input file) egy célba (of=output file).
+</p>
+<ul>
+    <li>ISO image készítése CD-ről/DVD-ről.</li>
+    <li>Diszkek, partíciók, SD kártyák teljes másolása (klónozása).</li>
+    <li>Merevlemez tartalmának biztonságos törlése véletlenszámokkal (if=/dev/random).</li>
+</ul>
+
+<h2>10. Mi a RAID? Milyen típusai vannak?</h2>
+<p>
+A RAID (Redundant Array of Independent Disks) több diszk felhasználásával biztosítja, hogy egy vagy több lemez meghibásodása esetén ne történjen adatvesztés, és a folyamatos üzem fenntartható legyen (redundancia).
+</p>
+<ul>
+    <li>Főbb Típusok: RAID0, RAID1, RAID5, RAID6, hibrid megoldások (pl. RAID10/RAID0+1).</li>
+</ul>
+
+<h2>11. Ismertesd a RAID0 felépítését, biztonságát, sebességét és egyéb jellemzőit!</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Jellemző</th>
+            <th>Leírás</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Felépítés</td>
+            <td>Két vagy több diszket használ. Az adatokat csíkokban (striping) írja ki a diszkekre.</td>
+        </tr>
+        <tr>
+            <td>Redundancia</td>
+            <td>Nincs! Ha egy diszk meghibásodik, a teljes tömb tartalma elvész (nem igazi RAID).</td>
+        </tr>
+        <tr>
+            <td>Tárolókapacitás</td>
+            <td>2 * N (a diszkek méretének összege).</td>
+        </tr>
+        <tr>
+            <td>Sebesség</td>
+            <td>Az írási és olvasási sebesség is a tömbben lévő diszkek számának többszöröse lehet (gyors).</td>
+        </tr>
+        <tr>
+            <td>Használat</td>
+            <td>Csak olyan esetekben, ahol a sebesség kritikus, és a rendszeres mentés garantált.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>12. Ismertesd a RAID1 felépítését, biztonságát, sebességét és egyéb jellemzőit!</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Jellemző</th>
+            <th>Leírás</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Felépítés</td>
+            <td>Két diszket használ (tükrözés). Minden adatot mindkét diszkre kiír.</td>
+        </tr>
+        <tr>
+            <td>Redundancia</td>
+            <td>Kiváló. Egy diszk meghibásodását kibírja (adatmentés nélkül is), a rendszer tovább működik.</td>
+        </tr>
+        <tr>
+            <td>Tárolókapacitás</td>
+            <td>N (a teljes kapacitás fele).</td>
+        </tr>
+        <tr>
+            <td>Sebesség</td>
+            <td>Az írási sebesség nem változik, az olvasási sebesség akár kétszer gyorsabb is lehet.</td>
+        </tr>
+        <tr>
+            <td>Spare Disk (Opcionális)</td>
+            <td>Tartalék diszk építhető be, ami hiba esetén azonnal átveszi a hibás diszk szerepét (rebuild).</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>13. Ismertesd a RAID5 felépítését, biztonságát, sebességét és egyéb jellemzőit!</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Jellemző</th>
+            <th>Leírás</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Felépítés</td>
+            <td>Legalább három diszkre van szükség. Az adatblokkok mellett ECC-t (Error Correction Code, paritás) számol, amit a diszkekre elosztva ír fel (forgatás).</td>
+        </tr>
+        <tr>
+            <td>Redundancia</td>
+            <td>Egy diszk meghibásodását kibírja.</td>
+        </tr>
+        <tr>
+            <td>Kapacitás</td>
+            <td>N-1 (N a diszkek száma), jobb kihasználtság, mint a RAID1.</td>
+        </tr>
+        <tr>
+            <td>Sebesség</td>
+            <td>Írási és olvasási sebesség is nagyobb. A teljesítmény azonban a diszkek számával csökken (a sok ECC számítás miatt).</td>
+        </tr>
+        <tr>
+            <td>Hátrány</td>
+            <td>Nagy diszkméretnél a hibás diszk cseréje utáni rebuild (helyreállítás) folyamat napokig tarthat, ami alatt egy második hiba a teljes tömb elvesztését jelenti.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>14. Hogyan működik a RAID5 ECC számítása? Adj egy példát erre!</h2>
+<p>
+A RAID5 az ECC-t (Error Correction Code) a XOR (kizáró vagy) műveleten alapulva számolja ki.
+</p>
+<ul>
+    <li>Számítás: Két adatblokkon (pl. A és B) végrehajtja a bitenkénti XOR műveletet, ami megadja a paritás (ECC) értékét (P): A ⊕ B = P.</li>
+    <li>Helyreállítás: Ha az egyik adat (pl. B) elvész, az ECC (P) és a megmaradt adat (A) ismételt XOR műveletével visszakapjuk az eredeti adatot: P ⊕ A = B.</li>
+    <li>Jellemző: A RAID5 tömb normál működése és a rebuild folyamat is rendkívül sok ECC számítást igényel.</li>
+</ul>
+
+<h2>15. Milyen hibrid RAID megoldások léteznek?</h2>
+<ul>
+    <li>RAID 0+1 (RAID 0 alkot egy RAID 1-et): Két RAID0-s tömbből alkot tükrözött (RAID1) tömböt. Sebesség nő, de ha az azonos RAID0-s tömbben lévő diszkek hibásodnak meg, a teljes tömb elvész.</li>
+    <li>RAID 1+0 (RAID 1 alkot egy RAID 0-t): Két RAID1-es tömböt szervez RAID0-ba. Jobb a hibatűrés, mert akár két diszk is elveszhet, ha azok különböző RAID1-es résztömbök elemei.</li>
+    <li>RAID 5+0: Két RAID5-ös tömb RAID0-ba fogva.</li>
+</ul>
+
+<h2>16. Milyen hardver elemek vannak a redundáns diszkek kezelésére?</h2>
+<ul>
+    <li>Hardveres RAID Vezérlő: Külön hardver (pl. kártya) a szerverben, amely leveszi a RAID számítási terhét a fő processzorról.</li>
+    <li>BBU (Battery Backup Unit): Akkumulátor a hardveres RAID vezérlőhöz, amely áramszünet esetén is képes a ki nem írt adatok tárolására, lehetővé téve az írási cache bekapcsolását.</li>
+    <li>Hot Swap Caddyk: Merevlemez tokok, amelyek lehetővé teszik a meghibásodott diszkek cseréjét üzem közben (anélkül, hogy a szervert le kellene állítani).</li>
+</ul>
+
+<h2>17. Hogyan telepíthető Linux szoftveres RAID tömbre?</h2>
+
+<ol>
+    <li>Partíciók Előkészítése: Mindegyik diszken (pl. sda, sdb, sdc) létre kell hozni az azonos méretű partíciókat (pl. sda1, sda2, sda3, stb.).</li>
+    <li>Partíció Típus: A partíciók típusát RAID fizikai kötetre kell állítani.</li>
+    <li>RAID Kötetek Létrehozása: A telepítő menüjében (Szoftveres RAID konfigurálása) az mdadm segítségével (Többlemezes eszköz létrehozása) össze kell állítani a kívánt RAID szintű köteteket (pl. RAID1, 2 aktív és 1 tartalék eszközzel).</li>
+    <li>Fájlrendszer Kialakítása: Az így kapott köteteken (pl. /dev/md0, /dev/md1) kell kialakítani a fájlrendszereket (Ext4) és megadni a mount pontokat (/, swap, /var).</li>
+    <li>MBR Telepítése: A rendszerbetöltőt (Grub) a tömb minden egyes aktív diszkjére fel kell írni, hogy bármelyikről be tudjon bootolni a gép.</li>
+</ol>
+
+<h2>18. Hogyan ellenőrizhető egy RAID tömb állapota és hogyan végezhető el a javítása a Linux szoftveres RAID megoldásában?</h2>
+<ul>
+    <li>Ellenőrzés: A /proc/mdstat virtuális fájl tartalmának kiolvasásával. Ez mutatja, hogy melyik tömb aktív, melyik diszk működik ([UU]), és melyik hibásodott meg ([_]).</li>
+    <li>Hibás Elem Jelölése: A meghibásodott eszközt mdadm paranccsal hibásnak kell jelölni: mdadm /dev/md0 -f /dev/sdb1.</li>
+    <li>Helyreállítás: Ha a meghibásodott diszk ki lett véve és az új bekerült, az mdadm /dev/mdX -a /dev/sdXn paranccsal lehet hozzáadni az új partíciót a tömbhöz, ami elindítja az adatok átmásolását (rebuild).</li>
+</ul>
+
+<h2>19. Hogyan használható a Windows kötetkezelése?</h2>
+<p>
+A Windowsban a Lemezkezelés (Disk Management) segédprogrammal lehet kezelni a partíciókat és a dinamikus köteteket.
+</p>
+<ul>
+    <li>Alaplemez (Basic Disk): Egyszerű kötetek, partíciók kezelésére. Lehetővé teszi a kötet kiterjesztését (növelését) vagy zsugorítását (csökkentését).</li>
+    <li>Dinamikus Lemez (Dynamic Disk): Konvertálás után támogatja a szoftveres RAID megoldásokat.</li>
+    <li>Csíkozott kötet (RAID 0): Sebességnövelés.</li>
+    <li>Tükrözött kötet (RAID 1): Hibatűrés (redundancia).</li>
+    <li>Átnyúló kötet (Spanned): Több diszk kihasználatlan részeinek összefogása egyetlen kötetbe (nem redundáns!).</li>
+    <li>Helyreállítás: Tükrözött kötet (RAID 1) hiba esetén a hibás láb eltávolítható (Tükör eltávolítása), majd az új diszk inicializálása után hozzáadható a működő tükrözött kötethez (Tükör hozzáadása), ami szinkronizálja azt.</li>
+</ul>
+
+<h1>Docker és Konténerizáció: Ellenőrző Kérdések</h1>
+
+<h2>1. Milyen operációs rendszereken használható a Docker?</h2>
+<p>A Docker a legelterjedtebb operációs rendszereken használható:</p>
+<ul>
+    <li>Linux (itt működik natívan, mivel a Linux kernel szolgáltatásaira épül).</li>
+    <li>Windows (a WSL2 (Windows Subsystem for Linux 2) kernel segítségével).</li>
+    <li>MacOS.</li>
+</ul>
+
+<h2>2. Milyen hardveren futtathatók Docker konténerek? Keress különböző architektúrákat a DockerHubon!</h2>
+<p>
+A Docker konténerek az x64 (AMD64) architektúrán kívül számos más hardverarchitektúrán is futtathatók, mivel a konténer-image-eket platform-specifikusan hozzák létre.
+</p>
+
+<p>Gyakori Architektúrák:</p>
+<ul>
+    <li>amd64 / x86_64 (szabványos PC-k és szerverek).</li>
+    <li>arm32 / arm64 (pl. Raspberry Pi, mobil eszközök, kis fogyasztású IoT eszközök).</li>
+    <li>PowerPC (ritkább, speciális szerverarchitektúra).</li>
+</ul>
+
+<h2>3. Mi a különbség a konténerek és a virtuális gépek között?</h2>
+<ul>
+    <li>Virtuális Gépek (VM): Minden VM tartalmaz egy teljes operációs rendszert (Guest OS) a saját kernelével. Ehhez kell a Hypervisor (pl. ESXi, VirtualBox).</li>
+    <li>Konténerek (Docker): A konténer megosztja a Host gép kernelét és az operációs rendszer szolgáltatásait, de a névterek és a UnionFS segítségével szeparálódik. Ez sokkal könnyebb, gyorsabb indítású és kevesebb erőforrást igénylő megoldás.</li>
+</ul>
+
+<h2>4. Mik a Docker architektúrájának főbb elemei?</h2>
+<p>A Docker architektúrája háromrétegű:</p>
+<ol>
+    <li>Kernel Szolgáltatások: A Linux kernel (névterek, kontroll csoportok, UnionFS).</li>
+    <li>Futásidő (Runtime): A runC és a containerd.</li>
+    <li>Docker Motor (Engine): A Docker daemon, amely a containerd-re épül, és kezeli a konténerekkel történő kommunikációt, valamint a külső szolgáltatásokat.</li>
+</ol>
+
+<h2>5. Mi a szerepe a Linux kernel névtereinek (namespaces) a Docker működésében?</h2>
+<p>A névterek (namespaces) biztosítják a konténerek szeparációját és elkülönített környezetét.</p>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Néptér Típusa</th>
+            <th>Szerep</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>PID Namespace</td>
+            <td>Elkülöníti a folyamatokat (processzeket). A konténer csak a saját folyamatait látja.</td>
+        </tr>
+        <tr>
+            <td>Network Namespace</td>
+            <td>Elkülöníti a hálózati interfészeket és beállításokat (saját IP, átjáró).</td>
+        </tr>
+        <tr>
+            <td>USER Namespace</td>
+            <td>Elkülöníti a felhasználókat. A konténerben lévő root felhasználó nem azonos a Host gép root felhasználójával.</td>
+        </tr>
+        <tr>
+            <td>Mount Namespace</td>
+            <td>Elkülöníti a fájlrendszereket. A konténer saját, virtuális fájlrendszerrel rendelkezik.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>6. Hogyan segítik a kontroll csoportok (cgroups) a Docker működését?</h2>
+<p>
+A kontroll csoportok (cgroups) a Linux kernel olyan szolgáltatása, amely lehetővé teszi, hogy korlátozzuk az egyes folyamatok vagy konténerek által igénybe vehető erőforrások mértékét.
+</p>
+<ul>
+    <li>Példák: Korlátozható a CPU, a memória, a diszk I/O vagy a hálózati sávszélesség.</li>
+    <li>Szerep: Megakadályozza, hogy egyetlen konténer vagy processz monopolizálja a Host gép erőforrásait.</li>
+</ul>
+
+<h2>7. Mi a Union fájlrendszer (UnionFS), és hogyan működik?</h2>
+<p>
+A Union Filesystem (UnionFS) egy olyan kernel szolgáltatás, amely több fájlrendszer réteg egyesítésére képes egyetlen, egységes virtuális fájlrendszerré, amelyet a konténer lát.
+</p>
+<ul>
+    <li>Rétegek: Az alsó réteg általában a csak olvasható alap image-t (pl. Ubuntu 22.04 OS) tartalmazza. Erre épül(nek) a felülírható réteg(ek), amelyek a konténer futás közbeni módosításait tárolják.</li>
+    <li>Copy-on-Write (COW): Amikor a konténer módosítana egy fájlt az alsó, olvasható rétegből, a UnionFS először egy másolatot készít a fájlról a felső, írható rétegbe, és a módosítást ezen a másolaton végzi el. Ez a másolat "eltakarja" az eredeti fájlt.</li>
+</ul>
+
+<h2>8. Milyen fő összetevőkből áll a Docker motor (Docker Engine)?</h2>
+<p>A Docker Engine (Motor) két fő futásidejű összetevőből áll:</p>
+<ol>
+    <li>runC: Az alacsony szintű motor, amely közvetlenül felel a konténerek létrehozásáért, indításáért és leállításáért.</li>
+    <li>containerd: A magasabb szintű daemon, amely a runC-re épül. Kezeli az image-eket, a tárolást, a hálózati beállításokat, a naplózást, és az állapot lekérdezését.</li>
+</ol>
+
+<h2>9. Hogyan lehet telepíteni a Dockert Linux rendszeren?</h2>
+<p>
+A Linux telepítés a legegyszerűbb, az apt csomagkezelővel történik (feltételezve egy Debian/Ubuntu alapú rendszert):
+</p>
+<pre>
+sudo apt install docker.io
+</pre>
+<p>
+A telepítés után biztonsági okokból a felhasználót hozzá kell adni a docker csoporthoz: usermod -aG docker &lt;felhasználó&gt;.
+</p>
+
+<h2>10. Hogyan lehet ezt megtenni Windows és MacOS rendszereken?</h2>
+<p>
+Windows és MacOS rendszereken a Docker Desktop alkalmazást kell használni.
+</p>
+<ul>
+    <li>Windows esetében (nem natív futtatás): Szükség van a WSL2 (Windows Subsystem for Linux 2) kernelre, amely egy Linux futási környezetet biztosít a Host OS-en belül. Ezt a szükséges fájlt a Microsoft weboldaláról kell letölteni és telepíteni.</li>
+    <li>Ellenőrzés: A Docker Desktop alkalmazás bal alsó sarkában lévő ikon zöld háttere jelzi a működőképességet.</li>
+</ul>
+
+<h2>11. Mi a WSL2 és miért van rá szükség?</h2>
+<p>
+A WSL2 (Windows Subsystem for Linux 2) egy virtuális Linux kernel, amelyet a Microsoft biztosít.
+</p>
+<ul>
+    <li>Szerepe: A Dockernek szüksége van a Linux kernel szolgáltatásaira (névterek, cgroups), mivel natívan csak Linuxon fut. A WSL2 biztosítja ezt a szükséges futási környezetet a Windows rendszer számára, lehetővé téve a Linux konténerek futtatását.</li>
+</ul>
+
+<h2>12. Mi a DockerHub, és milyen szolgáltatásai vannak?</h2>
+<p>
+A DockerHub egy központi, felhőalapú tárhely (repository), amely hatalmas mennyiségű konténer-image-et tárol.
+</p>
+<p>Szolgáltatások:</p>
+<ul>
+    <li>Image Tárolás: Kész konténer-image-ek (pl. Linux disztribúciók, webszerverek, adatbázisok) letöltése.</li>
+    <li>Publikálás: Regisztrált felhasználók elhelyezhetik és megoszthatják saját image-eiket.</li>
+    <li>Verziókezelés: Elérhetők az egyes szoftverek különböző verziói.</li>
+    <li>Keresőfunkció: Kényelmes böngészés és keresés a publikus image-ek között.</li>
+</ul>
+
+<h1>Munka a Konténerekkel: Ellenőrző Kérdések</h1>
+
+<h2>1. Keresd meg a DockerHubon a python kulcsszóra illeszkedő a konténereket!</h2>
+<p>A parancs:</p>
+<pre>
+docker search python
+</pre>
+
+<h2>2. Végezd el ugyanezt a feladatot a parancssorban úgy, hogy csak az első négy találat jelenjen meg!</h2>
+<p>A parancs a --limit paraméterrel:</p>
+<pre>
+docker search --limit 4 python
+</pre>
+
+<h2>3. Indítsd el a busybox konténert a Docker segítségével! Pontosan milyen lépései vannak ennek a folyamatnak? Milyen lépések történnek a háttérben?</h2>
+<p>Parancs:</p>
+<pre>
+docker run busybox
+</pre>
+
+<p>Háttérfolyamat (Lépések):</p>
+<ol>
+    <li>Kliens-Daemon Kapcsolat: A Docker kliens (a terminálban kiadott parancs) kapcsolatba lép a Docker daemonnal (a háttérben futó szerverprogrammal).</li>
+    <li>Image Keresése (Helyi): A Docker daemon ellenőrzi, hogy a busybox:latest image elérhető-e a helyi gépen (/var/lib/docker).</li>
+    <li>Image Letöltése (Pull): Ha az image nem található helyben, letölti azt a DockerHubról (vagy a konfigurált repozitóriumból).</li>
+    <li>Konténer Létrehozása: A Docker daemon létrehoz egy új konténer példányt az image-ből.</li>
+    <li>Program Futtatása: Elindítja a konténerben definiált alapértelmezett parancsot (pl. a busybox esetében a shellt vagy a belépési pontot).</li>
+    <li>Kimenet Visszaküldése: A futó program kimenetét visszaküldi a Docker kliensnek, majd a konténer futása befejeződik (Exited), mivel a program lefutott.</li>
+</ol>
+
+<h2>4. A cowsay egy karakteres felületen futó program, amelynek egy paramétere van, a mondat, amit a tehénnek ki kell mondania :-). Indítsd el a rancher névtérben elérhető cowsay-t a hello paraméterrel!</h2>
+<p>A parancsban a rancher/cowsay formátumot kell használni a névtér megadásához:</p>
+<pre>
+docker run rancher/cowsay hello
+</pre>
+
+<h2>5. Töröld a cowsay konténer példányait!</h2>
+<ol>
+    <li>Listázás (ID-k lekérdezése): Először meg kell keresni a leállított cowsay konténerek ID-it:
+        <pre>
+docker ps -a
+        </pre>
+    </li>
+    <li>Törlés (manuálisan): Ha már leálltak (Exited státuszban vannak):
+        <pre>
+docker rm &lt;cowsay_ID&gt;
+        </pre>
+    </li>
+    <li>Törlés (automatizálva, leállított konténerekre):
+        <pre>
+docker container prune
+        </pre>
+    </li>
+</ol>
+
+<h2>6. Milyen parancs használható az aktuális Docker verziószám megállapítására?</h2>
+<p>A parancs:</p>
+<pre>
+docker version
+</pre>
+<p>(A docker -v a kliens verzióját adja vissza.)</p>
+
+<h2>7. Mi a különbség a „running”, „exited” és „paused” státuszok között?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Státusz</th>
+            <th>Leírás</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>running</td>
+            <td>A konténerben lévő alkalmazás jelenleg fut.</td>
+        </tr>
+        <tr>
+            <td>exited</td>
+            <td>A konténer futása befejeződött (szabályosan vagy hibával kilépett). A konténer példány még létezik a rendszerben.</td>
+        </tr>
+        <tr>
+            <td>paused</td>
+            <td>A konténer működése átmenetileg fel van függesztve. A futó processzek leálltak, de a konténer állapota a memóriában megmarad.</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>8. Hogyan lehet egy már létező konténert újraindítani? Adj egy példát erre!</h2>
+<p>A docker start parancsot kell használni, megadva a konténer azonosítóját vagy nevét.</p>
+<ul>
+    <li>Példa (ID-vel):
+        <pre>
+docker start 6b9d1f725626
+        </pre>
+    </li>
+    <li>Példa (névvel):
+        <pre>
+docker start silly_albattani
+        </pre>
+    </li>
+    <li>(Megjegyzés: A -a paraméter hozzáadásával (docker start -a) újra csatlakoztathatjuk a terminált a konténer kimenetéhez.)</li>
+</ul>
+
+<h2>9. Hogyan lehet egy konténert törölni? Milyen parancs szükséges ehhez, és hogyan kell azt paraméterezni?</h2>
+<p>A törléshez a docker rm parancs szükséges.</p>
+<ul>
+    <li>Törlés (leállított konténer): docker rm &lt;ID vagy Név&gt;</li>
+    <li>Kényszerített Törlés (futó konténerre): Ha a konténer fut, előbb le kell állítani (docker stop), vagy a -f (force) paraméterrel kényszeríthetjük a törlést: docker rm -f &lt;ID vagy Név&gt;.</li>
+    <li>Automata Törlés (fejlesztéshez): A --rm paraméter a docker run parancsban automatikusan törli a konténer példányát, miután az leállt.</li>
+</ul>
+
+<h2>10. Hogyan használható a docker inspect parancs egy futó konténer részletes információinak lekérdezésére? Mit jelentenek a kimenet egyes sorai?</h2>
+<p>A parancs:</p>
+<pre>
+docker inspect &lt;konténer_ID_vagy_Név&gt;
+</pre>
+
+<p>Jelentős kimeneti sorok (JSON formátum):</p>
+<ul>
+    <li>Id: A konténer teljes azonosítója.</li>
+    <li>Created: A konténer létrehozásának ideje.</li>
+    <li>Path / Args: A konténerben futtatott parancs és annak argumentumai.</li>
+    <li>State: A konténer futási állapota (Status: "exited" / "running").</li>
+    <li>HostConfig: A Host gépre vonatkozó beállítások (erőforrás limitek, hálózati portok, stb.).</li>
+    <li>NetworkSettings: A konténer hálózati beállításai (IP cím, átjáró, MAC cím).</li>
+</ul>
+
+<h2>11. Hogyan lehet megtekinteni egy konténer memória használatát? Adj egy példát erre!</h2>
+<p>A statisztikák folyamatos megjelenítésére a docker stats parancs szolgál:</p>
+<pre>
+docker stats alpine
+</pre>
+
+<p>Kimenetben látható adatok:</p>
+<ul>
+    <li>MEM USAGE / LIMIT: A memória pillanatnyi használata és a konténer számára allokált maximális mennyiség.</li>
+    <li>CPU %: A processzor terhelése.</li>
+    <li>NET I/O: Bejövő és kimenő hálózati forgalom.</li>
+    <li>BLOCK I/O: Diszkről olvasott és oda kiírt adatok mennyisége.</li>
+</ul>
+
+<h2>12. Hogyan tudsz belépni egy futó konténerbe, hogy abban parancsokat lehessen kiadni? Milyen paramétereket szükségesek ehhez és mi ezek jelentése?</h2>
+
+<p>Új interaktív konténer indítása (Belépéskor):</p>
+<pre>
+docker run --name=alpine -it alpine /bin/sh
+</pre>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Paraméter</th>
+            <th>Jelentés</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>-i</td>
+            <td>Interaktív: Lehetővé teszi a standard bemenet (billentyűzet) használatát.</td>
+        </tr>
+        <tr>
+            <td>-t</td>
+            <td>Terminál: Terminált (TTY) rendel a konténerhez, így az megfelelően tudja megjeleníteni a karakteres kimenetet.</td>
+        </tr>
+        <tr>
+            <td>/bin/sh</td>
+            <td>A konténerben futtatandó program (parancsértelmező), amelybe a felhasználó belép.</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>Már futó konténerbe való belépés/csatlakozás:</p>
+<pre>
+docker attach alpine
+</pre>
+
+<h2>13. Miért érdemes nevet adni a konténernek? Mikor és hogyan lehet ezt megadni? Adj egy gyakorlati példát!</h2>
+
+<p>Miért érdemes nevet adni:</p>
+<p>
+A névvel könnyebben azonosítható a konténer funkciója, és megjegyezhetőbb, mint a hosszú, véletlenszerűen generált ID.
+</p>
+
+<p>Mikor és Hogyan:</p>
+<p>
+A nevet a docker run parancsban kell megadni a --name paraméterrel.
+</p>
+
+<p>Példa:</p>
+<pre>
+docker run --name adatbazis_test --rm postgres
+</pre>
+
+<p>
+(Ahelyett, hogy a Docker generálna egy nevet, mint pl. jolly_babbage.)
+</p>
+
+<h1>Konténer Image-ek: Ellenőrző Kérdések</h1>
+
+<h2>1. Hogyan lehet listázni a rendszerben lévő Docker image-eket?</h2>
+<p>A parancs:</p>
+<pre>
+docker image ls
+</pre>
+<p># Rövidebb alternatíva: docker images</p>
+
+<h2>2. Milyen információkat lehet megtudni, és hogyan egy Docker image-ről?</h2>
+<p>
+A részletes információk lekérdezésére a docker inspect parancs szolgál. A kimenet JSON formátumú.
+</p>
+
+<p>Parancs:</p>
+<pre>
+docker inspect &lt;image_neve_vagy_ID&gt;
+</pre>
+<p># Példa: docker inspect hello-world</p>
+
+<p>Lekérdezhető információk (docker image ls kimenete alapján):</p>
+<ul>
+    <li>REPOSITORY: Az image neve (pl. busybox).</li>
+    <li>TAG: Az image verziója (pl. latest, 16.04).</li>
+    <li>IMAGE ID: Az image egyedi, rövid azonosítója.</li>
+    <li>CREATED: A létrehozás ideje.</li>
+    <li>SIZE: Az image mérete.</li>
+</ul>
+
+<p>További információk (docker inspect kimenete alapján):</p>
+<ul>
+    <li>Id</li>
+    <li>RepoTags</li>
+    <li>RepoDigests</li>
+    <li>Created</li>
+    <li>ContainerConfig (pl. alapértelmezett Hostname, User)</li>
+</ul>
+
+<h2>3. Mi a teendő, ha egy olyan Docker image-et szeretnénk törölni, amiből még létezik futó konténer példány?</h2>
+<p>
+Egy image nem törölhető, amíg egy abból létrehozott konténer (akár fut, akár leállt, azaz Exited státuszban van) jelen van a rendszerben.
+</p>
+
+<ol>
+    <li>A Konténer Törlése: Először az image-ből létrehozott konténer példányt kell törölni a docker rm &lt;konténer_ID&gt; paranccsal. (Ha fut, előtte le kell állítani a docker stop paranccsal).</li>
+    <li>Image Törlése: Csak ezután törölhető az image a docker image rm &lt;image_ID&gt; paranccsal.</li>
+    <li>Kényszerített Törlés: Ha minden kötél szakad, a --force paraméterrel megkerülhető a korlát: docker rmi &lt;image_neve&gt; -f.</li>
+</ol>
+
+<h2>4. Milyen szerepe van az image id-nek a Docker műveletek során?</h2>
+<p>
+Az image ID az image-ek egyedi azonosítására szolgál.
+</p>
+
+<p>Fő Szerepe:</p>
+<ul>
+    <li>Törlés: Az image-ek törlése (pl. docker image rm) a pontos azonosító alapján történik.</li>
+    <li>Rövidítés: Az ID-ből elegendő az a legrövidebb karaktersorozatot megadni, amely már egyértelműen azonosítja az image-et.</li>
+    <li>Hivatkozás: Saját image-ek feltöltésekor a DockerHubra.</li>
+</ul>
+
+<h2>5. Milyen módon lehet frissíteni egy már letöltött Docker image-et?</h2>
+<p>
+Az image frissítése a docker pull parancs kiadásával történik, megadva az image nevét és tag-jét:
+</p>
+
+<pre>
+docker pull &lt;image_neve&gt;:&lt;tag&gt;
+</pre>
+<p># Példa: docker pull busybox:latest</p>
+
+<p>
+A pull parancs letölti a legújabb rétegeket a DockerHubról, felülírva a helyi, elavult részeket.
+</p>
+
+<h2>6. Hogyan lehet törölni az összes feleslegessé vált image-et a gépről?</h2>
+<p>
+Az összes, már nem használt (azaz nincs hozzájuk rendelve futó vagy leállított konténer) image törlése a docker image prune paranccsal történik:
+</p>
+
+<pre>
+docker image prune -a
+</pre>
+
+<p>
+(A -a paraméter a "mindent" jelenti. A jegyzet szerint a legáltalánosabb módszer az azonosítók lekérdezése és átadása: docker rmi $(docker images -q)).
+</p>
+
+<h1>Gyakorlati Feladatok (Parancsok)</h1>
+
+<h2>7. Listázd ki az összes olyan image-et, amely tartalmazza az ubuntu szót!</h2>
+<p>
+A keresést el kell végezni, majd a teljes listát meg kell jeleníteni:
+</p>
+
+<pre>
+docker search ubuntu --format "{{.Name}}"
+</pre>
+<p># Vagy: docker image ls | grep ubuntu</p>
+
+<h2>8. Töröld az alpine nevű image-et a hozzá tartozó image id alapján!</h2>
+
+<ol>
+    <li>Szükség esetén a belőle készült konténer törlése:
+        <pre>
+docker rm -f $(docker ps -a -q --filter ancestor=alpine)
+        </pre>
+    </li>
+    <li>Image törlése ID alapján (feltételezve, hogy az image ID kezdetű: 4ab):
+        <pre>
+docker image rm 4ab
+        </pre>
+    </li>
+</ol>
+
+<h2>9. Jelenítsd meg a python:3.9 image részletes információit! Mi az image id-je? Mekkora a mérete? Mikor lett ez létrehozva?</h2>
+
+<p>
+A docker inspect parancs a --format paraméterrel vagy anélkül használható:
+</p>
+
+<pre>
+docker inspect python:3.9
+</pre>
+
+<p>
+A kimenet JSON formátumú. Az adatok keresése:
+</p>
+
+<ul>
+    <li>Image ID: Keresd az "Id" mezőt.</li>
+    <li>Méret: Keresd a "Size" mezőt.</li>
+    <li>Létrehozás: Keresd a "Created" mezőt.</li>
+</ul>
+
+<h2>10. Frissítsd a busybox nevű image-et a legújabb verzióra! Ellenőrizd a konténer aktuális verziószámát!</h2>
+
+<ol>
+    <li>Frissítés (Pull):
+        <pre>
+docker pull busybox:latest
+        </pre>
+    </li>
+    <li>Verziószám Ellenőrzése (Inspect):
+        <pre>
+docker inspect --format='{{.RepoDigests}}' busybox
+        </pre>
+    </li>
+</ol>
+
+<p>
+(A digest/hash megváltozása jelzi, hogy új image került letöltésre.)
+</p>
+
+<h1>Hálózatkezelés a konténerekben: Kérdések és Feladatok Megoldása</h1>
+
+<h2>1. Miért van szükség hálózati kapcsolatra egy konténerekben futó alkalmazás esetén?</h2>
+<p>A konténerekben futó alkalmazások többsége hálózati kapcsolatot igényel, tipikusan azért, hogy:</p>
+<ul>
+    <li>Külső kommunikációt végezzenek (pl. egy webszerver fogadja a felhasználói kéréseket, egy alkalmazás eléri az internetet, vagy egy adatbázis-kezelő fogadja a kliensek kéréseit).</li>
+    <li>Konténerek közötti kommunikációt végezzenek (pl. egy webalkalmazás konténer beszél az adatbázis konténerrel).</li>
+</ul>
+
+<h2>2. Mi a Docker alapértelmezett belső hálózatának címe?</h2>
+<p>
+A Docker alapértelmezett belső hálózata a 172.17.0.0/16 CIDR tartományt használja. A bridge interfész (átjáró) címe általában 172.17.0.1.
+</p>
+
+<h2>3. Mit jelent a bridge a hálózatkezelésben?</h2>
+<p>
+A bridge (híd) az OSI modell hálózati rétegében működik, és több hálózati eszközt vagy szegmenst köt össze.
+</p>
+<ul>
+    <li>A Dockerben a docker0 nevű virtuális bridge biztosítja az összeköttetést a Docker belső hálózata (a konténerek) és a host gép fizikai hálózati interfésze között, lehetővé téve a konténerek közötti és a külvilág felé irányuló kommunikációt.</li>
+</ul>
+
+<h2>4. Milyen parancsok használhatók egy host gép fizikai interfészéhez tartozó hálózati paraméterek, és melyek a Docker bridge interfészének lekérdezésére?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Lekérdezett elem</th>
+            <th>Parancs (Linux/Text)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Host gép fizikai interfész (pl. ens160)</td>
+            <td>ip address ls ens160</td>
+        </tr>
+        <tr>
+            <td>Docker bridge interfész (docker0)</td>
+            <td>ip address ls docker0</td>
+        </tr>
+        <tr>
+            <td>Konténerek hálózati adatai a bridge-en</td>
+            <td>docker network inspect bridge</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>5. Hogyan lehet lekérdezni egy futó konténer IP címét és alapértelmezett átjáróját?</h2>
+
+<ul>
+    <li>A konténeren belül (shell használatával):
+        <ul>
+            <li>IP cím: hostname -I</li>
+            <li>Alapértelmezett átjáró: ip r (keresd a default via sort)</li>
+        </ul>
+    </li>
+    <li>A host gépről (konténer neve/ID-je alapján):</li>
+</ul>
+
+<pre>
+docker inspect &lt;konténer_neve&gt; --format='{{.NetworkSettings.IPAddress}}'
+</pre>
+
+<h2>6. Hogyan hozható létre egy új bridge Dockerben, és miért lehet erre szükség?</h2>
+
+<p>Létrehozás:</p>
+<pre>
+docker network create -d bridge --subnet 192.168.1.0/24 secretbridge
+</pre>
+
+<p>Szükségesség:</p>
+<p>
+Új bridge-ek létrehozása kiváló módszer az egyes konténerek elszeparálására. Az eltérő bridge-ekhez kapcsolt konténerek alapértelmezetten nem érik el egymást, ami növeli a biztonságot és a hálózat rendezettségét.
+</p>
+
+<h2>7. Hogyan rendelhetők portok a Docker konténerekhez, és miért van erre szükség?</h2>
+
+<p>
+A portok hozzárendelése a -p (vagy --publish) paraméterrel történik a docker run parancs során.
+</p>
+
+<ul>
+    <li>Formátum: -p &lt;külső_port&gt;:&lt;konténer_port&gt;</li>
+    <li>Példa: -p 5000:80 (A host gép 5000-es portjára érkező kéréseket a konténer 80-as portjára továbbítja).</li>
+</ul>
+
+<p>Szükségesség:</p>
+<p>
+Erre azért van szükség, mert a konténerben futó alkalmazások (pl. webszerver) csak a konténer belső hálózatán "hallgatóznak" (pl. 80-as porton). Ahhoz, hogy a külvilág (a host gép, vagy az internet) elérje a szolgáltatást, a host gép egy szabad portját össze kell rendelni a konténer belső portjával, így a külső forgalom továbbítva lesz.
+</p>
+
+<h2>8. Hogyan pingelhető meg egy konténerből a host gép és hogyan pingelhetők más konténerek a bridge hálózatán belül?</h2>
+
+<ul>
+    <li>Más konténer pingelése (ugyanazon a bridge-en): A konténerek az IP-címükön vagy (ha egy egyedi, felhasználó által létrehozott hálózatot használnak) a nevükön keresztül érik el egymást.</li>
+</ul>
+
+<pre>
+ping 172.17.0.2
+</pre>
+<pre>
+ping centos-1
+</pre>
+
+<ul>
+    <li>Host gép pingelése: A host gép a konténer alapértelmezett átjárójának IP-címén érhető el, ami az alapértelmezett docker0 bridge esetén általában 172.17.0.1.</li>
+</ul>
+
+<pre>
+ping 172.17.0.1
+</pre>
+
+<h2>9. Hogyan állítható be egyéni DNS szerver egy konténer számára?</h2>
+
+<p>
+Az egyéni DNS szerver a --dns paraméterrel állítható be a konténer indításakor:
+</p>
+
+<pre>
+docker run --name www.example.com --dns 1.1.1.1 nginx
+</pre>
+
+<h2>10. Milyen parancsokkal lehet listázni, lekérdezni és törölni a Docker hálózatait?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Művelet</th>
+            <th>Parancs</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Listázás (megjeleníti a bridge, host, none és egyéni hálózatokat)</td>
+            <td>docker network ls</td>
+        </tr>
+        <tr>
+            <td>Lekérdezés (részletes adatok, pl. IP tartományok, konténerek listája)</td>
+            <td>docker network inspect &lt;hálózat_neve&gt;</td>
+        </tr>
+        <tr>
+            <td>Törlés (egyedi, már nem használt hálózatok)</td>
+            <td>docker network rm &lt;hálózat_neve&gt;</td>
+        </tr>
+        <tr>
+            <td>Törlés (összes nem használt egyedi hálózat eltávolítása)</td>
+            <td>docker network prune</td>
+        </tr>
+    </tbody>
+</table>
+
+<h1>Gyakorlati Feladat</h1>
+
+<p>
+Feladat: Helyezd üzembe a Grav konténerét, és jelenítsd meg a kezdőoldalt a http://localhost:5002 url-en!
+</p>
+
+<p>
+A feladat megoldásához egy Grav image-et kell futtatni, a host gép 5002-es portját a konténer 80-as (vagy az általa használt) portjára kell irányítani, és futás után a konténernek a háttérben kell maradnia (-d és /bin/bash nélkül).
+</p>
+
+<h2>Megoldás (a Grav image legtöbbször a 80-as portot használja):</h2>
+
+<h3>1. Indítsuk el a konténert a megfelelő port-hozzárendeléssel:</h3>
+
+<pre>
+docker run -d --name grav-site -p 5002:80 getgrav/grav
+</pre>
+
+<ul>
+    <li>-d: A konténer a háttérben fog futni (detached mode).</li>
+    <li>--name grav-site: Elnevezi a konténert a könnyebb hivatkozás érdekében.</li>
+    <li>-p 5002:80: A host gép 5002-es portját összekapcsolja a konténer 80-as belső portjával.</li>
+    <li>getgrav/grav: A Grav hivatalos Docker image-e.</li>
+</ul>
+
+<h3>2. Ellenőrzés:</h3>
+
+<p>
+A böngészőben nyissa meg a következő címet:
+</p>
+
+<p>
+http://localhost:5002 (vagy http://127.0.0.1:5002)
+</p>
+
+<p>
+A Grav alapértelmezett kezdőoldala megjelenik, bizonyítva, hogy a hálózatkezelés és a port-mapping sikeres volt.
+</p>
+
+<h3>3. Takarítás (opcionális):</h3>
+
+<p>
+Ha befejezte a tesztelést, állítsa le és törölje a konténert:
+</p>
+
+<pre>
+docker stop grav-site
+docker rm grav-site
+</pre>
+
+<h1>Kötetek Kezelése: Összefoglalás és Kérdések</h1>
+
+<h2>1. Mi a kötetek (Volume) alapvető feladata a Dockerben?</h2>
+
+<p>
+A kötetek elsődleges célja a perzisztens adattárolás biztosítása. A kötetek függetlenek a konténerek életciklusától, így a konténer példányának törlése vagy újraépítése (ami a belső fájlrendszert törölné) után is megőrzik a keletkezett adatokat (pl. adatbázis fájlok, feltöltött képek).
+</p>
+
+<h2>2. Mi a különbség a nevesített kötet (Volume) és a megosztott mappa (Bind Mount) között?</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Jellemző</th>
+            <th>Nevesített Kötet (Volume)</th>
+            <th>Megosztott Mappa (Bind Mount)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Tárolás Helye</td>
+            <td>A Docker saját mappájában a host rendszerben (Linuxon: /var/lib/docker/volumes).</td>
+            <td>A host gép bárhol lévő, közvetlenül elérhető könyvtára.</td>
+        </tr>
+        <tr>
+            <td>Kezelés</td>
+            <td>A Docker kezeli, a host rendszerben nehezebben hozzáférhető.</td>
+            <td>Közvetlenül elérhető és szerkeszthető a host rendszerben is.</td>
+        </tr>
+        <tr>
+            <td>Alkalmazás</td>
+            <td>Adatbázisok, cache, belső adatok tárolása.</td>
+            <td>Fejlesztéshez ideális, ahol a forráskódot a hoston szerkesztjük, és a konténer azonnal futtatja.</td>
+        </tr>
+        <tr>
+            <td>Paraméter</td>
+            <td>-v dataVolume:/data</td>
+            <td>-v $PWD/dev:/var/www/html</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>3. Hogyan hozható létre egy nevesített kötet, és hogyan csatolható egy konténerhez?</h2>
+
+<h3>1. Kötet Létrehozása:</h3>
+
+<pre>
+docker volume create dataVolume
+</pre>
+
+<h3>2. Csatolás Konténerhez:</h3>
+
+<p>
+A -v paraméterrel, kettősponttal elválasztva a kötet nevét és a konténer belső csatolási pontját:
+</p>
+
+<pre>
+docker run -it --name ubuntu-16.04 -v dataVolume:/data ubuntu:16.04 /bin/bash
+</pre>
+
+<p>
+(A konténerben a /data könyvtárban végzett műveletek a dataVolume kötetben tárolódnak.)
+</p>
+
+<h2>4. Mi a copy-on-write technológia?</h2>
+
+<p>
+A copy-on-write egy technológia, amelyet a Union fájlrendszer használ.
+</p>
+
+<ul>
+    <li>Elve: Amikor a konténer módosítana egy fájlt az alsó, csak olvasható image-rétegből, a rendszer először másolatot készít a fájlról a felső, írható rétegbe, és a módosítást ezen a másolaton végzi el.</li>
+    <li>Eredmény: A konténer számára a módosított fájl látszik, de az alsó rétegben lévő eredeti fájl érintetlen marad. Ez teszi lehetővé a gyors újraépítést.</li>
+</ul>
+
+<h2>5. Miért nem javasolt névtelen köteteket (Anonymous Volumes) használni?</h2>
+
+<p>
+A névtelen köteteket a Docker automatikusan hozza létre (ha csak a belső csatolási pontot adjuk meg, pl. docker run -v /mnt ubuntu).
+</p>
+
+<ul>
+    <li>Hátrányok: Az azonosításuk nehézkes, mert véletlenszerű ID-t kapnak. Bár a docker volume prune törli azokat, amelyeket nem használ egyetlen konténer sem, a névvel hivatkozható kötetek sokkal áttekinthetőbbek és könnyebben kezelhetők.</li>
+</ul>
+
+<h1>Gyakorlati Példák: Perzisztencia Beállítása</h1>
+
+<h2>6. Webszerver (Nginx) Beállítása Statikus Fejlesztéshez (Megosztott Mappa)</h2>
+
+<p>
+A cél az, hogy a Host gépen szerkesztett forráskód azonnal megjelenjen a konténerben futó webszerveren:
+</p>
+
+<pre>
+mkdir dev
+docker run --name webserver -p 5001:80 -v $PWD/dev:/usr/share/nginx/html nginx
+</pre>
+
+<p>
+Magyarázat: A -v $PWD/dev:/usr/share/nginx/html megosztja a Host gép aktuális könyvtárában lévő dev mappát (ahonnan a parancsot kiadtuk) a konténer belső, webszerver által használt könyvtárával (/usr/share/nginx/html). Így a szerkesztés a hoston történik, a webszerver pedig a konténeren belül szolgálja ki az adatot.
+</p>
+
+<h2>7. Adatbázis Szerver (MySQL) Beállítása (Kötet)</h2>
+
+<p>
+A cél az, hogy a MySQL adatbázis fájljai megmaradjanak, ha a konténert leállítják/törlik.
+</p>
+
+<pre>
+docker run --name mydbserver -p 3306:3306 \
+-v $PWD/mysqldata:/var/lib/mysql \
+-e MYSQL_RANDOM_ROOT_PASSWORD="yes" \
+-e MYSQL_DATABASE="webdb" -e MYSQL_USER="dbuser" -e MYSQL_PASSWORD="naih23thah" \
+mysql
+</pre>
+
+<ul>
+    <li>-v $PWD/mysqldata:/var/lib/mysql: A Host gép mysqldata mappáját (ahol az adatbázis fájljai valójában tárolódnak) csatolja a MySQL belső adatkönyvtárához. Ezzel az adatbázis túlél minden konténertörlést.</li>
+    <li>-e paraméterek: Környezeti változókkal adja át a szükséges beállításokat a MySQL-nek (véletlen root jelszó, adatbázis név, felhasználó és jelszó), ami általánosan bevett módszer a konténerek paraméterezésére.</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+/* Alap reset / olvashatóság */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body{
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.55;
+  color: #1f2937;
+  background: #f6f7fb;
+  padding: 24px;
+}
+
+/* Oldalszélesség és “kártya” hatás */
+body > *{
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1, h2, h3{
+  line-height: 1.2;
+  margin: 0 0 12px 0;
+  color: #111827;
+}
+
+h1{
+  font-size: 28px;
+  margin-top: 8px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+h2{
+  font-size: 20px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid #e5e7eb;
+}
+
+h3{
+  font-size: 16px;
+  margin-top: 14px;
+}
+
+/* Szöveg elemek */
+p{
+  margin: 0 0 12px 0;
+}
+
+ul, ol{
+  margin: 0 0 12px 22px;
+  padding: 0;
+}
+
+li{ margin: 6px 0; }
+
+/* Code blokk / parancsok */
+pre{
+  margin: 10px 0 16px 0;
+  padding: 12px 14px;
+  overflow: auto;
+  background: #0b1020;
+  color: #e5e7eb;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Inline code (ha használnád) */
+code{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.95em;
+}
+
+/* Táblázatok */
+table{
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px 0;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+th, td{
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+thead th{
+  background: #f3f4f6;
+  font-weight: 700;
+  color: #111827;
+}
+
+tbody tr:last-child td{
+  border-bottom: none;
+}
+
+tbody tr:hover td{
+  background: #fafafa;
+}
+
+/* Linkek (ha vannak) */
+a{
+  color: #2563eb;
+  text-decoration: none;
+}
+a:hover{ text-decoration: underline; }
+
+/* Kisebb kijelző */
+@media (max-width: 600px){
+  body{ padding: 14px; }
+  h1{ font-size: 22px; }
+  h2{ font-size: 18px; }
+  pre{ border-radius: 8px; }
+  table{ font-size: 14px; }
+}
