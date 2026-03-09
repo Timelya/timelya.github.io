@@ -1,11 +1,275 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <title>Átirányítás…</title>
-  <link rel="icon" href="data:,">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random kérdésgenerátor</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-  <meta http-equiv="refresh" content="0; url=html/op2.html">
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #3a2e5f);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 24px;
+      font-size: 2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.3rem;
+    }
+
+    .question {
+      flex: 1;
+      font-size: 1.05rem;
+      line-height: 1.5;
+      background: rgba(0, 0, 0, 0.18);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .meta {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 12px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .friend-btn {
+      background: #4f8cff;
+    }
+
+    .romantic-btn {
+      background: #ff5fa2;
+    }
+
+    .intimate-btn {
+      background: #b16cff;
+    }
+
+    .reset-wrap {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .reset-btn {
+      background: #ff9f43;
+      padding: 14px 22px;
+    }
+
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+
+      .question {
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
-<body></body>
+<body>
+  <div class="container">
+    <h1>Random kérdésgenerátor</h1>
+
+    <div class="grid">
+      <div class="card">
+        <div>
+          <h2>Baráti / személyes</h2>
+          <div class="question" id="friend-question">
+            Nyomd meg a gombot egy kérdésért.
+          </div>
+          <div class="meta" id="friend-meta">Hátralévő kérdések: 10</div>
+        </div>
+        <button class="friend-btn" onclick="showRandomQuestion('friend')">
+          Random baráti kérdés
+        </button>
+      </div>
+
+      <div class="card">
+        <div>
+          <h2>Romantikus / kapcsolati</h2>
+          <div class="question" id="romantic-question">
+            Nyomd meg a gombot egy kérdésért.
+          </div>
+          <div class="meta" id="romantic-meta">Hátralévő kérdések: 10</div>
+        </div>
+        <button class="romantic-btn" onclick="showRandomQuestion('romantic')">
+          Random romantikus kérdés
+        </button>
+      </div>
+
+      <div class="card">
+        <div>
+          <h2>Intim / vágy</h2>
+          <div class="question" id="intimate-question">
+            Nyomd meg a gombot egy kérdésért.
+          </div>
+          <div class="meta" id="intimate-meta">Hátralévő kérdések: 10</div>
+        </div>
+        <button class="intimate-btn" onclick="showRandomQuestion('intimate')">
+          Random intim kérdés
+        </button>
+      </div>
+    </div>
+
+    <div class="reset-wrap">
+      <button class="reset-btn" onclick="resetQuestions()">Összes újrakeverése</button>
+    </div>
+  </div>
+
+  <script>
+    const originalQuestions = {
+      friend: [
+        "Mi az a tulajdonság, amit a legjobban szeretsz magadban?",
+        "Mi az, amire az életedben a legbüszkébb vagy?",
+        "Mi motivál téged a mindennapokban?",
+        "Mikor érzed magad igazán önmagadnak?",
+        "Mi az a dolog, amit az emberek gyakran félreértenek veled kapcsolatban?",
+        "Milyen volt a gyerekkorod hangulata?",
+        "Mi a legkedvesebb gyerekkori emléked?",
+        "Milyen egy tökéletes nap számodra?",
+        "Mi az a kis dolog, ami nagyon boldoggá tesz?",
+        "Mi az, ami mostanában sokat foglalkoztat?"
+      ],
+      romantic: [
+        "Mit jelent számodra egy jó kapcsolat?",
+        "Mit tartasz a legfontosabbnak a másikban?",
+        "Hogyan mutatod ki a szereteted?",
+        "Hogyan szereted, ha kimutatják feléd a szeretetet?",
+        "Mi az a red flag, amit nem tolerálsz?",
+        "Mi az a green flag, ami azonnal vonzó számodra?",
+        "Mi az a dolog, amitől biztonságban érzed magad egy kapcsolatban?",
+        "Mikor érezted először, hogy szeretsz valakit?",
+        "Mi az egyik legnagyobb álmod?",
+        "Milyen életet szeretnél élni hosszú távon?"
+      ],
+      intimate: [
+        "Mi az, amitől igazán kívánatosnak érzed magad?",
+        "Mi az, amitől a partnered kívánatosnak érzi magát szerinted?",
+        "Inkább spontán vagy tervezett romantikus pillanatokat szeretsz?",
+        "Hogyan szereted kimutatni a vágyat a partnered felé?",
+        "Hogyan szereted, ha a partnered kimutatja a vágyát irántad?",
+        "Mi az, ami nagyon fel tud izgatni?",
+        "Mi az, amit nagyon vonzónak találsz valakiben fizikailag?",
+        "Van olyan romantikus vagy intim fantáziád, amit szívesen kipróbálnál?",
+        "Mitől érzed magad közel valakihez?",
+        "Mit jelent számodra az intimitás?"
+      ]
+    };
+
+    let availableQuestions = {};
+
+    function cloneQuestions() {
+      return {
+        friend: [...originalQuestions.friend],
+        romantic: [...originalQuestions.romantic],
+        intimate: [...originalQuestions.intimate]
+      };
+    }
+
+    function updateMeta(category) {
+      const meta = document.getElementById(`${category}-meta`);
+      const remaining = availableQuestions[category].length;
+      meta.textContent = `Hátralévő kérdések: ${remaining}`;
+    }
+
+    function showRandomQuestion(category) {
+      const questionBox = document.getElementById(`${category}-question`);
+      const questions = availableQuestions[category];
+
+      if (questions.length === 0) {
+        questionBox.textContent = "Ebben a kategóriában már elfogytak a kérdések.";
+        updateMeta(category);
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * questions.length);
+      const selectedQuestion = questions.splice(randomIndex, 1)[0];
+
+      questionBox.textContent = selectedQuestion;
+      updateMeta(category);
+    }
+
+    function resetQuestions() {
+      availableQuestions = cloneQuestions();
+
+      document.getElementById("friend-question").textContent =
+        "Nyomd meg a gombot egy kérdésért.";
+      document.getElementById("romantic-question").textContent =
+        "Nyomd meg a gombot egy kérdésért.";
+      document.getElementById("intimate-question").textContent =
+        "Nyomd meg a gombot egy kérdésért.";
+
+      updateMeta("friend");
+      updateMeta("romantic");
+      updateMeta("intimate");
+    }
+
+    resetQuestions();
+  </script>
+</body>
 </html>
