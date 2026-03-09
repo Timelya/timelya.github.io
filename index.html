@@ -1,346 +1,452 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Random kérdésgenerátor</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1f1c2c, #3a2e5f);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 24px;
-    }
+<title>Random kérdésgenerátor</title>
 
-    .container {
-      width: 100%;
-      max-width: 1000px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
-      padding: 24px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
+<style>
 
-    h1 {
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 24px;
-      font-size: 2rem;
-    }
+*{
+box-sizing:border-box;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(135deg,#1f1c2c,#3a2e5f);
+color:#fff;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:24px;
+}
 
-    .card {
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 20px;
-      min-height: 260px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
+.container{
+width:100%;
+max-width:1000px;
+background:rgba(255,255,255,0.08);
+border-radius:20px;
+padding:24px;
+backdrop-filter:blur(10px);
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
 
-    .card h2 {
-      margin-top: 0;
-      margin-bottom: 12px;
-      font-size: 1.3rem;
-    }
+h1{
+text-align:center;
+margin-top:0;
+margin-bottom:24px;
+font-size:2rem;
+}
 
-    .question {
-      flex: 1;
-      font-size: 1.05rem;
-      line-height: 1.5;
-      background: rgba(0, 0, 0, 0.18);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-    }
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
+}
 
-    .meta {
-      font-size: 0.9rem;
-      opacity: 0.8;
-      margin-bottom: 12px;
-    }
+.card{
+background:rgba(255,255,255,0.08);
+border-radius:16px;
+padding:20px;
+min-height:260px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+border:1px solid rgba(255,255,255,0.12);
+}
 
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 1rem;
-      cursor: pointer;
-      color: white;
-      font-weight: bold;
-      transition: transform 0.15s ease, opacity 0.15s ease;
-    }
+.card h2{
+margin-top:0;
+margin-bottom:12px;
+font-size:1.3rem;
+}
 
-    button:hover {
-      transform: translateY(-2px);
-    }
+.question{
+flex:1;
+font-size:1.05rem;
+line-height:1.5;
+background:rgba(0,0,0,0.18);
+border-radius:12px;
+padding:16px;
+margin-bottom:16px;
+display:flex;
+align-items:center;
+transition:transform 0.15s ease;
+}
 
-    button:active {
-      transform: translateY(0);
-    }
+.meta{
+font-size:0.9rem;
+opacity:0.8;
+margin-bottom:12px;
+}
 
-    .friend-btn {
-      background: #4f8cff;
-    }
+button{
+border:none;
+border-radius:12px;
+padding:12px 16px;
+font-size:1rem;
+cursor:pointer;
+color:white;
+font-weight:bold;
+transition:transform 0.15s ease;
+}
 
-    .romantic-btn {
-      background: #ff5fa2;
-    }
+button:hover{
+transform:translateY(-2px);
+}
 
-    .intimate-btn {
-      background: #b16cff;
-    }
+.friend-btn{
+background:#4f8cff;
+}
 
-    .reset-wrap {
-      margin-top: 24px;
-      text-align: center;
-    }
+.romantic-btn{
+background:#ff5fa2;
+}
 
-    .reset-btn {
-      background: #ff9f43;
-      padding: 14px 22px;
-    }
+.intimate-btn{
+background:#b16cff;
+}
 
-    @media (max-width: 640px) {
-      h1 {
-        font-size: 1.6rem;
-      }
+.reset-wrap{
+margin-top:24px;
+text-align:center;
+}
 
-      .question {
-        font-size: 1rem;
-      }
-    }
-  </style>
+.reset-btn{
+background:#ff9f43;
+padding:14px 22px;
+}
+
+.toggle{
+text-align:center;
+margin-top:10px;
+margin-bottom:10px;
+font-size:1.1rem;
+}
+
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Random kérdésgenerátor</h1>
+<div class="container">
 
-    <div class="grid">
-      <div class="card">
-        <div>
-          <h2>Baráti / személyes</h2>
-          <div class="question" id="friend-question">
-            Nyomd meg a gombot egy kérdésért.
-          </div>
-          <div class="meta" id="friend-meta">Hátralévő kérdések: 10</div>
-        </div>
-        <button class="friend-btn" onclick="showRandomQuestion('friend')">
-          Random baráti kérdés
-        </button>
-      </div>
+<h1>Random kérdésgenerátor</h1>
 
-      <div class="card">
-        <div>
-          <h2>Romantikus / kapcsolati</h2>
-          <div class="question" id="romantic-question">
-            Nyomd meg a gombot egy kérdésért.
-          </div>
-          <div class="meta" id="romantic-meta">Hátralévő kérdések: 10</div>
-        </div>
-        <button class="romantic-btn" onclick="showRandomQuestion('romantic')">
-          Random romantikus kérdés
-        </button>
-      </div>
+<div class="grid">
 
-      <div class="card">
-        <div>
-          <h2>Intim / vágy</h2>
-          <div class="question" id="intimate-question">
-            Nyomd meg a gombot egy kérdésért.
-          </div>
-          <div class="meta" id="intimate-meta">Hátralévő kérdések: 10</div>
-        </div>
-        <button class="intimate-btn" onclick="showRandomQuestion('intimate')">
-          Random intim kérdés
-        </button>
-      </div>
-    </div>
+<div class="card">
+<div>
+<h2>Baráti / személyes</h2>
+<div class="question" id="friend-question">
+Nyomd meg a gombot egy kérdésért.
+</div>
+<div class="meta" id="friend-meta"></div>
+</div>
+<button class="friend-btn" onclick="showRandomQuestion('friend')">
+Random baráti kérdés
+</button>
+</div>
 
-    <div class="reset-wrap">
-      <button class="reset-btn" onclick="resetQuestions()">Összes újrakeverése</button>
-    </div>
-  </div>
+
+<div class="card">
+<div>
+<h2>Romantikus / kapcsolati</h2>
+<div class="question" id="romantic-question">
+Nyomd meg a gombot egy kérdésért.
+</div>
+<div class="meta" id="romantic-meta"></div>
+</div>
+<button class="romantic-btn" onclick="showRandomQuestion('romantic')">
+Random romantikus kérdés
+</button>
+</div>
+
+
+<div class="card">
+<div>
+<h2>Intim / vágy</h2>
+<div class="question" id="intimate-question">
+Nyomd meg a gombot egy kérdésért.
+</div>
+<div class="meta" id="intimate-meta"></div>
+</div>
+<button class="intimate-btn" onclick="showRandomQuestion('intimate')">
+Random intim kérdés
+</button>
+</div>
+
+</div>
+
+
+<div class="toggle">
+<label>
+<input type="checkbox" id="spicyToggle">
+🔥 Spicy Mode
+</label>
+</div>
+
+
+<div class="reset-wrap">
+<button class="reset-btn" onclick="resetQuestions()">
+Összes újrakeverése
+</button>
+</div>
+
+</div>
 
   <script>
-    const originalQuestions = {
-     friend: [
-    "Mi az a tulajdonság bennem, amit a legjobban szeretsz?",
-    "Mi az a tulajdonság bennem, amit a legkevésbé szeretsz?",
-    "Van bennem olyan dolog, amin szerinted változtatnom kellene?",
-    "Mi az bennem, amire szerinted a legbüszkébb lehetek?",
-    "Mi volt életed egyik legnehezebb döntése?",
-    "Mi az a tulajdonság, amit a legjobban szeretsz magadban?",
-    "Mi az a tulajdonság, amit a legkevésbé szeretsz magadban?",
-    "Mi az, amin még szeretnél változtatni magadon?",
-    "Mi az, amire az életedben a legbüszkébb vagy?",
-    "Mi volt életed egyik legnehezebb döntése?",
-    "Mi motivál téged a mindennapokban?",
-    "Mi az, amitől igazán boldog leszel?",
-    "Mikor érzed magad igazán önmagadnak?", 
-    "Mi az a dolog, amit az emberek gyakran félreértenek veled kapcsolatban?",
-    "Mi az a tanács, amit a fiatalabb önmagadnak adnál?", 
-    "Mi az az élmény, ami teljesen megváltoztatott?", 
-    "Milyen volt a gyerekkorod hangulata?", 
-    "Mi a legkedvesebb gyerekkori emléked?", 
-    "Mi volt a legnagyobb baj, amibe gyerekként kerültél?", 
-    "Mi volt az álom munkád gyerekként?", 
-    "Mi volt a jeled oviban?", 
-    "Mi az, amit a családodtól tanultál az életről?", 
-    "Mi az a családi hagyomány, amit szeretsz?", 
-    "Van olyan emlék, amit szívesen újraélnél?", 
-    "Mi volt a legnagyobb hülyeség, amit fiatalon csináltál?", 
-    "Miben változtál a legtöbbet az évek során?", 
-    "Milyen egy tökéletes nap számodra?", 
-    "Mi az a dolog, ami gyorsan feldobja a hangulatod?", 
-    "Hogyan pihensz ki egy nehéz nap után?", 
-    "Inkább spontán vagy tervezős típus vagy?", 
-    "Mi az a szokásod, amit szeretsz magadban?", 
-    "Mi volt életed legdurvább ivászatának története?", 
-    "Mi az a rossz szokásod, amin dolgozol?", 
-    "Mi az, ami nélkül nem tudnál élni a mindennapokban?", 
-    "Mi az a kis dolog, ami nagyon boldoggá tesz?",
-    "Mi az, ami nagyon fel tud idegesíteni?",
-    ],
-
-    romantic: [
-   "Mit jelent számodra egy jó kapcsolat?", 
-   "Mit tartasz a legfontosabbnak a másikban?", 
-   "Hogyan mutatod ki a szereteted?", 
-   "Hogyan szereted, ha kimutatják feléd a szeretetet?", 
-   "Mi az a red flag, amit nem tolerálsz?", 
-   "Mi az a green flag, ami azonnal vonzó számodra?", 
-   "Mi az a dolog, amitől biztonságban érzed magad egy kapcsolatban?",
-   "Mikor érezted először, hogy szeretsz engem?", 
-   "Pontozd EZT a randit 1-től 10-ig, és legyél kegyelmes. *csillogós szemű szomi emoji helye*",
-   "Hol látod magad 10 év múlva?",
-   "Mi az egyik legnagyobb álmod?", 
-   "Van valami, amit még mindenképp szeretnél elérni?", 
-   "Mi az a hely, ahová egyszer el szeretnél jutni?",
-   "Inkább stabil életet vagy kalandokat szeretnél?", 
-   "Mit jelent számodra a siker?", 
-   "Mi az, amit még mindenképp ki akarsz próbálni az életben?", 
-   "Mi az, amitől félsz a jövőben?", 
-   "Mi ad értelmet az életednek?", 
-   "Milyen életet szeretnél élni hosszú távon?", 
-   "Mi az, ami könnyen meghat téged?", 
-   "Mikor sírtál utoljára és miért?", 
-   "Mitől érzed magad igazán szeretve?", 
-   "Mi az, amitől biztonságban érzed magad mások mellett?", 
-   "Mi az, amitől félsz egy kapcsolatban?", 
-   "Hogyan kezeled a stresszt?", 
-   "Kihez fordulsz, ha nehéz időszakod van?", 
-   "Mi az, ami segít újra talpra állni?", 
-   "Milyen állat lennél szívesen?", 
-   "Mi az, amitől meg tudsz nyílni valaki előtt?", 
-   "Mennyi idő kell, hogy megbízz valakiben?", 
-   "Mi az, ami gyorsan tönkretesz egy kapcsolatot?",
-   "Mi az, ami hosszú távon működővé tesz egy kapcsolatot?",
-   "Milyen szeretetnyelv fontos számodra?",
-   "Mi az, amitől romantikusnak érzel egy pillanatot?",
-   "Mi az, ami szerinted alulértékelt a kapcsolatokban?",
-   "Mi az, amit mindig őszintén kimondasz egy kapcsolatban?",
-    ],
-
-    intimate: [
-    "Mi az a három külső dolog rajtam, ami szerinted szexi?",
-    "Mi a legizgatóbb tulajdonságom?",
-    "Volt már olyan pillanat, amikor zavarba jöttél miattam?",
-    "Mi az a dolog rajtam, ami szerinted különösen csábító?",
-    "Inkább domináns vagy gyengéd energiákat kedveled?",
-    "Milyen érintést amitől kirázna a hideg?",
-    "Gyengéden vagy szenvedélyesen csókot kedveled?",
-    "Mi az, amitől szerinted szexinek érzed magam egy kapcsolatban?",
-    "Mi az, amitől szexinek érzed magam egyedül?",
-    "Milyen romantikus jelenetbe illenék szerinted egy filmben?",
-    "Hol lenne szerinted a legromantikusabb hely, ahol megcsókolnál?",
-    "Hogy csókolok?",
-    "Volt már olyan fantáziád rólam, amit nem mertél elmondani?",
-    "Mi az a pillanat, amikor szerinted a legerősebb köztünk a kémia?",
-    "Ha most közelebb hajolnék hozzád, mit tennél?",
-    "Mi az rajtam, amitől szerinted nehéz ellenállni?",
-    "Szerinted én vagy te kezdeményezel előbb?",
-    "Milyen szexuális fantáziád volt rólam?(ha volt)",
-    "Mi az rajtam, ami szerinted a legcsábítóbb?",
-    "Szerinted melyik részem a legszexibb?",
-    "Ha most teljesen őszinte lennél, mennyire találsz vonzónak?",
-    "Mi az ami legjobban beindit és a másik nem tud róla?",
-    "Volt már olyan pillanat, amikor nagyon nehéz volt nem megcsókolni?",
-    "Mi az a hely rajtam, amit a legjobban szeretsz megérinteni?",
-    "Volt már olyan pillanat, amikor nagyon akartál engem?",
-    "Mi az a ruha rajtam, amitől teljesen megőrülsz?(mi lenne)",
-    "Ha most egy merész dolgot kérhetnél tőlem, mi lenne az?",
-    ]
-    };
-
-    let availableQuestions = {};
-
-    function cloneQuestions() {
-      return {
-        friend: [...originalQuestions.friend],
-        romantic: [...originalQuestions.romantic],
-        intimate: [...originalQuestions.intimate]
+    const questions = {
+      friend: [
+      "Mi az a dolog, amit a legtöbben nem tudnak rólad? 🤔",
+      "Mi az a hobbid vagy érdeklődésed, amire nagyon büszke vagy? 🎨",
+      "Mi az a dolog, amit mindig halogatsz? ⏳",
+      "Mi hat meg a legkönnyebben? 🥹",
+      "Mi az a hely, ahol igazán otthon érzed magad? 🏡",
+      "Mi az a dolog, amitől azonnal jobb kedved lesz? ☀️",
+      "Mi volt a legjobb döntésed az elmúlt pár évben? ⭐",
+      "Mi az a dolog, amit mindig újra és újra elrontasz? 😅",
+      "Mi az a tulajdonság, amit mások szerinted leginkább értékelnek benned? 💬",
+      "Mi az a dolog, amit mostanában nagyon szeretnél megtanulni? 📚",
+      "Mi az a dolog, amitől igazán ellazulsz? 🛀",
+      "Mi az a tulajdonság bennem, amit a legjobban szeretsz? 🙂",
+      "Mi az a tulajdonság bennem, amit a legkevésbé szeretsz? 😬",
+      "Van bennem olyan dolog, amin szerinted változtatnom kellene? 🤨",
+      "Mi az bennem, amire szerinted a legbüszkébb lehetek? 💪",
+      "Mi az a tulajdonság, amit a legjobban szeretsz magadban? 🌱",
+      "Mi az a tulajdonság, amit a legkevésbé szeretsz magadban? 🪞",
+      "Mi az, amin még szeretnél változtatni magadon? 🔄",
+      "Mi az, amire az életedben a legbüszkébb vagy? 🏆",
+      "Mi motivál téged a mindennapokban? 🚀",
+      "Mi az, amitől igazán boldog leszel? 😊",
+      "Mikor érzed magad igazán önmagadnak? 🌿",
+      "Mi az a dolog, amit az emberek gyakran félreértenek veled kapcsolatban? 🤷",
+      "Mi az a tanács, amit a fiatalabb önmagadnak adnál? 🧠",
+      "Mi az az élmény, ami teljesen megváltoztatott? ✨",
+      "Milyen volt a gyerekkorod hangulata? 🧸",
+      "Mi a legkedvesebb gyerekkori emléked? 🥹",
+      "Mi volt a legnagyobb baj, amibe gyerekként kerültél? 😈",
+      "Mi volt az álom munkád gyerekként? 👶",
+      "Mi volt a jeled oviban? 🎒",
+      "Mi az, amit a családodtól tanultál az életről? 👨‍👩‍👧‍👦",
+      "Mi az a családi hagyomány, amit szeretsz? 🎄",
+      "Van olyan emlék, amit szívesen újraélnél? 📸",
+      "Mi volt a legnagyobb hülyeség, amit fiatalon csináltál? 🤦",
+      "Miben változtál a legtöbbet az évek során? 📈",
+      "Milyen egy tökéletes nap számodra? 🌞",
+      "Mi az a dolog, ami gyorsan feldobja a hangulatod? 🎶",
+      "Hogyan pihensz ki egy nehéz nap után? 💤",
+      "Inkább spontán vagy tervezős típus vagy? 🗺️",
+      "Mi az a szokásod, amit szeretsz magadban? 🌟",
+      "Mi volt életed legdurvább ivászatának története? 🍻",
+      "Mi az a rossz szokásod, amin dolgozol? 🔧",
+      "Mi az, ami nélkül nem tudnál élni a mindennapokban? 📱",
+      "Mi az a kis dolog, ami nagyon boldoggá tesz? 🌼",
+      "Mi az, ami nagyon fel tud idegesíteni? 😤"
+      ],
+      romantic: [
+      "Mi a legidegesítőbb bennem? 😅",
+      "Mi az a dolog, amit szerinted tanultunk egymástól? 🧠",
+      "Mi az a romantikus apróság, ami szerinted sokat számít egy kapcsolatban? 💞",
+      "Mi az a dolog, amit szeretnél, ha többet csinálnánk együtt? 🤍",
+      "Mi az a jövőkép, amit el tudsz képzelni kettőnkről? 🔮",
+      "Mi az a romantikus gesztus, ami mindig levesz a lábadról? ❤️",
+      "Mi az a dolog, amit egy kapcsolatban soha nem akarnál elveszíteni? 💍",
+      "Mi az a közös élmény, amit nagyon szeretnél velem átélni? 🌍",
+      "Mi az a dolog, amitől szerinted egy kapcsolat igazán különleges lesz? ✨",
+      "Mi az a romantikus hely, ahová egyszer elvinnél engem? 🌙",
+      "Mi az a dolog, amitől igazán közel érzed magad a partneredhez? 🤗",
+      "Mi az a közös szokás, amit szívesen kialakítanál egy kapcsolatban? ☕",
+      "Mi az a pillanat, amikor érzed, hogy valaki igazán fontos neked? 💗",
+      "Mi az a romantikus apróság, amit gyakran alábecsülnek az emberek? 🌹",
+      "Mi az a közös jövőkép, ami szerinted boldoggá tenne? 🏡",
+      "Mit jelent számodra egy jó kapcsolat? 💑",
+      "Mit tartasz a legfontosabbnak a másikban? 💖",
+      "Hogyan mutatod ki a szereteted? 🫶",
+      "Hogyan szereted, ha kimutatják feléd a szeretetet? 💌",
+      "Mi az a red flag, amit nem tolerálsz? 🚩",
+      "Mi az a green flag, ami azonnal vonzó számodra? 🟢",
+      "Mi az a dolog, amitől biztonságban érzed magad egy kapcsolatban? 🛡️",
+      "Mikor érezted először, hogy szeretsz engem? 💘",
+      "Pontozd EZT a randit 1-től 10-ig! 😏",
+      "Hol látod magad 10 év múlva? 🕰️",
+      "Mi az egyik legnagyobb álmod? 🌠",
+      "Van valami, amit még mindenképp szeretnél elérni? 🎯",
+      "Mi az a hely, ahová egyszer el szeretnél jutni? ✈️",
+      "Inkább stabil életet vagy kalandokat szeretnél? 🌄",
+      "Mit jelent számodra a siker? 🏆",
+      "Mi az, amit még mindenképp ki akarsz próbálni az életben? 🔥",
+      "Mi az, amitől félsz a jövőben? 😟",
+      "Mi ad értelmet az életednek? 🌌",
+      "Milyen életet szeretnél élni hosszú távon? 🧭",
+      "Mi az, ami könnyen meghat téged? 🥺",
+      "Mikor sírtál utoljára és miért? 😢",
+      "Mitől érzed magad igazán szeretve? ❤️",
+      "Mi az, amitől biztonságban érzed magad mások mellett? 🤝",
+      "Mi az, amitől félsz egy kapcsolatban? 💔",
+      "Hogyan kezeled a stresszt? 🧘",
+      "Kihez fordulsz, ha nehéz időszakod van? 🫂",
+      "Mi az, ami segít újra talpra állni? 🌱",
+      "Milyen állat lennél szívesen? 🐾",
+      "Mi az, amitől meg tudsz nyílni valaki előtt? 🔓",
+      "Mennyi idő kell, hogy megbízz valakiben? ⌛",
+      "Mi az, ami gyorsan tönkretesz egy kapcsolatot? 💥",
+      "Mi az, ami hosszú távon működővé tesz egy kapcsolatot? 🧩",
+      "Milyen szeretetnyelv fontos számodra? 💬",
+      "Mi az, amitől romantikusnak érzel egy pillanatot? 🌙",
+      "Mi az, ami szerinted alulértékelt a kapcsolatokban? 🤍",
+      "Mi az, amit mindig őszintén kimondasz egy kapcsolatban? 🗣️"
+      ],
+      intimate: [
+      "Mi az a dolog, amit szerinted csak én hozok ki belőled? 😏",
+      "Mi az a pillanat, amikor szerinted a legvonzóbb vagyok? 🔥",
+      "Mi az a dolog, amit titokban nagyon szeretsz, amikor közel vagyunk egymáshoz? 🖤",
+      "Mi az a helyzet, amikor szerinted a legnehezebb ellenállni nekem? 😈",
+      "Mi az a három külső dolog rajtam, ami szerinted szexi? 😏",
+      "Mi a legizgatóbb tulajdonságom? 🔥",
+      "Volt már olyan pillanat, amikor zavarba jöttél miattam? 😳",
+      "Mi az a dolog rajtam, ami szerinted különösen csábító? 💋",
+      "Inkább domináns vagy gyengéd energiákat kedveled? 🖤",
+      "Milyen érintés az, amitől kiráz a hideg? 🫦",
+      "Gyengéd vagy szenvedélyes csókot kedvelsz? 💋",
+      "Mi az, amitől szerinted szexinek érzem magam egy kapcsolatban? 🔥",
+      "Mi az, amitől szexinek érzem magam egyedül? 😌",
+      "Milyen romantikus jelenetbe illenék szerinted egy filmben? 🎬",
+      "Hol lenne szerinted a legromantikusabb hely, ahol megcsókolnál? 🌙",
+      "Szerinted hogyan csókolok? 😏",
+      "Volt már olyan fantáziád rólam, amit nem mertél elmondani? 🔥",
+      "Mi az a pillanat, amikor szerinted a legerősebb köztünk a kémia? ⚡",
+      "Ha most közelebb hajolnék hozzád, mit tennél? 😈",
+      "Mi az rajtam, amitől szerinted nehéz ellenállni? 🫦",
+      "Szerinted én vagy te kezdeményezel előbb? 😉",
+      "Volt már szexuális fantáziád rólam? 😏",
+      "Mi az rajtam, ami szerinted a legcsábítóbb? 🔥",
+      "Szerinted melyik részem a legszexibb? 😈",
+      "Ha most teljesen őszinte lennél, mennyire találsz vonzónak? 🖤",
+      "Mi az, ami legjobban beindít benned, de lehet nem tudok róla? 🔥",
+      "Volt már olyan pillanat, amikor nagyon nehéz volt nem megcsókolni? 💋",
+      "Mi az a hely rajtam, amit a legjobban szeretsz megérinteni? 🫦",
+      "Volt már olyan pillanat, amikor nagyon akartál engem? 😏",
+      "Mi az a ruha rajtam, amitől teljesen megőrülsz? 🔥",
+      "Ha most egy merész dolgot kérhetnél tőlem, mi lenne az? 😈"
+      ]
       };
-    }
 
-    function updateMeta(category) {
-      const meta = document.getElementById(`${category}-meta`);
-      const remaining = availableQuestions[category].length;
-      meta.textContent = `Hátralévő kérdések: ${remaining}`;
-    }
+    
+let availableQuestions={};
 
-    function showRandomQuestion(category) {
-      const questionBox = document.getElementById(`${category}-question`);
-      const questions = availableQuestions[category];
+function cloneQuestions(){
+return{
+friend:[...originalQuestions.friend],
+romantic:[...originalQuestions.romantic],
+intimate:[...originalQuestions.intimate]
+}
+}
 
-      if (questions.length === 0) {
-        questionBox.textContent = "Ebben a kategóriában már elfogytak a kérdések.";
-        updateMeta(category);
-        return;
-      }
+function updateMeta(category){
 
-      const randomIndex = Math.floor(Math.random() * questions.length);
-      const selectedQuestion = questions.splice(randomIndex, 1)[0];
+const meta=document.getElementById(category+"-meta")
 
-      questionBox.textContent = selectedQuestion;
-      updateMeta(category);
-    }
+meta.textContent="Hátralévő kérdések: "+availableQuestions[category].length
 
-    function resetQuestions() {
-      availableQuestions = cloneQuestions();
+}
 
-      document.getElementById("friend-question").textContent =
-        "Nyomd meg a gombot egy kérdésért.";
-      document.getElementById("romantic-question").textContent =
-        "Nyomd meg a gombot egy kérdésért.";
-      document.getElementById("intimate-question").textContent =
-        "Nyomd meg a gombot egy kérdésért.";
+function spinAnimation(box,category){
 
-      updateMeta("friend");
-      updateMeta("romantic");
-      updateMeta("intimate");
-    }
+let spins=0
 
-    resetQuestions();
-  </script>
+let interval=setInterval(()=>{
+
+let pool=originalQuestions[category]
+
+let random=pool[Math.floor(Math.random()*pool.length)]
+
+box.textContent=random
+
+spins++
+
+if(spins>15){
+
+clearInterval(interval)
+
+finalQuestion(category)
+
+}
+
+},70)
+
+}
+
+function finalQuestion(category){
+
+let spicy=document.getElementById("spicyToggle").checked
+
+if(spicy && category!=="intimate"){
+
+if(Math.random()<0.35){
+
+category="intimate"
+
+}
+
+}
+
+let box=document.getElementById(category+"-question")
+
+let list=availableQuestions[category]
+
+if(list.length===0){
+
+box.textContent="Ebben a kategóriában már elfogytak a kérdések."
+
+updateMeta(category)
+
+return
+
+}
+
+let index=Math.floor(Math.random()*list.length)
+
+let q=list.splice(index,1)[0]
+
+box.textContent=q
+
+box.style.transform="scale(1.05)"
+
+setTimeout(()=>box.style.transform="scale(1)",120)
+
+updateMeta(category)
+
+}
+
+function showRandomQuestion(category){
+
+let box=document.getElementById(category+"-question")
+
+spinAnimation(box,category)
+
+}
+
+function resetQuestions(){
+
+availableQuestions=cloneQuestions()
+
+document.getElementById("friend-question").textContent="Nyomd meg a gombot egy kérdésért."
+
+document.getElementById("romantic-question").textContent="Nyomd meg a gombot egy kérdésért."
+
+document.getElementById("intimate-question").textContent="Nyomd meg a gombot egy kérdésért."
+
+updateMeta("friend")
+updateMeta("romantic")
+updateMeta("intimate")
+
+}
+
+resetQuestions()
+
+</script>
+
 </body>
 </html>
