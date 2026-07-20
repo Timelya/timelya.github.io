@@ -339,53 +339,162 @@ main{
 <h1>Bazár</h1>
 <section class="coin-table">
 
-<h2>🔄 Gyors pénzváltó tábla</h2>
+<h2>Gyors pénzváltó tábla</h2>
 
 <table>
 
 <tr>
     <th>Váltás</th>
     <th>Ebből</th>
-    <th>Ennyit ér</th>
     <th>Mire váltod</th>
 </tr>
 
 <tr>
     <td>Réz → Ezüst</td>
     <td>10 cp</td>
-    <td>=</td>
     <td>1 sp</td>
 </tr>
 
 <tr>
     <td>Ezüst → Arany</td>
     <td>10 sp</td>
-    <td>=</td>
-    <td>1 gp</td>
-</tr>
-
-<tr>
-    <td>Ezüst → Elektrum</td>
-    <td>5 sp</td>
-    <td>=</td>
-    <td>1 ep</td>
-</tr>
-
-<tr>
-    <td>Elektrum → Arany</td>
-    <td>2 ep</td>
-    <td>=</td>
     <td>1 gp</td>
 </tr>
 
 <tr>
     <td>Arany → Platina</td>
     <td>10 gp</td>
-    <td>=</td>
     <td>1 pp</td>
 </tr>
 
 </table>
+
+<div style="
+    max-width:700px;
+    margin:40px auto;
+    padding:30px;
+    background:rgba(255,245,220,.9);
+    border:4px solid #b98a47;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.3);
+    font-family:Georgia,serif;
+">
+
+<h2 style="
+    color:#7b4d20;
+    margin-bottom:25px;
+">
+💰 Gyors pénzváltó
+</h2>
+
+
+<label style="color:#4b3017;">
+    Miből:
+</label>
+
+<select id="from" style="
+    padding:10px;
+    margin:10px;
+    border:2px solid #b98a47;
+    border-radius:8px;
+    background:#fff3d0;
+">
+    <option value="cp">Réz (cp)</option>
+    <option value="sp">Ezüst (sp)</option>
+    <option value="gp">Arany (gp)</option>
+    <option value="pp">Platina (pp)</option>
+</select>
+
+
+<input id="amount" type="number" value="10" min="1" style="
+    width:90px;
+    padding:10px;
+    border:2px solid #b98a47;
+    border-radius:8px;
+    background:#fff3d0;
+">
+
+
+<br><br>
+
+
+<label style="color:#4b3017;">
+    Mire:
+</label>
+
+<select id="to" style="
+    padding:10px;
+    margin:10px;
+    border:2px solid #b98a47;
+    border-radius:8px;
+    background:#fff3d0;
+">
+    <option value="cp">Réz (cp)</option>
+    <option value="sp">Ezüst (sp)</option>
+    <option value="gp">Arany (gp)</option>
+    <option value="pp">Platina (pp)</option>
+</select>
+
+
+<br><br>
+
+
+<button onclick="convertMoney()" style="
+    padding:12px 25px;
+    background:#6b4318;
+    color:#f8dda3;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:17px;
+">
+⚖️ Váltás
+</button>
+
+
+<div id="result" style="
+    margin-top:25px;
+    padding:15px;
+    background:#ead09a;
+    border-radius:10px;
+    font-size:20px;
+    color:#4b3017;
+">
+Ennyit ér: -
+</div>
+
+
+<script>
+
+function convertMoney(){
+
+    let values = {
+        cp:1,
+        sp:10,
+        gp:100,
+        pp:1000
+    };
+
+    let amount = Number(document.getElementById("amount").value);
+
+    let from = document.getElementById("from").value;
+
+    let to = document.getElementById("to").value;
+
+
+    let result = (amount * values[from]) / values[to];
+
+
+    document.getElementById("result").innerHTML =
+    amount + " " + from.toUpperCase() +
+    " = <b>" + result + " " + to.toUpperCase() + "</b>";
+
+}
+
+</script>
+
+</div>
 
 </section>
 <section id="varos">
