@@ -81,6 +81,7 @@ nav a:hover{
 main{
 
     margin-left:300px;
+    margin-right: 300px;
 
     width:100%;
     padding:50px;
@@ -179,7 +180,7 @@ nav{
 }
 
 main{
-    margin-left:0;
+    margin: left 0 !important;;
     padding:20px;
 }
 
@@ -225,13 +226,168 @@ main{
     line-height:1.8;
     color:#5b3d1c;
 }
+.coin-table{
+
+    margin:40px auto;
+
+    max-width:900px;
+
+    background:rgba(255,245,220,.9);
+
+    padding:30px;
+
+    border:4px solid #b98a47;
+
+    border-radius:15px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.3);
+
+}
+
+
+.coin-table h2{
+
+    text-align:center;
+
+    color:#7b4d20;
+
+    margin-bottom:25px;
+
+    font-size:30px;
+
+}
+
+
+.coin-table table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    overflow:hidden;
+
+}
+
+
+.coin-table th{
+
+    background:#6b4318;
+
+    color:#f8dda3;
+
+    padding:15px;
+
+    font-size:18px;
+
+    border:2px solid #b98a47;
+
+}
+
+
+.coin-table td{
+
+    padding:14px;
+
+    text-align:center;
+
+    border:2px solid #c9a76b;
+
+    color:#4b3017;
+
+    font-size:17px;
+
+}
+
+
+.coin-table tr:nth-child(even){
+
+    background:rgba(205,165,95,.2);
+
+}
+
+
+.coin-table tr:hover{
+
+    background:rgba(218,165,32,.25);
+
+    transition:.3s;
+
+}
+
+
+@media(max-width:700px){
+
+.coin-table{
+
+    overflow-x:auto;
+
+}
+
+
+.coin-table table{
+
+    min-width:600px;
+
+}
+
+}
 </style>
 
 </head>
 <body>
 <main>
 <h1>Bazár</h1>
+<section class="coin-table">
 
+<h2>🔄 Gyors pénzváltó tábla</h2>
+
+<table>
+
+<tr>
+    <th>Váltás</th>
+    <th>Ebből</th>
+    <th>Ennyit ér</th>
+    <th>Mire váltod</th>
+</tr>
+
+<tr>
+    <td>Réz → Ezüst</td>
+    <td>10 cp</td>
+    <td>=</td>
+    <td>1 sp</td>
+</tr>
+
+<tr>
+    <td>Ezüst → Arany</td>
+    <td>10 sp</td>
+    <td>=</td>
+    <td>1 gp</td>
+</tr>
+
+<tr>
+    <td>Ezüst → Elektrum</td>
+    <td>5 sp</td>
+    <td>=</td>
+    <td>1 ep</td>
+</tr>
+
+<tr>
+    <td>Elektrum → Arany</td>
+    <td>2 ep</td>
+    <td>=</td>
+    <td>1 gp</td>
+</tr>
+
+<tr>
+    <td>Arany → Platina</td>
+    <td>10 gp</td>
+    <td>=</td>
+    <td>1 pp</td>
+</tr>
+
+</table>
+
+</section>
 <section id="varos">
 
 
@@ -239,29 +395,92 @@ main{
 <div class="gallery">
 
     <div class="item">
-        <h2>🍖 Ételek</h2>
-
+        <h2>Ételek</h2>
         <a href="images/2.png" target="_blank">
             <img src="images/2.png" alt="Ételek">
         </a>
-
-        <div class="description">
-            A bazár legnépszerűbb ételei. Az árak és a kínálat a képen találhatók.
-        </div>
     </div>
 
+    
     <div class="item">
-        <h2>🍷 Italok</h2>
-
+        <h2>Italok</h2>
         <a href="images/1.png" target="_blank">
             <img src="images/1.png" alt="Italok">
         </a>
-
-        <div class="description">
-            Frissítő italok és különleges sivatagi nedűk. A részletek a képen olvashatók.
-        </div>
     </div>
 
+    <div class="item">
+        <h2>Kovács és fia</h2>
+        <a href="images/3.png" target="_blank">
+            <img src="images/3.png" alt="Kovács és fia">
+        </a>
+        <a href="images/3.1.png" target="_blank">
+            <img src="images/3.1.png" alt="Kovács és fia">
+        </a>
+    </div>
+
+    <div class="item">
+        <h2>Páncélkereskedő</h2>
+        <a href="images/4.png" target="_blank">
+            <img src="images/4.png" alt="Páncélkereskedő">
+        </a>
+    </div>
+
+    <div class="item">
+        <h2>Füvesasszony</h2>
+        <a href="images/5.png" target="_blank">
+            <img src="images/5.png" alt="Füvesasszony">
+        </a>
+    </div>
+
+    <div class="item">
+        <h2>Kalandor felszerelés</h2>
+        <a href="images/6.png" target="_blank">
+            <img src="images/6.png" alt="Kalandor felszerelés">
+        </a>
+    </div>
+
+    <div class="item">
+        <h2>Tevekereskedő</h2>
+        <a href="images/7.png" target="_blank">
+            <img src="images/7.png" alt="Tevekereskedő">
+        </a>
+    </div>
+
+    <div class="item">
+        <h2>Ékszerész</h2>
+        <a href="images/8.png" target="_blank">
+            <img src="images/8.png" alt="Ékszerész">
+        </a>
+    </div>
+
+    <div class="item">
+        <h2>Zahra Luxus Szövetei (elf)</h2>
+        <a href="images/9.png" target="_blank">
+            <img src="images/9.png" alt="Zahra Luxus Szövetei">
+        </a>
+    </div>
+
+    <div class="item">
+        <h2>Bazári Szórakozás</h2>
+        <a href="images/10.png" target="_blank">
+            <img src="images/10.png" alt="Bazári Szórakozás">
+        </a>
+    </div>
+
+    <div class="item">
+        <h2>Ritka mágikus árus</h2>
+        <a href="images/11.png" target="_blank">
+            <img src="images/11.png" alt="Ritka mágikus árus">
+        </a>
+    </div>
+
+    <div class="item">
+        <h2>Félork tárgy</h2>
+        <a href="images/12.png" target="_blank">
+            <img src="images/12.png" alt="Félork tárgy">
+        </a>
+    </div>
 </div>
 
 </section>
