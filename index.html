@@ -184,6 +184,47 @@ main{
 }
 
 }
+.gallery{
+    display:flex;
+    flex-direction:column;
+    gap:60px;
+}
+
+.item{
+    background:rgba(255,248,230,.85);
+    border:3px solid #b58b4f;
+    border-radius:16px;
+    padding:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+.item h2{
+    margin-bottom:20px;
+}
+
+.item img{
+    display:block;
+    width:100%;
+    max-width:1200px;   /* nagy méret PC-n */
+    margin:auto;
+    border-radius:12px;
+    border:4px solid #b58b4f;
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+    transition:.3s;
+}
+
+.item img:hover{
+    transform:scale(1.01);
+    border-color:gold;
+}
+
+.description{
+    max-width:1200px;
+    margin:20px auto 0;
+    font-size:18px;
+    line-height:1.8;
+    color:#5b3d1c;
+}
 </style>
 
 </head>
@@ -196,16 +237,30 @@ main{
 
 
 <div class="gallery">
-<h2>1. Étel</h2>
-<a href="images/2.png" target="_blank">
-<img src="images/2.png" alt="">
-</a>
 
-<h2>2. Ital</h2>
-<a href="images/1.png" target="_blank">
-<img src="images/1.png" alt="">
-</a>
+    <div class="item">
+        <h2>🍖 Ételek</h2>
 
+        <a href="images/2.png" target="_blank">
+            <img src="images/2.png" alt="Ételek">
+        </a>
+
+        <div class="description">
+            A bazár legnépszerűbb ételei. Az árak és a kínálat a képen találhatók.
+        </div>
+    </div>
+
+    <div class="item">
+        <h2>🍷 Italok</h2>
+
+        <a href="images/1.png" target="_blank">
+            <img src="images/1.png" alt="Italok">
+        </a>
+
+        <div class="description">
+            Frissítő italok és különleges sivatagi nedűk. A részletek a képen olvashatók.
+        </div>
+    </div>
 
 </div>
 
