@@ -11,590 +11,468 @@
     padding:0;
     box-sizing:border-box;
     scroll-behavior:smooth;
-}
+  }
 
-body{
+  html{
+    /* fluid alapméret: kis mobilon kisebb, nagy monitoron nagyobb betű */
+    font-size:clamp(15px, 1.4vw, 18px);
+  }
+
+  body{
     font-family:Georgia, serif;
-    display:flex;
     background:
-    linear-gradient(rgba(245,220,170,.85), rgba(225,195,140,.85)),
-    url("images/desert-bg.jpg");
+      linear-gradient(rgba(245,220,170,.85), rgba(225,195,140,.85)),
+      url("images/desert-bg.jpg");
     background-size:cover;
+    background-position:center;
     background-attachment:fixed;
     color:#3f2b18;
-}
+    min-height:100vh;
+    overflow-x:hidden;
+  }
 
-/* ===== Tartalomjegyzék ===== */
+  /* háttér-attachment:fixed sok mobil böngészőn akadozik/villog -> ott inkább scroll */
+  @media (max-width:900px){
+    body{
+      background-attachment:scroll;
+    }
+  }
 
-nav{
-    width:280px;
-    position:fixed;
-    height:100vh;
-    overflow:auto;
-
-    background:rgba(79,55,33,.92);
-    border-right:5px solid #c79b4f;
-
-    padding:25px;
-
-    box-shadow:5px 0 20px rgba(0,0,0,.35);
-}
-
-nav h2{
-    text-align:center;
-    color:#f6d58f;
-    margin-bottom:25px;
-    font-size:28px;
-    letter-spacing:2px;
-}
-
-nav ul{
-    list-style:none;
-}
-
-nav li{
-    margin:18px 0;
-}
-
-nav a{
-    display:block;
-    padding:12px;
-
-    text-decoration:none;
-
-    color:#efd9a6;
-
-    border-left:4px solid transparent;
-
-    transition:.3s;
-}
-
-nav a:hover{
-
-    background:#7a5730;
-    border-left:4px solid gold;
-    padding-left:20px;
-}
-
-/* ===== Tartalom ===== */
-
-main{
-
-    margin-left:300px;
-    margin-right: 300px;
-
-    width:100%;
-    padding:50px;
-}
-
-h1{
-
-    text-align:center;
-
-    font-size:48px;
-
-    color:#6b4318;
-
-    margin-bottom:50px;
-
-    text-shadow:2px 2px 5px rgba(255,255,255,.4);
-}
-
-section{
-
-    margin-bottom:80px;
-
-    background:rgba(255,245,220,.82);
-
-    padding:30px;
-
-    border-radius:18px;
-
-    border:3px solid #b98a47;
-
-    box-shadow:0 10px 25px rgba(0,0,0,.2);
-}
-
-h2{
-
-    margin-bottom:25px;
-
-    color:#8b5a2b;
-
-    border-bottom:3px solid #c9a76b;
-
-    padding-bottom:10px;
-}
-
-/* ===== Galéria ===== */
-
-.gallery{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-
-    gap:22px;
-}
-
-.gallery img{
-
-    width:100%;
-
-    height:200px;
-
-    object-fit:cover;
-
-    border-radius:12px;
-
-    border:5px solid #b58b4f;
-
-    cursor:pointer;
-
-    transition:.35s;
-
-    box-shadow:0 5px 15px rgba(0,0,0,.35);
-}
-
-.gallery img:hover{
-
-    transform:scale(1.05) rotate(1deg);
-
-    border-color:gold;
-
-    box-shadow:0 10px 25px rgba(0,0,0,.45);
-}
-
-/* ===== Mobil ===== */
-
-@media(max-width:900px){
-
-body{
-    display:block;
-}
-
-nav{
-    position:relative;
-    width:100%;
+  img{
+    max-width:100%;
     height:auto;
-}
+    display:block;
+  }
 
-main{
-    margin: left 0 !important;;
-    padding:20px;
-}
+  /* ===== Tartalom ===== */
 
-}
-.gallery{
-    display:flex;
-    flex-direction:column;
-    gap:60px;
-}
+  main{
+    width:100%;
+    max-width:1400px;
+    margin:0 auto;
+    padding:clamp(16px, 4vw, 50px);
+  }
 
-.item{
+  h1{
+    text-align:center;
+    font-size:clamp(28px, 6vw, 48px);
+    color:#6b4318;
+    margin-bottom:clamp(24px, 5vw, 50px);
+    text-shadow:2px 2px 5px rgba(255,255,255,.4);
+  }
+
+  section{
+    margin-bottom:clamp(30px, 6vw, 80px);
+    background:rgba(255,245,220,.82);
+    padding:clamp(16px, 4vw, 30px);
+    border-radius:18px;
+    border:3px solid #b98a47;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+  }
+
+  h2{
+    margin-bottom:20px;
+    color:#8b5a2b;
+    border-bottom:3px solid #c9a76b;
+    padding-bottom:10px;
+    font-size:clamp(20px, 3.5vw, 26px);
+  }
+
+  /* ===== Galéria ===== */
+
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap:clamp(20px, 4vw, 40px);
+  }
+
+  .item{
     background:rgba(255,248,230,.85);
     border:3px solid #b58b4f;
     border-radius:16px;
-    padding:25px;
+    padding:clamp(14px, 3vw, 25px);
     box-shadow:0 8px 20px rgba(0,0,0,.2);
-}
+    display:flex;
+    flex-direction:column;
+    min-width:0; /* hogy a grid cellák ne feszítsék szét a rácsot */
+  }
 
-.item h2{
-    margin-bottom:20px;
-}
+  .item h2{
+    margin-bottom:16px;
+  }
 
-.item img{
-    display:block;
+  .item img{
     width:100%;
-    max-width:1200px;   /* nagy méret PC-n */
-    margin:auto;
+    max-width:100%;
+    height:auto;
+    aspect-ratio:4/3;
+    object-fit:cover;
+    margin:0 auto;
     border-radius:12px;
     border:4px solid #b58b4f;
     box-shadow:0 6px 18px rgba(0,0,0,.35);
     transition:.3s;
-}
+    cursor:pointer;
+  }
 
-.item img:hover{
-    transform:scale(1.01);
+  /* ha egy kártyában két kép van (pl. Kovács és fia), rakjuk egymás mellé nagy képernyőn */
+  .item .img-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+
+  .item .img-row a{
+    flex:1 1 200px;
+  }
+
+  .item img:hover{
+    transform:scale(1.02);
     border-color:gold;
-}
+  }
 
-.description{
-    max-width:1200px;
-    margin:20px auto 0;
-    font-size:18px;
-    line-height:1.8;
+  .description{
+    margin-top:16px;
+    font-size:1rem;
+    line-height:1.7;
     color:#5b3d1c;
-}
-.coin-table{
+  }
 
-    margin:40px auto;
+  /* ===== Pénzváltó tábla ===== */
 
+  .coin-table{
+    margin:0 auto clamp(24px, 5vw, 40px);
     max-width:900px;
-
     background:rgba(255,245,220,.9);
-
-    padding:30px;
-
+    padding:clamp(16px, 4vw, 30px);
     border:4px solid #b98a47;
-
     border-radius:15px;
-
     box-shadow:0 8px 20px rgba(0,0,0,.3);
+  }
 
-}
-
-
-.coin-table h2{
-
+  .coin-table h2{
     text-align:center;
-
     color:#7b4d20;
+    margin-bottom:20px;
+    font-size:clamp(22px, 4vw, 30px);
+    border-bottom:none;
+  }
 
-    margin-bottom:25px;
-
-    font-size:30px;
-
-}
-
-
-.coin-table table{
-
-    width:100%;
-
-    border-collapse:collapse;
-
-    overflow:hidden;
-
-}
-
-
-.coin-table th{
-
-    background:#6b4318;
-
-    color:#f8dda3;
-
-    padding:15px;
-
-    font-size:18px;
-
-    border:2px solid #b98a47;
-
-}
-
-
-.coin-table td{
-
-    padding:14px;
-
-    text-align:center;
-
-    border:2px solid #c9a76b;
-
-    color:#4b3017;
-
-    font-size:17px;
-
-}
-
-
-.coin-table tr:nth-child(even){
-
-    background:rgba(205,165,95,.2);
-
-}
-
-
-.coin-table tr:hover{
-
-    background:rgba(218,165,32,.25);
-
-    transition:.3s;
-
-}
-
-
-@media(max-width:700px){
-
-.coin-table{
-
+  .coin-table-scroll{
     overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
 
-}
+  .coin-table table{
+    width:100%;
+    min-width:420px; /* mobilon vízszintesen görgethető, nem tördelődik szét */
+    border-collapse:collapse;
+  }
 
+  .coin-table th{
+    background:#6b4318;
+    color:#f8dda3;
+    padding:clamp(8px, 2vw, 15px);
+    font-size:clamp(14px, 2vw, 18px);
+    border:2px solid #b98a47;
+  }
 
-.coin-table table{
+  .coin-table td{
+    padding:clamp(8px, 2vw, 14px);
+    text-align:center;
+    border:2px solid #c9a76b;
+    color:#4b3017;
+    font-size:clamp(13px, 2vw, 17px);
+  }
 
-    min-width:600px;
+  .coin-table tr:nth-child(even){
+    background:rgba(205,165,95,.2);
+  }
 
-}
+  .coin-table tr:hover{
+    background:rgba(218,165,32,.25);
+    transition:.3s;
+  }
 
-}
-</style>
+  /* ===== Gyors pénzváltó kalkulátor ===== */
 
-</head>
-<body>
-<main>
-<h1>Bazár</h1>
-<section class="coin-table">
-
-<h2>Gyors pénzváltó tábla</h2>
-
-<table>
-
-<tr>
-    <th>Váltás</th>
-    <th>Ebből</th>
-    <th>Mire váltod</th>
-</tr>
-
-<tr>
-    <td>Réz → Ezüst</td>
-    <td>10 cp</td>
-    <td>1 sp</td>
-</tr>
-
-<tr>
-    <td>Ezüst → Arany</td>
-    <td>10 sp</td>
-    <td>1 gp</td>
-</tr>
-
-<tr>
-    <td>Arany → Platina</td>
-    <td>10 gp</td>
-    <td>1 pp</td>
-</tr>
-
-</table>
-
-<div style="
+  .converter{
     max-width:700px;
-    margin:40px auto;
-    padding:30px;
+    margin:clamp(24px, 5vw, 40px) auto 0;
+    padding:clamp(18px, 4vw, 30px);
     background:rgba(255,245,220,.9);
     border:4px solid #b98a47;
     border-radius:15px;
     text-align:center;
     box-shadow:0 8px 20px rgba(0,0,0,.3);
-    font-family:Georgia,serif;
-">
+  }
 
-<h2 style="
+  .converter h2{
     color:#7b4d20;
-    margin-bottom:25px;
-">
-💰 Gyors pénzváltó
-</h2>
+    margin-bottom:20px;
+    border-bottom:none;
+    text-align:center;
+  }
 
+  .converter-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-bottom:16px;
+  }
 
-<label style="color:#4b3017;">
-    Miből:
-</label>
+  .converter label{
+    color:#4b3017;
+    font-size:1rem;
+  }
 
-<select id="from" style="
-    padding:10px;
-    margin:10px;
-    border:2px solid #b98a47;
-    border-radius:8px;
-    background:#fff3d0;
-">
-    <option value="cp">Réz (cp)</option>
-    <option value="sp">Ezüst (sp)</option>
-    <option value="gp">Arany (gp)</option>
-    <option value="pp">Platina (pp)</option>
-</select>
-
-
-<input id="amount" type="number" value="10" min="1" style="
-    width:90px;
+  .converter select,
+  .converter input{
     padding:10px;
     border:2px solid #b98a47;
     border-radius:8px;
     background:#fff3d0;
-">
+    font-size:1rem;
+    max-width:100%;
+  }
 
+  .converter input{
+    width:110px;
+  }
 
-<br><br>
-
-
-<label style="color:#4b3017;">
-    Mire:
-</label>
-
-<select id="to" style="
-    padding:10px;
-    margin:10px;
-    border:2px solid #b98a47;
-    border-radius:8px;
-    background:#fff3d0;
-">
-    <option value="cp">Réz (cp)</option>
-    <option value="sp">Ezüst (sp)</option>
-    <option value="gp">Arany (gp)</option>
-    <option value="pp">Platina (pp)</option>
-</select>
-
-
-<br><br>
-
-
-<button onclick="convertMoney()" style="
+  .converter button{
     padding:12px 25px;
     background:#6b4318;
     color:#f8dda3;
     border:none;
     border-radius:8px;
     cursor:pointer;
-    font-size:17px;
-">
-⚖️ Váltás
-</button>
+    font-size:1.05rem;
+    transition:.25s;
+  }
 
+  .converter button:hover{
+    background:#7a5730;
+  }
 
-<div id="result" style="
-    margin-top:25px;
+  .converter button:focus-visible,
+  .converter select:focus-visible,
+  .converter input:focus-visible{
+    outline:3px solid gold;
+    outline-offset:2px;
+  }
+
+  #result{
+    margin-top:20px;
     padding:15px;
     background:#ead09a;
     border-radius:10px;
-    font-size:20px;
+    font-size:clamp(16px, 3vw, 20px);
     color:#4b3017;
-">
-Ennyit ér: -
-</div>
+    word-wrap:break-word;
+  }
 
+  /* ===== Mobil finomhangolás ===== */
 
-<script>
+  @media (max-width:600px){
+    .gallery{
+      grid-template-columns:1fr;
+    }
 
-function convertMoney(){
+    .converter-row{
+      flex-direction:column;
+      align-items:stretch;
+    }
 
-    let values = {
-        cp:1,
-        sp:10,
-        gp:100,
-        pp:1000
-    };
+    .converter input,
+    .converter select{
+      width:100%;
+    }
+  }
+</style>
 
-    let amount = Number(document.getElementById("amount").value);
+</head>
+<body>
+<main>
+  <h1>Bazár</h1>
 
-    let from = document.getElementById("from").value;
+  <section class="coin-table">
+    <h2>Gyors pénzváltó tábla</h2>
 
-    let to = document.getElementById("to").value;
+    <div class="coin-table-scroll">
+      <table>
+        <tr>
+          <th>Váltás</th>
+          <th>Ebből</th>
+          <th>Mire váltod</th>
+        </tr>
+        <tr>
+          <td>Réz → Ezüst</td>
+          <td>10 cp</td>
+          <td>1 sp</td>
+        </tr>
+        <tr>
+          <td>Ezüst → Arany</td>
+          <td>10 sp</td>
+          <td>1 gp</td>
+        </tr>
+        <tr>
+          <td>Arany → Platina</td>
+          <td>10 gp</td>
+          <td>1 pp</td>
+        </tr>
+      </table>
+    </div>
 
+    <div class="converter">
+      <h2>Gyors pénzváltó</h2>
 
-    let result = (amount * values[from]) / values[to];
+      <div class="converter-row">
+        <label for="from">Miből:</label>
+        <select id="from">
+          <option value="cp">Réz (cp)</option>
+          <option value="sp">Ezüst (sp)</option>
+          <option value="gp">Arany (gp)</option>
+          <option value="pp">Platina (pp)</option>
+        </select>
+        <input id="amount" type="number" value="10" min="1">
+      </div>
 
+      <div class="converter-row">
+        <label for="to">Mire:</label>
+        <select id="to">
+          <option value="cp">Réz (cp)</option>
+          <option value="sp">Ezüst (sp)</option>
+          <option value="gp">Arany (gp)</option>
+          <option value="pp">Platina (pp)</option>
+        </select>
+      </div>
 
-    document.getElementById("result").innerHTML =
-    amount + " " + from.toUpperCase() +
-    " = <b>" + result + " " + to.toUpperCase() + "</b>";
+      <button onclick="convertMoney()">⚖️ Váltás</button>
 
-}
+      <div id="result">Ennyit ér: -</div>
+    </div>
+  </section>
 
-</script>
+  <section id="varos">
+    <div class="gallery">
 
-</div>
-
-</section>
-<section id="varos">
-
-
-
-<div class="gallery">
-
-    <div class="item">
+      <div class="item">
         <h2>Ételek</h2>
         <a href="images/2.png" target="_blank">
-            <img src="images/2.png" alt="Ételek">
+          <img src="images/2.png" alt="Ételek" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    
-    <div class="item">
+      <div class="item">
         <h2>Italok</h2>
         <a href="images/1.png" target="_blank">
-            <img src="images/1.png" alt="Italok">
+          <img src="images/1.png" alt="Italok" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Kovács és fia</h2>
-        <a href="images/3.png" target="_blank">
-            <img src="images/3.png" alt="Kovács és fia">
-        </a>
-        <a href="images/3.1.png" target="_blank">
-            <img src="images/3.1.png" alt="Kovács és fia">
-        </a>
-    </div>
+        <div class="img-row">
+          <a href="images/3.png" target="_blank">
+            <img src="images/3.png" alt="Kovács és fia" loading="lazy">
+          </a>
+          <a href="images/3.1.png" target="_blank">
+            <img src="images/3.1.png" alt="Kovács és fia" loading="lazy">
+          </a>
+        </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Páncélkereskedő</h2>
         <a href="images/4.png" target="_blank">
-            <img src="images/4.png" alt="Páncélkereskedő">
+          <img src="images/4.png" alt="Páncélkereskedő" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Füvesasszony</h2>
         <a href="images/5.png" target="_blank">
-            <img src="images/5.png" alt="Füvesasszony">
+          <img src="images/5.png" alt="Füvesasszony" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Kalandor felszerelés</h2>
         <a href="images/6.png" target="_blank">
-            <img src="images/6.png" alt="Kalandor felszerelés">
+          <img src="images/6.png" alt="Kalandor felszerelés" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Tevekereskedő</h2>
         <a href="images/7.png" target="_blank">
-            <img src="images/7.png" alt="Tevekereskedő">
+          <img src="images/7.png" alt="Tevekereskedő" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Ékszerész</h2>
         <a href="images/8.png" target="_blank">
-            <img src="images/8.png" alt="Ékszerész">
+          <img src="images/8.png" alt="Ékszerész" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Zahra Luxus Szövetei (elf)</h2>
         <a href="images/9.png" target="_blank">
-            <img src="images/9.png" alt="Zahra Luxus Szövetei">
+          <img src="images/9.png" alt="Zahra Luxus Szövetei" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Bazári Szórakozás</h2>
         <a href="images/10.png" target="_blank">
-            <img src="images/10.png" alt="Bazári Szórakozás">
+          <img src="images/10.png" alt="Bazári Szórakozás" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Ritka mágikus árus</h2>
         <a href="images/11.png" target="_blank">
-            <img src="images/11.png" alt="Ritka mágikus árus">
+          <img src="images/11.png" alt="Ritka mágikus árus" loading="lazy">
         </a>
-    </div>
+      </div>
 
-    <div class="item">
+      <div class="item">
         <h2>Félork tárgy</h2>
         <a href="images/12.png" target="_blank">
-            <img src="images/12.png" alt="Félork tárgy">
+          <img src="images/12.png" alt="Félork tárgy" loading="lazy">
         </a>
-    </div>
-</div>
+      </div>
 
-</section>
+    </div>
+  </section>
 
 </main>
+
+<script>
+function convertMoney(){
+  const values = { cp:1, sp:10, gp:100, pp:1000 };
+
+  const amount = Number(document.getElementById("amount").value);
+  const from = document.getElementById("from").value;
+  const to = document.getElementById("to").value;
+
+  if (!amount || amount < 0) {
+    document.getElementById("result").innerHTML = "Adj meg egy érvényes összeget!";
+    return;
+  }
+
+  const result = (amount * values[from]) / values[to];
+
+  document.getElementById("result").innerHTML =
+    amount + " " + from.toUpperCase() +
+    " = <b>" + (Math.round(result * 100) / 100) + " " + to.toUpperCase() + "</b>";
+}
+</script>
+
 </body>
 </html>
-
